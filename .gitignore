@@ -1,0 +1,3 @@
+# Don't track known hosts since it changes all the time and is annoying
+.ssh/known_hosts
+
