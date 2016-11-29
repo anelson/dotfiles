@@ -1,6 +1,9 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" Use jj instead of <ESC> to exit insert mode
+inoremap jj <ESC>
+
 call plug#begin('~/.vim/plugged')
 
 " Make sure you use single quotes
