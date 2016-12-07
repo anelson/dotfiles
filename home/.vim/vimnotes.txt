@@ -1,8 +1,18 @@
-* Select within a quote or other delimiter: vi" (or ( or [ or ' )  This works with d and c also:
+* text objects:
+	* a inclues whitesapce, i does not, t is "until" whatever character follows
+	* w - word
+	* s - sentence
+	* p - paragraph
+	* " - bounded by double quotes
+	* ' - bounded by single quotes
+	* ` - bounded by backtick
+	* ) - in parens
+	* ] - in anglebackets
+
+* Select within a quote or other delimiter: v(text object) such as vi" to select everything within double quotes
 
 	"fuck you asshole" this is unrelated text
 
-* Surround text with quotes: use vim-surround.  ysiw" (or other delimitor)
+* Surround text with quotes: use vim-surround.  ysiw" ("iw" is a text object and " is the char to surround with; other objects are supported)
 * Change or remote quotes: cs"'/ds"
-* If the text is alrady selected in visual mode, then just s"
 
