@@ -9,6 +9,12 @@ call plug#begin('~/.vim/plugged')
 " Make sure you use single quotes
 Plug 'ctrlpvim/ctrlp.vim'
 
+" Use vim-surround for quoting/parenthesizing
+Plug 'tpope/vim-surround'
+
+" repeat.vim to support repeating vim-surround operations with .
+Plug 'tpope/vim-repeat'
+
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'
 

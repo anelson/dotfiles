@@ -1,0 +1,8 @@
+* Select within a quote or other delimiter: vi" (or ( or [ or ' )  This works with d and c also:
+
+	"fuck you asshole" this is unrelated text
+
+* Surround text with quotes: use vim-surround.  ysiw" (or other delimitor)
+* Change or remote quotes: cs"'/ds"
+* If the text is alrady selected in visual mode, then just s"
+
