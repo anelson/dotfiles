@@ -1,1 +1,6 @@
-/mnt/c/Users/rupert/.ideavimrc
+" Use jj instead of <ESC> to exit insert mode
+inoremap jj <ESC>
+
+" Emulate vim-surround
+set surround
+
