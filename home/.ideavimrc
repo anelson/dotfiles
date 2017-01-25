@@ -4,3 +4,7 @@ inoremap jj <ESC>
 " Emulate vim-surround
 set surround
 
+" Use the system clipboard when yanking
+set clipboard+=unnamed
+
+
