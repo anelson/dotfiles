@@ -4,6 +4,12 @@ filetype off                  " required
 " Use jj instead of <ESC> to exit insert mode
 inoremap jj <ESC>
 
+" Use relative line numbers
+set relativenumber
+
+" Show the absolute line number of the current line
+set number
+
 call plug#begin('~/.vim/plugged')
 
 " Make sure you use single quotes

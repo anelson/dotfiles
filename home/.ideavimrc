@@ -7,4 +7,10 @@ set surround
 " Use the system clipboard when yanking
 set clipboard+=unnamed
 
+" Use relative line numbers
+set relativenumber
+
+" Show the absolute line number of the current line
+set number
+
 
