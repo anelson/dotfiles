@@ -1,7 +1,7 @@
 # Don't track known hosts since it changes all the time and is annoying
-.ssh/known_hosts
+home/.ssh/known_hosts
 
 # Don't track the vim-plug managed plugins, since each of them is a git clone 
 # so it just won't work right
-.vim/plugged
+home/.vim/plugged
 
