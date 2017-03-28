@@ -1,10 +1,13 @@
 {
+	"bootstrapped": true,
 	"in_process_packages":
 	[
 	],
 	"installed_packages":
 	[
 		"Dockerfile Syntax Highlighting",
+		"Package Control",
+		"TOML",
 		"Vintageous"
 	]
 }
