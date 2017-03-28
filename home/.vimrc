@@ -21,6 +21,21 @@ Plug 'tpope/vim-surround'
 " repeat.vim to support repeating vim-surround operations with .
 Plug 'tpope/vim-repeat'
 
+" Enable Ensime for Scala/Java code
+Plug 'ensime/ensime-vim'
+
+" Vim-Syntastic for syntax highlighting including Ensime-aware highlighting of
+" Scala and Java
+Plug 'vim-syntastic/syntastic'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'
 
