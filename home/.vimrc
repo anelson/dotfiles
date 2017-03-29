@@ -27,14 +27,12 @@ Plug 'ensime/ensime-vim'
 " Vim-Syntastic for syntax highlighting including Ensime-aware highlighting of
 " Scala and Java
 Plug 'vim-syntastic/syntastic'
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" vim-scala plugin to set up vim for scala coding
+Plug 'derekwyatt/vim-scala'
+
+" Load the Dracula color scheme
+Plug 'dracula/vim'
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'
@@ -66,4 +64,20 @@ let g:syntastic_check_on_wq = 0
 
 " Add plugins to &runtimepath
 call plug#end()
+
+syntax on "enable syntax highlighting"
+color dracula "Use the Dracula color scheme
+
+"Syntastic config
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Ensime config
+let ensime_server_v2=1
 
