@@ -88,3 +88,6 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 homeshick --quiet refresh 2
+
+. $HOME/.config/gsettings/gsettings.sh
+
