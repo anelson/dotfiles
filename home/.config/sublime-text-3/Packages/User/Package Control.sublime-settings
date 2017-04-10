@@ -5,8 +5,10 @@
 	],
 	"installed_packages":
 	[
+		"Agila Theme",
 		"Dockerfile Syntax Highlighting",
 		"Dracula Color Scheme",
+		"Markdown Extended",
 		"Package Control",
 		"TOML",
 		"Vintageous"
