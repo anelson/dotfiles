@@ -13,4 +13,8 @@ set relativenumber
 " Show the absolute line number of the current line
 set number
 
+" Enable incremental search
+set incsearch
+
+
 
