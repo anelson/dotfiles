@@ -1,0 +1,7 @@
+[user]
+	email = anelson@apocryph.org
+	name = Adam Nelson
+
+[credential]
+ 	helper = store
+
