@@ -1,5 +1,6 @@
 [global_config]
   enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
+  tab_position = hidden
   title_font = Source Code Pro Semi-Bold 13
   title_use_system_font = False
 [keybindings]
@@ -16,5 +17,6 @@
   [[default]]
     cursor_color = "#aaaaaa"
     font = Source Code Pro Semi-Bold 13
+    scrollbar_position = hidden
     show_titlebar = False
     use_system_font = False
