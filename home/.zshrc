@@ -95,3 +95,4 @@ homeshick --quiet refresh 2
 
 . $HOME/.config/gsettings/gsettings.sh
 
+
