@@ -10,6 +10,10 @@ set relativenumber
 " Show the absolute line number of the current line
 set number
 
+" apply the same line number settings to newrw windows
+" inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
+let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
+
 call plug#begin('~/.vim/plugged')
 
 " Make sure you use single quotes
@@ -21,6 +25,10 @@ Plug 'tpope/vim-surround'
 " repeat.vim to support repeating vim-surround operations with .
 Plug 'tpope/vim-repeat'
 
+" add some 'vinegar' (inside joke) to netrw so it sucks less and maybe
+" NERDtree isn't needed
+Plug 'tpope/vim-vinegar'
+
 " Enable Ensime for Scala/Java code
 Plug 'ensime/ensime-vim'
 
@@ -30,6 +38,10 @@ Plug 'vim-syntastic/syntastic'
 
 " vim-scala plugin to set up vim for scala coding
 Plug 'derekwyatt/vim-scala'
+
+" A lighter version of the powerline plugin
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Load the Dracula color scheme
 Plug 'dracula/vim'
