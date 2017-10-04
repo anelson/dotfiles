@@ -67,9 +67,21 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
+  # If this is an ssh connection it's pretty likely we want
+  # vim.  
+  # TODO: maybe drop this logic and use the conditionals below, since
+  # I never invoke the GUI gvim and nvim doesn't have a GUI version
   export EDITOR='vim'
 else
-  export EDITOR='vim'
+  # prefer nvim if it's on the path, failing that use vim, and in case of emergency
+  # fall back to vi
+  if command -v nvim >/dev/null; then 
+    export EDITOR='nvim'
+  elif command -v vim >/dev/null; then 
+    export EDITOR='vim'
+  else
+    export EDITOR='vi'
+  fi
 fi
 
 # Compilation flags
