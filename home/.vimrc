@@ -25,9 +25,18 @@ Plug 'tpope/vim-surround'
 " repeat.vim to support repeating vim-surround operations with .
 Plug 'tpope/vim-repeat'
 
+" unimpaired to add convenient short aliases for next/previous things
+Plug 'tpope/vim-unimpaired'
+
 " add some 'vinegar' (inside joke) to netrw so it sucks less and maybe
 " NERDtree isn't needed
 Plug 'tpope/vim-vinegar'
+
+" Add git integration to vim
+Plug 'tpope/vim-fugitive'
+
+" Briefly highlight yanked regions for clarity
+Plug 'machakann/vim-highlightedyank'
 
 " Enable Ensime for Scala/Java code
 Plug 'ensime/ensime-vim'
@@ -43,8 +52,23 @@ Plug 'derekwyatt/vim-scala'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" because netrw tree mode sucks in cruel and unusual ways
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdtree'
+
+let NERDTreeHijackNetrw = 1 " netrw is crap; NERDTree sucks less
+let NERDTreeQuitOnOpen = 1 " I want to force myself to use a vim-like way of exploring
+let NERDTreeShowLineNumbers = 1 " I am addicted to navigation by line number
+autocmd FileType nerdtree setlocal relativenumber " make sure relative line numbers are used
+
 " Load the Dracula color scheme
 Plug 'dracula/vim'
+
+" add some goodness to the neovim terminal
+if has('nvim')
+  Plug 'kassio/neoterm'
+endif
+
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'
@@ -77,7 +101,7 @@ Plug 'dracula/vim'
 " Add plugins to &runtimepath
 call plug#end()
 
-syntax on "enable syntax highlighting"
+syntax on "enable syntax highlighting
 color dracula "Use the Dracula color scheme
 
 "Syntastic config
@@ -85,9 +109,12 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
+" The Syntastic checks on open and populating the location list is rather
+" overbearing. 
+" TODO: If this config works remove these commented-out lines
+" let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 " Ensime config
