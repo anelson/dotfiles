@@ -16,3 +16,10 @@
 * Surround text with quotes: use vim-surround.  ysiw" ("iw" is a text object and " is the char to surround with; other objects are supported)
 * Change or remote quotes: cs"'/ds"
 
+* <Leader>h clears the current search highlight without disabling search highlighting in general
+
+* with the nerdcommenter plugin, <Leader>c[space] toggles comments on the line or selection
+
+* With unimpaired plugin, ]e moves line down [e moves line up.
+* ](spacebar) adds a blank line below, [(spacebar) adds a blank line above
+
