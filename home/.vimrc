@@ -80,8 +80,21 @@ autocmd FileType nerdtree setlocal relativenumber " make sure relative line numb
 " add smarter commenting-out logic
 Plug 'scrooloose/nerdcommenter'
 
+" UltiSnips which depends on vim-snippets
+Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' 
+let g:UltiSnipsExpandTrigger = '<C-j>' "The default of <TAB> interferes with YCM
+let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+
 " Use the autocompleter
 Plug 'Valloric/YouCompleteMe'
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>'] "Avoid collisions with UltiSnips
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>'] "Avoid collisions with UltiSnips
+
+" I simply MUST have automatic insertion of closing delimiters
+Plug 'Raimondi/delimitMate'
+let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
 
 " Load the Dracula color scheme
 Plug 'dracula/vim'
