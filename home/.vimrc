@@ -1,14 +1,24 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" Use the comma as the leader
+let mapleader = ","
+
 " Use jj instead of <ESC> to exit insert mode
 inoremap jj <ESC>
+
+" Make a quick shortcut to hide the highlights from a search
+nnoremap <Leader>h :noh<CR><ESC>
 
 " Use relative line numbers
 set relativenumber
 
 " Show the absolute line number of the current line
 set number
+
+" Use a faster updatetime to vim-gutter reflects changes faster
+" TODO: Make sure this doesn't slow things down
+set updatetime=250
 
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
@@ -52,14 +62,26 @@ Plug 'derekwyatt/vim-scala'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" Show git status line by line 
+Plug 'airblade/vim-gitgutter'
+
+" Use a fancy plugin to render nested parens in different colors
+Plug 'luochen1990/rainbow'
+
 " because netrw tree mode sucks in cruel and unusual ways
-Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 let NERDTreeHijackNetrw = 1 " netrw is crap; NERDTree sucks less
 let NERDTreeQuitOnOpen = 1 " I want to force myself to use a vim-like way of exploring
 let NERDTreeShowLineNumbers = 1 " I am addicted to navigation by line number
 autocmd FileType nerdtree setlocal relativenumber " make sure relative line numbers are used
+
+" add smarter commenting-out logic
+Plug 'scrooloose/nerdcommenter'
+
+" Use the autocompleter
+Plug 'Valloric/YouCompleteMe'
 
 " Load the Dracula color scheme
 Plug 'dracula/vim'
