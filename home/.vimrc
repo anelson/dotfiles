@@ -61,6 +61,12 @@ Plug 'derekwyatt/vim-scala'
 " A lighter version of the powerline plugin
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
+let g:airline#extensions#tabline#show_tab_type = 1
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+let g:airline_powerline_fonts=1
 
 " Show git status line by line 
 Plug 'airblade/vim-gitgutter'
@@ -96,8 +102,9 @@ let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>'] "Avoid collisions wit
 Plug 'Raimondi/delimitMate'
 let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
 
-" Load the Dracula color scheme
+" Load some themes
 Plug 'dracula/vim'
+Plug 'altercation/vim-colors-solarized'
 
 " add some goodness to the neovim terminal
 if has('nvim')
@@ -137,7 +144,10 @@ endif
 call plug#end()
 
 syntax on "enable syntax highlighting
-color dracula "Use the Dracula color scheme
+set t_Co=256 "tell vim our terminal supports 256 colors (it does, right))
+" color dracula "Use the Dracula color scheme
+colorscheme solarized "use the solarized scheme
+set background=dark "specifically the dark variant
 
 "Syntastic config
 set statusline+=%#warningmsg#
