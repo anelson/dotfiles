@@ -10,6 +10,9 @@ inoremap jj <ESC>
 " Make a quick shortcut to hide the highlights from a search
 nnoremap <Leader>h :noh<CR><ESC>
 
+" Make it easy to open my vimnotes file to note something
+nnoremap <Leader>vn :split ~/.vim/vimnotes.txt<CR>
+
 " Use relative line numbers
 set relativenumber
 
@@ -26,8 +29,9 @@ let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
 
 call plug#begin('~/.vim/plugged')
 
-" Make sure you use single quotes
+" CtrlP for fuzzy file/MRU/buffer navigation
 Plug 'ctrlpvim/ctrlp.vim'
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard'] "respect gitignore
 
 " Use vim-surround for quoting/parenthesizing
 Plug 'tpope/vim-surround'
