@@ -38,6 +38,21 @@ call plug#begin('~/.vim/plugged')
 " CtrlP for fuzzy file/MRU/buffer navigation
 Plug 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard'] "respect gitignore
+let g:ctrlp_by_filename = 1 "searching by filename is a more sensible default; Ctrl-d in prompt to switch
+let g:ctrlp_match_window='bottom,order:ttb' "why would anyone want bottom-to-top by default??
+let g:ctrlp_open_new_file='r' " open files in the current window, dont' open a new window or a new tab
+
+if executable('ag')
+    " the silver searcher grep alternative is installed so use that
+    set grepprg=ag\ --nogroup\ --no-color
+
+    " Also use ag with CtrlP
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+    " ag is fast no need to cache
+    let g:ctrlp_use_caching = 0
+endif
+
 
 " Use vim-surround for quoting/parenthesizing
 Plug 'tpope/vim-surround'
