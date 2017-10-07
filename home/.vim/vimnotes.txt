@@ -27,3 +27,12 @@
 
 * Very annoying and hard to break issue with tabs in insert mode.  TAB adds a tab of course, but S-TAB doesn't work as expected.  Official VIM bindings are C-t to indent and C-d to de-indent.  This is not exactly like the TAB/S-TAB behavior I'm used to.  C-t indents the entire line, just like >> in normal mode.  C-d de-indents the entire line, which is what I expect.  I have not created a mapping from S-TAB to C-d since I'm trying to build up muscle memory that works with default vim bindings as much as possible.  We'll see if that persists.
 
+# CtrlP
+
+Handy for fuzzy matching of file/buffer/MRU files
+
+Ctrl-P to invoke.  Defaults to list of files in the project (there's a heuristic for what is the 'project')
+
+With the menu up, Ctrl-f/Ctrl-b to cycle forward and backward between modes
+Ctrl-j/Ctrl-k to navigate up/down the list
+
