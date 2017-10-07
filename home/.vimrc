@@ -23,6 +23,12 @@ set number
 " TODO: Make sure this doesn't slow things down
 set updatetime=250
 
+" Configure sane defaults for tabs
+set tabstop=8 "make actual tabs very ugly so we notice them
+set softtabstop=4
+set shiftwidth=4
+set noexpandtab
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
