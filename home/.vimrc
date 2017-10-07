@@ -13,6 +13,10 @@ nnoremap <Leader>h :noh<CR><ESC>
 " Make it easy to open my vimnotes file to note something
 nnoremap <Leader>vn :split ~/.vim/vimnotes.txt<CR>
 
+" Search for the word under the cursor in the whole project with grep
+" A cheap poor mans 'find usages'
+nnoremap <Leader>* :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
 " Use relative line numbers
 set relativenumber
 
@@ -28,6 +32,11 @@ set tabstop=8 "make actual tabs very ugly so we notice them
 set softtabstop=4
 set shiftwidth=4
 set noexpandtab
+
+"allow buffers to be hidden without saving changes, but confirm on close
+"unsaved changes
+set hidden
+set confirm
 
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
@@ -53,6 +62,8 @@ if executable('ag')
     let g:ctrlp_use_caching = 0
 endif
 
+" Apply tpope's sensible defaults
+Plug 'tpope/vim-sensible'
 
 " Use vim-surround for quoting/parenthesizing
 Plug 'tpope/vim-surround'
@@ -69,6 +80,9 @@ Plug 'tpope/vim-vinegar'
 
 " Add git integration to vim
 Plug 'tpope/vim-fugitive'
+
+" Try to automatically deduce the proper tab settings for a particular file
+Plug 'tpope/vim-sleuth'
 
 " Briefly highlight yanked regions for clarity
 Plug 'machakann/vim-highlightedyank'

@@ -36,3 +36,9 @@ Ctrl-P to invoke.  Defaults to list of files in the project (there's a heuristic
 With the menu up, Ctrl-f/Ctrl-b to cycle forward and backward between modes
 Ctrl-j/Ctrl-k to navigate up/down the list
 
+# Grep
+
+* The `.vimrc` uses `ag` if it's present which is much faster
+* the `grep` command searches by default the current directory
+* search results go in the quickfix list.  `]q`/`[q` to navigate forward and backward
+* `cw` to display the quickfix list in a window which can be navigated like any other
