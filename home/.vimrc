@@ -15,7 +15,11 @@ nnoremap <Leader>vn :split ~/.vim/vimnotes.txt<CR>
 
 " Search for the word under the cursor in the whole project with grep
 " A cheap poor mans 'find usages'
-nnoremap <Leader>* :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap <Leader>* :silent grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" Improve the experience in terminal mode
+:tnoremap <Esc> <C-\><C-n> "Pressing <ESC> in terminal mode switches to normal mode
+:tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi' "Use Ctrl-R to paste from a register in terminal insert mode
 
 " Use relative line numbers
 set relativenumber
@@ -140,6 +144,11 @@ let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>'] "Avoid collisions wit
 " I simply MUST have automatic insertion of closing delimiters
 Plug 'Raimondi/delimitMate'
 let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
+
+" Need the ability to toggle a single window full screen why is this not built
+" in?
+" TODO: Maybe bring this back if it is updated to work with latest neovim
+"Plug 'regedarek/ZoomWin'
 
 " Load some themes
 Plug 'dracula/vim'
