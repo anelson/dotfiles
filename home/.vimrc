@@ -64,6 +64,12 @@ if executable('ag')
 
     " ag is fast no need to cache
     let g:ctrlp_use_caching = 0
+    
+    " Define an Ag command to invoke the ag search tool
+    " Most of the time just using the grep command is find, but this way we also
+    " have the option of invoking Ag directly with command line args to override
+    " default behaviors
+    command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 endif
 
 " Apply tpope's sensible defaults
@@ -110,6 +116,19 @@ let g:airline#extensions#tabline#show_tab_type = 1
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
 let g:airline_powerline_fonts=1
+let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline 
+
+" Use tmuxline to generate a tmux statusline config that matches our airline
+" config.  It's a bit odd to use vim code to generate a tmux config, but it's
+" that or use a shell script to generate the vim config, and I like this
+" better
+Plug 'edkolev/tmuxline.vim'
+let g:tmuxline_preset = {
+      \'a'    : '#S',
+      \'win'  : ['#I', '#W'],
+      \'cwin' : ['#I', '#W', '#F'],
+      \'y'    : ['%R', '%a', '%Y'],
+      \'z'    : '#H'}
 
 " Show git status line by line 
 Plug 'airblade/vim-gitgutter'

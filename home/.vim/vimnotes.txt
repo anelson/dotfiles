@@ -42,3 +42,27 @@ Ctrl-j/Ctrl-k to navigate up/down the list
 * the `grep` command searches by default the current directory
 * search results go in the quickfix list.  `]q`/`[q` to navigate forward and backward
 * `cw` to display the quickfix list in a window which can be navigated like any other
+
+# Windows
+
+* C-w n - New window in a horizontal split
+* C-w w - Next window
+* `botright new` makes a new horizonal split window below the current window
+* C-w _ - Maximizes the current window (useless because this can't be toggled)
+* {NR}z<CR> - Set the current window height to {NR} lines
+
+# SBT
+
+There's no good sbt integration right now.  The challenge is how do you populate the quickfix list with the output of a compile or test run?  We don't want vim invoking sbt because that is slow and the output format is not consistent.  This code https://github.com/Duhemm/sbt-errors-summary/blob/sbt-0.13/src/main/scala/sbt/errorssummary/Reporter.scala shows a plugin some guy wrote which generates alternate error message formats.  His plugin is not interesting but he found a way to hook into the compiler messages directly so no parsing is required.  That's a first step.
+
+Need to write an sbt plugin that uses this technique to get compiler errors.  I seem to recall the testing framework in SBT also has a way to get test results out programmatically.
+
+Then need to figure out a way to hook before and after a compile operation happens project-wide, not for each sub-project, and generate a quickfix list.
+
+Finally, need a way to programmatically call back into vim from sbt to notify when new test or compile errors are present.  The shitty sbt-quickfix plugin uses `vim` remote mode; `nvim` actually has a socket protocol that can be used with `nvrm` but in both cases the issue is figuring out which (n)vim instance is the one that should be called in to
+
+There might be another way on the horizon.  In SBT 1.0 there is a `server` command almost entirely undocumented.  When SBT starts up at least on my system it loads this by default and prints out a "sbt server started at..." message.  Looking at https://github.com/sbt/sbt/issues/3508 it seems eed3si9n has merged a change to populate a server discovery JSON file when this server starts, but it was merged recently and probably won't be in a released SBT version for a while.
+
+This server accepts some simple JSON commands to send it command line options and it responds with JSON log output that includes rich warning and error info.  Not sure about tests but for compiles at least it's a good option.
+
+This means a VIM plugin could simply look for this service discovery file in a project root, and if found connect to the socket server and remotely drive an SBT instance.  Shipping SBT is not quite there yet but it's close.  I predict this will be the way forward for vim integration with SBT.
