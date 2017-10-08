@@ -45,6 +45,9 @@ set noexpandtab
 set hidden
 set confirm
 
+set list          " Display unprintable characters f12 - switches
+set listchars=tab:•-,trail:•,extends:»,precedes:« " Unprintable chars mapping
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
