@@ -13,6 +13,9 @@ nnoremap <Leader>h :noh<CR><ESC>
 " Make it easy to open my vimnotes file to note something
 nnoremap <Leader>vn :split ~/.vim/vimnotes.txt<CR>
 
+" Same for .vimrc
+nnoremap <Leader>vc :split ~/.vimrc<CR>
+
 " Search for the word under the cursor in the whole project with grep
 " A cheap poor mans 'find usages'
 nnoremap <Leader>* :silent grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
@@ -129,6 +132,9 @@ let g:tmuxline_preset = {
       \'cwin' : ['#I', '#W', '#F'],
       \'y'    : ['%R', '%a', '%Y'],
       \'z'    : '#H'}
+
+" Use the same keys to navigate vim windows and tmux panes seamlessly
+Plug 'christoomey/vim-tmux-navigator'
 
 " Show git status line by line 
 Plug 'airblade/vim-gitgutter'
