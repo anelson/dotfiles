@@ -149,8 +149,13 @@ Plug 'luochen1990/rainbow'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
+nnoremap <Leader>f :NERDTreeToggle<Enter>
+nnoremap <Leader>F :NERDTreeFind<Enter>
 let NERDTreeHijackNetrw = 1 " netrw is crap; NERDTree sucks less
 let NERDTreeQuitOnOpen = 1 " I want to force myself to use a vim-like way of exploring
+let NERDTreeAutoDeleteBuffer = 1 "No reason to keep the buffer of a deleted file around
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 let NERDTreeShowLineNumbers = 1 " I am addicted to navigation by line number
 autocmd FileType nerdtree setlocal relativenumber " make sure relative line numbers are used
 
