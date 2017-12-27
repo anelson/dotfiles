@@ -1,0 +1,19 @@
+session_name: scala-dev
+windows:
+    - window_name: editor
+      focus: true
+      layout: main-horizontal
+      options:
+          main-pane-height: 80
+      panes:
+          - shell_command:
+              - vim
+            focus: true
+          - shell_command:
+              - sbt
+    - window_name: shells
+      layout: even-vertical
+      panes:
+          - pane
+          - pane
+
