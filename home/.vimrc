@@ -48,6 +48,8 @@ set confirm
 set list          " Display unprintable characters f12 - switches
 set listchars=tab:•-,trail:•,extends:»,precedes:« " Unprintable chars mapping
 
+set smartcase "assume all-lowercase searches are case insensitive; upper or mixed is case sensitive
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
@@ -70,7 +72,7 @@ if executable('ag')
 
     " ag is fast no need to cache
     let g:ctrlp_use_caching = 0
-    
+
     " Define an Ag command to invoke the ag search tool
     " Most of the time just using the grep command is find, but this way we also
     " have the option of invoking Ag directly with command line args to override
@@ -154,6 +156,7 @@ nnoremap <Leader>F :NERDTreeFind<Enter>
 let NERDTreeHijackNetrw = 1 " netrw is crap; NERDTree sucks less
 let NERDTreeQuitOnOpen = 1 " I want to force myself to use a vim-like way of exploring
 let NERDTreeAutoDeleteBuffer = 1 "No reason to keep the buffer of a deleted file around
+let NERDTreeChDirMode = 2 "changing the root in nerdtree changes vim's cwd
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let NERDTreeShowLineNumbers = 1 " I am addicted to navigation by line number
@@ -239,9 +242,16 @@ set statusline+=%*
 " overbearing. 
 " TODO: If this config works remove these commented-out lines
 " let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
 " let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+" the checking for SBT is stupid and doesn't know the rules of SBT syntax
+let g:syntastic_disabled_filetypes=['sbt']
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_auto_jump = 0
 
 " Ensime config
 let ensime_server_v2=1
