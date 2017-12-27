@@ -4,6 +4,9 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
+# Disable auto titling it interferes with tmux and bugs me
+export DISABLE_AUTO_TITLE='true'
+
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -102,6 +105,9 @@ fi
 alias vi=nvim
 alias vim=nvim
 alias gvim=gnvim
+
+# Pull in the settings that are common to all shells
+. $HOME/.profile
 
 homeshick --quiet refresh 2
 
