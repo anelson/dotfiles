@@ -110,7 +110,11 @@ Plug 'ensime/ensime-vim'
 
 " Vim-Syntastic for syntax highlighting including Ensime-aware highlighting of
 " Scala and Java
-Plug 'vim-syntastic/syntastic'
+" NB: Syntastic runs checks synchronously and blocks the editor while doing so
+" For the time being I'm disabling this and trying vim-ale
+"Plug 'vim-syntastic/syntastic'
+
+Plug 'w0rp/ale'
 
 " vim-scala plugin to set up vim for scala coding
 Plug 'derekwyatt/vim-scala'
@@ -121,6 +125,7 @@ Plug 'vim-airline/vim-airline-themes'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 let g:airline#extensions#tabline#show_tab_type = 1
+let g:airline#extensions#ale#enabled = 1
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
 let g:airline_powerline_fonts=1
@@ -233,26 +238,11 @@ set t_Co=256 "tell vim our terminal supports 256 colors (it does, right))
 colorscheme solarized "use the solarized scheme
 set background=dark "specifically the dark variant
 
-"Syntastic config
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-" The Syntastic checks on open and populating the location list is rather
-" overbearing. 
-" TODO: If this config works remove these commented-out lines
-" let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-" the checking for SBT is stupid and doesn't know the rules of SBT syntax
-let g:syntastic_disabled_filetypes=['sbt']
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_auto_jump = 0
-
 " Ensime config
 let ensime_server_v2=1
+
+" Underline errors and warnings from ale
+"highlight ALEError cterm=underline
+"highlight ALEWarning cterm=underline
+
 
