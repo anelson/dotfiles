@@ -8,7 +8,7 @@ let mapleader = ","
 inoremap jj <ESC>
 
 " Make a quick shortcut to hide the highlights from a search
-nnoremap <Leader>h :noh<CR><ESC>
+nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
 " Make it easy to open my vimnotes file to note something
 nnoremap <Leader>vn :split ~/.vim/vimnotes.txt<CR>
@@ -200,6 +200,40 @@ if has('nvim')
   Plug 'kassio/neoterm'
 endif
 
+" Use several of the handy haya14busa plugins
+Plug 'easymotion/vim-easymotion' " Visually pick motion targets
+let g:EasyMotion_do_mapping = 0 "Do not create automatic key mappings I want to control everything!
+let g:EasyMotion_smartcase = 1 "use something similar to Vim's smartcase
+" Use easymotion's version of 'f' (there's no equivalent of 'F' because it's
+" bidi)
+map s <Plug>(easymotion-bd-f2)
+nmap s <Plug>(easymotion-overwin-f2)
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+Plug 'haya14busa/incsearch.vim' " Incremental search that works with regex
+Plug 'haya14busa/incsearch-easymotion.vim' " Use EasyMotion motions with incsearch matches
+Plug 'haya14busa/incsearch-fuzzy.vim' " Do fuzzy incremental searches
+
+" Replace default search with incsearch
+map / <Plug>(incsearch-easymotion-/)
+map ? <Plug>(incsearch-easymotion-?)
+map g/ <Plug>(incsearch-easymotion-stay)
+
+" Automatically turn off highlighted search after it's not needed using
+" the incsearch auto_nohlsearch feature
+set hlsearch
+let g:incsearch#auto_nohlsearch = 1
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'
