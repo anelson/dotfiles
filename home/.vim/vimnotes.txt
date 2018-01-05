@@ -61,6 +61,16 @@ The jumps `'<` and `'>` jump to the start or end of the last visual selection!  
 
 You can use `V` to block select lines and then `>>` to indent once and then `.` to repeat that.  But there's a better way if you know from relative line numbers how many lines you want to indent.  Just use the number of lines as a modifier ton `>>`, eg: `3>>`.
 
+# Folding
+
+I've configured my `.vimrc` to enable folding by default, fully expand all folds, and to fold based on syntax information in the file.   There are a few handy folding commands.
+
+`zR` opens all folds in a file, if for some reason they have closed
+`zM` closes all folds
+`zv` opens only the folds needed to reveal the cursor
+`za` toggles open/closed a fold
+`zc` closes a fold; if it's on a closed fold it closes the parent fold, so you can work your way up folds that way
+
 # SBT
 
 There's no good sbt integration right now.  The challenge is how do you populate the quickfix list with the output of a compile or test run?  We don't want vim invoking sbt because that is slow and the output format is not consistent.  This code https://github.com/Duhemm/sbt-errors-summary/blob/sbt-0.13/src/main/scala/sbt/errorssummary/Reporter.scala shows a plugin some guy wrote which generates alternate error message formats.  His plugin is not interesting but he found a way to hook into the compiler messages directly so no parsing is required.  That's a first step.

@@ -53,6 +53,11 @@ set smartcase "assume all-lowercase searches are case insensitive; upper or mixe
 " diffs should always use a vertical split, why would anyone want horizonal??
 set diffopt+=vertical
 
+" enable folding based on the syntax information for a file, but start out
+" files with folds fully expanded
+set foldmethod=syntax
+set foldlevelstart=99
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
