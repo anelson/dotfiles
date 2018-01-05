@@ -71,6 +71,16 @@ I've configured my `.vimrc` to enable folding by default, fully expand all folds
 `za` toggles open/closed a fold
 `zc` closes a fold; if it's on a closed fold it closes the parent fold, so you can work your way up folds that way
 
+# Git hacks
+
+With fugitive some cool git workflows are easier.
+
+* `Gstatus` opens a status window and you can use the `-` key to toggle files into staging, `<C-n>` to move to next changed file, `zj`/`zk` to move down/up between sections
+* `Gcommit` opens an interactive commit window
+* `Gedit` edits a git file.  Doesn't seem that useful except you can specify revisions of the current file.  Killer use for me: `Gedit master:%` edits the current file as it appears in the `master` branch.  Great way to get the old version of the file.
+* `Gvsplit master:%` same as above but with a vertical split to see the two versions side by side
+* From withing `Gstatus` use `cc` to start committing
+
 # SBT
 
 There's no good sbt integration right now.  The challenge is how do you populate the quickfix list with the output of a compile or test run?  We don't want vim invoking sbt because that is slow and the output format is not consistent.  This code https://github.com/Duhemm/sbt-errors-summary/blob/sbt-0.13/src/main/scala/sbt/errorssummary/Reporter.scala shows a plugin some guy wrote which generates alternate error message formats.  His plugin is not interesting but he found a way to hook into the compiler messages directly so no parsing is required.  That's a first step.
