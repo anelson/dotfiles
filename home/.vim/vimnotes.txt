@@ -51,6 +51,16 @@ Ctrl-j/Ctrl-k to navigate up/down the list
 * C-w _ - Maximizes the current window (useless because this can't be toggled)
 * {NR}z<CR> - Set the current window height to {NR} lines
 
+# Using yank to duplicate visual selection blocks
+
+I very often want to select some code and then copy/paste it directly below for modification.  The problem is that when I press `y` to yank, the visual selection is cleared and I'm left with the cursor at the beginning not the end of the visual selection.  That's not cool.  There's a better way:
+
+The jumps `'<` and `'>` jump to the start or end of the last visual selection!  So just `y` to yank the selected block, then `'>` to jump to the end of that block, then `p` as usual.
+
+# Indenting multiple lines
+
+You can use `V` to block select lines and then `>>` to indent once and then `.` to repeat that.  But there's a better way if you know from relative line numbers how many lines you want to indent.  Just use the number of lines as a modifier ton `>>`, eg: `3>>`.
+
 # SBT
 
 There's no good sbt integration right now.  The challenge is how do you populate the quickfix list with the output of a compile or test run?  We don't want vim invoking sbt because that is slow and the output format is not consistent.  This code https://github.com/Duhemm/sbt-errors-summary/blob/sbt-0.13/src/main/scala/sbt/errorssummary/Reporter.scala shows a plugin some guy wrote which generates alternate error message formats.  His plugin is not interesting but he found a way to hook into the compiler messages directly so no parsing is required.  That's a first step.
