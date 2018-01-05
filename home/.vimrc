@@ -66,6 +66,10 @@ call plug#begin('~/.vim/plugged')
 
 " CtrlP for fuzzy file/MRU/buffer navigation
 Plug 'ctrlpvim/ctrlp.vim'
+" By default <C-p> is mapped to :CtrlP, I want to add a mapping to :CtrlPBuffer
+" since I often use that too
+nnoremap <Leader>b :CtrlPBuffer<Enter>
+
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard'] "respect gitignore
 let g:ctrlp_by_filename = 1 "searching by filename is a more sensible default; Ctrl-d in prompt to switch
 let g:ctrlp_match_window='bottom,order:ttb' "why would anyone want bottom-to-top by default??
@@ -106,6 +110,8 @@ Plug 'tpope/vim-vinegar'
 
 " Add git integration to vim
 Plug 'tpope/vim-fugitive'
+" Automatically delete ephemeral fugitive buffers so they don't drive me mad
+autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " Try to automatically deduce the proper tab settings for a particular file
 Plug 'tpope/vim-sleuth'
