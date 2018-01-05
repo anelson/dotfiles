@@ -50,6 +50,9 @@ set listchars=tab:•-,trail:•,extends:»,precedes:« " Unprintable chars mapp
 
 set smartcase "assume all-lowercase searches are case insensitive; upper or mixed is case sensitive
 
+" diffs should always use a vertical split, why would anyone want horizonal??
+set diffopt+=vertical
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
