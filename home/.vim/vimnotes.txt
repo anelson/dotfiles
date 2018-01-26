@@ -15,8 +15,11 @@
 
 * Surround text with quotes: use vim-surround.  ysiw" ("iw" is a text object and " is the char to surround with; other objects are supported)
 * Change or remote quotes: cs"'/ds"
+* To surround something selected in visual mode, use S" (for double quotes), S' (for single quotes), etc.  Also works for markup tags.
 
 * The `%` motion moves to the matching parens/brace/whatever.  Yawn.  But do you know what it does if you're not on a parens?  It scans forward to find the first one, and then jumps to the corresponding closing symbol.  Guess how you can use that?  `c%` to change an entire method call expression!  Obviously `d%`, `y%`, etc.  Sweet!
+
+* When navigating or selecting in code, remember the text motion objects that start with `]` and `[`.  For example `]}` moves to the closing `}`, `])` to the closing parens, etc.  There's also `]m` which moves to the next method, and `]M` which moves to the END of the method.  Want to select an entire method regardless of the language syntax?  `[mV]M` will do the job.
 
 * <Leader>h clears the current search highlight without disabling search highlighting in general
 
