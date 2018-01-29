@@ -106,11 +106,9 @@ alias vi=nvim
 alias vim=nvim
 alias gvim=gnvim
 
-# Pull in the settings that are common to all shells
-. $HOME/.profile
-
 homeshick --quiet refresh 2
 
 . $HOME/.config/gsettings/gsettings.sh
 
-
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
