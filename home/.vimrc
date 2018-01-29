@@ -62,6 +62,14 @@ set foldlevelstart=99
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
 
+" If vim-plug isn't present (for example this is a new install)
+" then download and initialize it now
+" per https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/plugged')
 
 " CtrlP for fuzzy file/MRU/buffer navigation
