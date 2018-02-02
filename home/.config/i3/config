@@ -164,11 +164,17 @@ exec --no-startup-id nm-applet
 # On XPS systems with 4K displays need to scale up the DPI
 exec --no-startup-id xrandr --dpi 192
 
+# Configure the X screensaver API to dim the screen after 10 minutes, and to lock the screen 30 seconds after that
+exec --no-startup-id xset s 600 30
+
+# Invoke i3lock to lock the session when the screen saver setting above locks it, and also if the system suspends
+exec --no-startup-id xss-lock --transfer-sleep-lock --notifier $HOME/.config/i3/dim-screen.sh -- $HOME/.config/i3/transfer-sleep-lock-i3lock.sh
+
 # Always run dunst to handle notifications
 exec_always --no-startup-id "killall -q dunst; dunst"
 
 # Set a wallpaper
-exec_always --no-startup-id feh --bg-max /home/rupert/.wallpaper/wallpaper.jpg
+exec_always --no-startup-id feh --bg-max $HOME/.wallpaper/wallpaper.jpg
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id "pamixer -i 5; notify-send --expire-time=250 '  Raise Volume ['$(pamixer --get-volume)'%]'"
