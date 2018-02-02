@@ -164,13 +164,16 @@ exec --no-startup-id nm-applet
 # On XPS systems with 4K displays need to scale up the DPI
 exec --no-startup-id xrandr --dpi 192
 
+# Always run dunst to handle notifications
+exec_always --no-startup-id "killall -q dunst; dunst"
+
+# Set a wallpaper
+exec_always --no-startup-id feh --bg-max /home/rupert/.wallpaper/wallpaper.jpg
+
 # Pulse Audio controls
-#increase sound volume
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
-#decrease sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
-# mute sound
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle 
+bindsym XF86AudioRaiseVolume exec --no-startup-id "pamixer -i 5; notify-send --expire-time=250 '  Raise Volume ['$(pamixer --get-volume)'%]'"
+bindsym XF86AudioLowerVolume    exec --no-startup-id "pamixer -d 5; notify-send --expire-time=250 '  Lower Volume ['$(pamixer --get-volume)'%]'"
+bindsym XF86AudioMute       exec --no-startup-id "pamixer -t; notify-send --expire-time=250 ' /  Toggle'"
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10  -time 500 # increase screen brightness
@@ -182,7 +185,4 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-# Set a wallpaper
-exec_always --no-startup-id feh --bg-max /home/rupert/.wallpaper/wallpaper.jpg
-
-
+bindsym $mod+control+l    exec --no-startup-id "i3lock"
