@@ -1,0 +1,12 @@
+! theme
+rofi.theme: Adam-Adapta-Nokto.rasi
+rofi.show-icons: true
+rofi.drun-icon-theme: Arc
+
+rofi.opacity: 60
+rofi.lines: 20
+rofi.columns: 1
+rofi.font: System San Francisco Display 26
+rofi.hide-scrollbar: true
+rofi.location: 0
+
