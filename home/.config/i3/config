@@ -36,20 +36,39 @@ set $inactive-text-color #676E7D
 set $urgent-bg-color     #E53935
 
 # set $height 34
+# pick fontawesome icons from https://fontawesome.bootstrapcheatsheets.com/
+# firefox
+set $ws1  "1: "
 
-set $ws1  "1:  "
+# terminals
 set $ws2  "2:  "
-set $ws3  "3:  "
-set $ws4  "4:  "
-set $ws5  "5:  "
-set $ws6  "6:  "
-set $ws7  "7:  "
-set $ws8  "8:  "
-set $ws9  "9:  "
-set $ws10 "10:  "
 
-set $default_gaps_inner 5
-set $default_gaps_outer 5
+# code
+set $ws3  "3:  "
+
+# ???
+set $ws4  "4: "
+
+# windows VM
+set $ws5  "5:  "
+
+# file explorer
+set $ws6  "6:  "
+
+# spotify or other music
+set $ws7  "7: "
+
+# skype (and other chats)
+set $ws8  "8: "
+
+# mail client
+set $ws9  "9:  "
+
+# chrome
+set $ws10 "10:  "
+
+set $default_gaps_inner 10
+set $default_gaps_outer 10
 gaps inner $default_gaps_inner
 gaps outer $default_gaps_outer
 
@@ -283,6 +302,13 @@ for_window [class="(?i)recordmydesktop"] floating enable
 for_window [class="(?i)pavucontrol"] floating enable, move position mouse
 for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down $height px
 
+for_window [class="Skype"] floating disable
+
+assign [class="Firefox"] workspace $ws1
+assign [class="Google-chrome"] workspace $ws10
+assign [class="Vmware"] workspace $ws5
+assign [class="Skype"] workspace $ws8
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
@@ -338,4 +364,13 @@ exec_always --no-startup-id feh --bg-max --randomize $HOME/.wallpaper/*.jpg
 # Copied from the manjaro i3 config
 # something to do with handling screen changes
 exec_always --no-startup-id "pgrep --exact xev || xev -root -event randr | grep --line-buffered ScreenChangeNotify | while read change; do pkill -RTMIN+4 i3blocks; done"
+
+# always start firefox
+exec firefox
+exec google-chrome-stable
+exec skype
+
+# execute a terminal running tmux in workspace two
+exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL -c tmux'
+
 
