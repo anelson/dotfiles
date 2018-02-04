@@ -323,9 +323,9 @@ for_window [class="Spotify"] move to workspace $ws7
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-        status_command i3status
-}
+#bar {
+        #status_command i3status
+#}
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id "pamixer -i 5; notify-send --expire-time=250 '  Raise Volume ['$(pamixer --get-volume)'%]'"
@@ -351,6 +351,9 @@ exec --no-startup-id xrandr --dpi 192
 
 # Run compton compositor to enable fancy transparency trickery
 exec --no-startup-id compton -b
+
+# Launch polybar instead of using the i3 bar
+exec_always --no-startup-id $HOME/.config/polybar/run-polybar.sh
 
 # nm-applet at startup for configuring wifi connections
 exec --no-startup-id nm-applet &
