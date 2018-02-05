@@ -7,7 +7,7 @@
 
 # Options to pass to i3lock
 #i3lock_options="-d" # dpms support is removed from i3lock
-i3lock_options=( --font "System San Francisco Display" --text "Enter passphrase to unlock" --nofork  -- scrot -z --quality 40)
+i3lock_options=( --font "SFNS-Display-Bold" --text "Enter passphrase to unlock" --nofork  -- scrot -z --quality 40)
 i3lock_command=i3lock-fancy
 
 # Run before starting the locker
