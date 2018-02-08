@@ -357,7 +357,7 @@ bindsym $mod+control+l    exec --no-startup-id $HOME/.config/i3/transfer-sleep-l
 exec_always --no-startup-id $HOME/.config/i3/configure-monitors.sh
 
 # Run compton compositor to enable fancy transparency trickery
-exec --no-startup-id compton -b
+exec --no-startup-id $HOME/.config/i3/run-compton.sh
 
 # nm-applet at startup for configuring wifi connections
 exec --no-startup-id nm-applet &
