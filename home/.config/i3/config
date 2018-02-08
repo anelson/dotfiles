@@ -351,16 +351,13 @@ bindsym $mod+control+l    exec --no-startup-id $HOME/.config/i3/transfer-sleep-l
 # Autostart commands
 
 # On XPS systems with 4K displays need to scale up the DPI
-exec --no-startup-id xrandr --dpi 192
+#exec --no-startup-id xrandr --dpi 192
 
 # Experimental: automatically run my displays config script
 exec_always --no-startup-id $HOME/.config/i3/configure-monitors.sh
 
 # Run compton compositor to enable fancy transparency trickery
 exec --no-startup-id compton -b
-
-# Launch polybar instead of using the i3 bar
-exec_always --no-startup-id $HOME/.config/polybar/run-polybar.sh
 
 # nm-applet at startup for configuring wifi connections
 exec --no-startup-id nm-applet &
@@ -382,6 +379,9 @@ exec_always --no-startup-id "killall -q dunst; dunst &"
 
 # Set a wallpaper
 exec_always --no-startup-id feh --bg-max --randomize $HOME/.wallpaper/*.jpg
+
+# Launch polybar instead of using the i3 bar
+exec_always --no-startup-id $HOME/.config/polybar/run-polybar.sh
 
 # Copied from the manjaro i3 config
 # something to do with handling screen changes
