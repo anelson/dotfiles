@@ -72,12 +72,14 @@ set $default_gaps_outer 10
 gaps inner $default_gaps_inner
 gaps outer $default_gaps_outer
 
-workspace $ws1 gaps inner 0
-workspace $ws1 gaps outer 0
-workspace $ws9 gaps inner 0
-workspace $ws9 gaps outer 0
-workspace $ws10 gaps inner 0
-workspace $ws10 gaps outer 0
+#it annoys me that some of these workspaces don't have gaps.  Commenting it out for now
+#and if it continues to be acceptable this way then remove
+#workspace $ws1 gaps inner 0
+#workspace $ws1 gaps outer 0
+#workspace $ws9 gaps inner 0
+#workspace $ws9 gaps outer 0
+#workspace $ws10 gaps inner 0
+#workspace $ws10 gaps outer 0
 
 workspace_auto_back_and_forth no # this is annoying; just use Mod-Tab
 force_display_urgency_hint 500 ms
@@ -321,12 +323,6 @@ for_window [class="Skype"] move to workspace $ws8
 #assign [class="Spotify"] workspace $ws7
 for_window [class="Spotify"] move to workspace $ws7
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
-        #status_command i3status
-#}
-
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id "pamixer -i 5; notify-send --expire-time=250 '  Raise Volume ['$(pamixer --get-volume)'%]'"
 bindsym XF86AudioLowerVolume    exec --no-startup-id "pamixer -d 5; notify-send --expire-time=250 '  Lower Volume ['$(pamixer --get-volume)'%]'"
@@ -352,6 +348,9 @@ bindsym $mod+control+l    exec --no-startup-id $HOME/.config/i3/transfer-sleep-l
 
 # On XPS systems with 4K displays need to scale up the DPI
 exec --no-startup-id xrandr --dpi 192
+
+# Experimental: automatically run my displays config script
+exec_always --no-startup-id $HOME/.config/i3/configure-monitors.sh
 
 # Run compton compositor to enable fancy transparency trickery
 exec --no-startup-id compton -b
