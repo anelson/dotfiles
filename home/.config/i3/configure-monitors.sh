@@ -18,7 +18,7 @@
 # errors as well.  This is at the same time that docking and undocking from my TB16 dock is unreliable
 # so it's entirely possible the mons approach was perfectly adequate after all
 BUILTIN_MONITOR_NAME="eDP1" # this seems to be pretty consistent
-BUILTIN_MONITOR_DPI="240" #basically a 2.5x scaling factor when using the built-in monitor
+BUILTIN_MONITOR_DPI="192" #basically a 2x scaling factor when using the built-in monitor
 EXTERNAL_MONITOR_DPI="144" #my external 4K HiDPI monitors are big enough they don't need such a big scale factor. this is 1.5x
 
 # the mons script assigns monitors numbers, from what I can tell it's based on their outpt order
