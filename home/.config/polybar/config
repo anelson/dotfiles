@@ -12,16 +12,17 @@
 background = #222
 background-alt = #444
 ;foreground = ${xrdb:color7:#222}
-foreground = #dfdfdf
-foreground-alt = #afafaf
+foreground = #aaaaaa
+foreground-alt = #999999
 primary = #ffb52a
 secondary = #e60053
 alert = #bd2c40
 
-[bar/example]
-# Use the 'run-polybar.sh' script which sets the MONITOR env var
+[bar/top]
+; Use the 'run-polybar.sh' script which sets the monitor env var
 monitor = ${env:MONITOR:eDP1}
-dpi = -1 # use system dpi from xrandr
+; use system dpi from xrandr
+dpi = -1
 width = 100%
 height = 2%
 ;offset-x = 1%
@@ -203,14 +204,14 @@ type = custom/script
 exec = ~/.config/polybar/processor-clock-speed.sh
 interval = 5
 
-label =  CPU FREQ: %output% GHz
+label =   %output% GHz
 format = <label>
 format-underline = #f50a4d
 
 [module/memory]
 type = internal/memory
 interval = 2
-format-prefix = "RAM "
+format-prefix = "MEM "
 format-prefix-foreground = ${colors.foreground-alt}
 format-underline = #4bffdc
 label = %percentage_used%%
@@ -332,15 +333,16 @@ animation-charging-framerate = 750
 type = internal/temperature
 # on my xps 13 9370 thermal zone 10 is x86_pkg_temp
 hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon2/temp1_input
-warn-temperature = 90 #intel specs say max junction temp 100C
+;intel specs say max junction temp 100C
+warn-temperature = 90
 
 format = <ramp> <label>
 format-underline = #f50a4d
 format-warn = <ramp> <label-warn>
 format-warn-underline = ${self.format-underline}
 
-label = CPU TEMP %temperature%
-label-warn = CPU TEMP %temperature%
+label = CPU %temperature%
+;label-warn = CPU %temperature%
 label-warn-foreground = ${colors.secondary}
 
 ramp-0 = 
@@ -352,7 +354,6 @@ ramp-foreground = ${colors.foreground-alt}
 
 [module/pch-temperature]
 type = internal/temperature
-# on my xps 13 9370 thermal zone 10 is x86_pkg_temp
 hwmon-path = /sys/devices/virtual/hwmon/hwmon3/temp1_input
 warn-temperature = 60
 
@@ -361,8 +362,8 @@ format-underline = #f50a4d
 format-warn = <ramp> <label-warn>
 format-warn-underline = ${self.format-underline}
 
-label = PCH TEMP %temperature%
-label-warn = PCH TEMP %temperature%
+label = PCH %temperature%
+;label-warn = PCH %temperature%
 label-warn-foreground = ${colors.secondary}
 
 ramp-0 = 
@@ -377,7 +378,7 @@ type = custom/script
 exec = ~/.config/polybar/processor-fan-speed.sh
 interval = 10
 
-label =  CPU FAN: %output% RPM
+label =   %output% RPM
 format = <label>
 format-underline = #f50a4d
 

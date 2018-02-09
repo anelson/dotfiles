@@ -10,7 +10,7 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 active_monitors=( $(xrandr | grep " connected" | cut -d ' ' -f1) )
 
 for mon in "${active_monitors[@]}"; do
-  MONITOR="$mon" polybar example &
+  MONITOR="$mon" polybar top &
 done
 
 echo "Bars launched..."
