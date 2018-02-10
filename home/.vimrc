@@ -164,7 +164,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 let g:airline#extensions#tabline#show_tab_type = 1
 let g:airline#extensions#ale#enabled = 1
-let g:airline_theme='solarized'
+let g:airline_theme='gruvbox'
 let g:airline_solarized_bg='dark'
 let g:airline_powerline_fonts=1
 let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline 
@@ -227,6 +227,11 @@ let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is 
 " Load some themes
 Plug 'dracula/vim'
 Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
+let g:gruvbox_italic=1 "alacritty assures me it supports italics
+let g:gruvbox_bold=1 "alacritty assures me it supports bold
+let g:gruvbox_underline=1 "alacritty assures me it supports underline
+let g:gruvbox_contrast_dark='medium'
 
 " add some goodness to the neovim terminal
 if has('nvim')
@@ -326,8 +331,10 @@ call plug#end()
 
 syntax on "enable syntax highlighting
 set t_Co=256 "tell vim our terminal supports 256 colors (it does, right))
+set termguicolors "if the term supports 24-bit color even better
 " color dracula "Use the Dracula color scheme
-colorscheme solarized "use the solarized scheme
+" colorscheme solarized "use the solarized scheme
+colorscheme gruvbox
 set background=dark "specifically the dark variant
 
 " Ensime config
