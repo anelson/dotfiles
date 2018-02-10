@@ -74,6 +74,8 @@ call plug#begin('~/.vim/plugged')
 
 " CtrlP for fuzzy file/MRU/buffer navigation
 Plug 'ctrlpvim/ctrlp.vim'
+" also install a compiled fuzzy matcher library for added performance
+Plug 'nixprime/cpsm', { 'do': './install.sh' }
 " By default <C-p> is mapped to :CtrlP, I want to add a mapping to :CtrlPBuffer
 " since I often use that too
 nnoremap <Leader>b :CtrlPBuffer<Enter>
@@ -83,13 +85,23 @@ let g:ctrlp_by_filename = 1 "searching by filename is a more sensible default; C
 let g:ctrlp_match_window='bottom,order:ttb' "why would anyone want bottom-to-top by default??
 let g:ctrlp_open_new_file='r' " open files in the current window, dont' open a new window or a new tab
 let g:ctrlp_mruf_max = 500 "remember more files
+let g:ctrlp_show_hidden = 1 "working with dotfiles requires this
+let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 
-if executable('ag')
+if executable('rg')
+    " use ripgrep it's even faster than ag
+    set grepprg=rg\ --vimgrep
+    let g:ctrlp_user_command = 'rg %s --files --color=never --hidden --glob "!.git/*"'
+
+    " rg is fast no need to cache
+    let g:ctrlp_use_caching = 0
+elseif executable('ag')
     " the silver searcher grep alternative is installed so use that
     set grepprg=ag\ --nogroup\ --no-color
 
     " Also use ag with CtrlP
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+    " NOTE: to change the show hidden files behavior this must also be changed
+    let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
     " ag is fast no need to cache
     let g:ctrlp_use_caching = 0
@@ -252,6 +264,11 @@ map *  <Plug>(incsearch-nohl-*)
 map #  <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
+
+" use fzf as a plugin
+if executable("fzf")
+    Plug 'junegunn/fzf'
+endif
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'
