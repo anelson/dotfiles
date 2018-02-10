@@ -61,8 +61,8 @@ fpath=($HOME/.homesick/repos/homeshick/completions $fpath)
 
 # i install fzf using the package manager.
 # this assumes the arch package layout is used
-[[ -a /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh && echo bindings
-[[ -a /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh && echo completions
+[[ -a /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+[[ -a /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
 
 source $ZSH/oh-my-zsh.sh
 
