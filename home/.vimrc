@@ -82,6 +82,7 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 let g:ctrlp_by_filename = 1 "searching by filename is a more sensible default; Ctrl-d in prompt to switch
 let g:ctrlp_match_window='bottom,order:ttb' "why would anyone want bottom-to-top by default??
 let g:ctrlp_open_new_file='r' " open files in the current window, dont' open a new window or a new tab
+let g:ctrlp_mruf_max = 500 "remember more files
 
 if executable('ag')
     " the silver searcher grep alternative is installed so use that
