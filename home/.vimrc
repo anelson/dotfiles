@@ -124,18 +124,18 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 " Try to automatically deduce the proper tab settings for a particular file
 Plug 'tpope/vim-sleuth'
 
+" support saving vim sessions and restoring them later
+" this is used with the tmux plugin tmux-resurrect 
+Plug 'tpope/vim-obsession'
+
 " Briefly highlight yanked regions for clarity
 Plug 'machakann/vim-highlightedyank'
 
 " Enable Ensime for Scala/Java code
 Plug 'ensime/ensime-vim'
 
-" Vim-Syntastic for syntax highlighting including Ensime-aware highlighting of
+" ALE for syntax highlighting including Ensime-aware highlighting of
 " Scala and Java
-" NB: Syntastic runs checks synchronously and blocks the editor while doing so
-" For the time being I'm disabling this and trying vim-ale
-"Plug 'vim-syntastic/syntastic'
-
 Plug 'w0rp/ale'
 
 " vim-scala plugin to set up vim for scala coding
@@ -207,11 +207,6 @@ let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>'] "Avoid collisions wit
 " I simply MUST have automatic insertion of closing delimiters
 Plug 'Raimondi/delimitMate'
 let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
-
-" Need the ability to toggle a single window full screen why is this not built
-" in?
-" TODO: Maybe bring this back if it is updated to work with latest neovim
-"Plug 'regedarek/ZoomWin'
 
 " Load some themes
 Plug 'dracula/vim'
