@@ -21,7 +21,10 @@ nnoremap <Leader>vc :split ~/.vimrc<CR>
 nnoremap <Leader>* :silent grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " Improve the experience in terminal mode
-:tnoremap <Esc> <C-\><C-n> "Pressing <ESC> in terminal mode switches to normal mode
+" UPDATE: I disabled this.  I never use terminal mode as a terminal, and
+" plugins like fugitive and fzf.vim open terminals that I want to close with
+" escape but I can't because of this
+" :tnoremap <Esc> <C-\><C-n> "Pressing <ESC> in terminal mode switches to normal mode
 :tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi' "Use Ctrl-R to paste from a register in terminal insert mode
 
 " Use relative line numbers
@@ -267,7 +270,27 @@ map g# <Plug>(incsearch-nohl-g#)
 
 " use fzf as a plugin
 if executable("fzf")
-    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf' "the basic fzf pluging
+    Plug 'junegunn/fzf.vim' "the more advanced one, ships separately
+
+    " Customize fzf colors to match your color scheme
+    let g:fzf_colors =
+    \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
+
+    " customize the layout
+    let g:fzf_layout = { 'down': '~40%' }
 endif
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
