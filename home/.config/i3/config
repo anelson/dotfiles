@@ -103,7 +103,12 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec rofi -show run
+#bindsym $mod+d exec rofi -show run
+# try combi mode, mixing run, desktop run, and window switcher into one
+# -display-combi overrides the prompt text, 'combi' by default, to just be an empty string
+# -drun-match-fields disables matching by executable name, because my Chromium desktop apps
+# like Todoist should not appear when I type 'chromium' in the search
+bindsym $mod+d exec "rofi -combi-modi window,drun,run -show combi -modi combi -display-combi '' -drun-match-fields name,generic,categories"
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -311,6 +316,7 @@ for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down $heigh
 
 for_window [class="Skype"] floating disable
 
+
 # There's a bug in i3 https://faq.i3wm.org/question/3473/how-to-disable-urgent-hints-on-startup/index.html
 # which causes an 'urgent' indicator on the workspace when these apps are launched
 # that's very annoying and there's no way to turn it off, but apparently using 'for_window' instead of 'assign'
@@ -318,6 +324,7 @@ for_window [class="Skype"] floating disable
 # UPDATE: that workaround doesn't work, it still signals the worksapces with the urgent color.
 for_window [class="Firefox"] move to workspace $ws1
 for_window [class="Google-chrome"] move to workspace $ws10
+for_window [class="Chromium"] move to workspace $ws10
 for_window [class="Vmware"] move to workspace $ws5
 for_window [class="Skype"] move to workspace $ws8
 
@@ -352,6 +359,20 @@ bindsym $mod+control+l    exec --no-startup-id $HOME/.config/i3/transfer-sleep-l
 
 # On XPS systems with 4K displays need to scale up the DPI
 #exec --no-startup-id xrandr --dpi 192
+
+# I have some Chromium desktop apps, meaning websites with their own desktop entry and browser instance
+# For some reason chromium has these as 'popup' but they are not popups.
+# Unfortunately it's not possible to set for_window rules with i3-msg, 
+# so updating this is a manual process.  I've written a script that does the work
+# but you have to update the i3 config manually.
+#
+# When you add another Chromium desktop app, run the configure-desktop-apps.sh
+# script in the i3 config folder.
+# In vim it's easy, just delete all of the entries already present, put the cursor
+# on last line of this comment block and run the following vim Ex command:
+# :r !%:p:h/configure-desktop-apps.sh
+for_window [instance="crx_fglpadnaeloagmjgkoncdgemigemmoen"] floating disable #Evernote
+for_window [instance="crx_oihmkpogbcncclhnjdcnbhpgmidhcoed"] floating disable #Todoist
 
 # Experimental: automatically run my displays config script
 exec_always --no-startup-id $HOME/.config/i3/configure-monitors.sh
