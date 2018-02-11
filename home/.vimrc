@@ -61,6 +61,8 @@ set diffopt+=vertical
 set foldmethod=syntax
 set foldlevelstart=99
 
+set conceallevel=3 "enable all syntax concealing, like rendering _Markdown_ in italics
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
@@ -157,6 +159,19 @@ Plug 'w0rp/ale'
 " vim-scala plugin to set up vim for scala coding
 Plug 'derekwyatt/vim-scala'
 
+" markdown support plugins
+Plug 'tpope/vim-markdown'
+Plug 'godlygeek/tabular' " required by vim-markdown to support Markdown table formatting
+Plug 'MikeCoder/markdown-preview.vim' " preview markdown in a browser from vim
+"Plug 'plasticboy/vim-markdown'
+"Plug 'gabrielelana/vim-markdown'
+Plug 'reedes/vim-pencil' " modify vim to behave better when writing prose
+
+" vimwiki related plugins
+Plug 'vimwiki/vimwiki'
+let g:vimwiki_list = [
+	    \ { 'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.mkd'}
+	\ ]
 " A lighter version of the powerline plugin
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -231,6 +246,7 @@ Plug 'morhetz/gruvbox'
 let g:gruvbox_italic=1 "alacritty assures me it supports italics
 let g:gruvbox_bold=1 "alacritty assures me it supports bold
 let g:gruvbox_underline=1 "alacritty assures me it supports underline
+let g:gruvbox_undercurl=1 "I don't know if this will work or not but it'd be cool
 let g:gruvbox_contrast_dark='medium'
 
 " add some goodness to the neovim terminal
@@ -330,10 +346,12 @@ endif
 call plug#end()
 
 syntax on "enable syntax highlighting
-set t_Co=256 "tell vim our terminal supports 256 colors (it does, right))
+" according to the answer at https://vi.stackexchange.com/questions/3576/trouble-using-color-scheme-in-neovim
+" one should not ever set t_Co in neovim
+"set t_Co=256 "tell vim our terminal supports 256 colors (it does, right))
 set termguicolors "if the term supports 24-bit color even better
 " color dracula "Use the Dracula color scheme
-" colorscheme solarized "use the solarized scheme
+"colorscheme solarized "use the solarized scheme
 colorscheme gruvbox
 set background=dark "specifically the dark variant
 
