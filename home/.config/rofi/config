@@ -1,5 +1,5 @@
 ! theme
-rofi.theme: Adam-Adapta-Nokto.rasi
+rofi.theme: Adapta-Nokto.rasi
 rofi.show-icons: true
 rofi.drun-icon-theme: Arc
 
