@@ -97,7 +97,7 @@ if executable('fd')
    " if present, 'fd' is the best option for listing files
    " ripgrep is meant to search inside files 
    let g:ctrlp_user_command = 'fd --type file --color never --hidden --exclude .git "" %s'
-    " rg is fast no need to cache
+    " fd is fast no need to cache
     let g:ctrlp_use_caching = 0
 endif
 
