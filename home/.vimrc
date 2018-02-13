@@ -93,29 +93,21 @@ let g:ctrlp_mruf_max = 500 "remember more files
 let g:ctrlp_show_hidden = 1 "working with dotfiles requires this
 let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 
+if executable('fd')
+   " if present, 'fd' is the best option for listing files
+   " ripgrep is meant to search inside files 
+   let g:ctrlp_user_command = 'fd --type file --color never --hidden --exclude .git "" %s'
+    " rg is fast no need to cache
+    let g:ctrlp_use_caching = 0
+endif
+
+" optionally use a more powerful external tool for grep
 if executable('rg')
     " use ripgrep it's even faster than ag
     set grepprg=rg\ --vimgrep
-    let g:ctrlp_user_command = 'rg %s --files --color=never --hidden --glob "!.git/*"'
-
-    " rg is fast no need to cache
-    let g:ctrlp_use_caching = 0
 elseif executable('ag')
     " the silver searcher grep alternative is installed so use that
     set grepprg=ag\ --nogroup\ --no-color
-
-    " Also use ag with CtrlP
-    " NOTE: to change the show hidden files behavior this must also be changed
-    let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-
-    " ag is fast no need to cache
-    let g:ctrlp_use_caching = 0
-
-    " Define an Ag command to invoke the ag search tool
-    " Most of the time just using the grep command is find, but this way we also
-    " have the option of invoking Ag directly with command line args to override
-    " default behaviors
-    command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 endif
 
 " Apply tpope's sensible defaults
