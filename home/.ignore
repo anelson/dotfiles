@@ -25,6 +25,8 @@
 
 node_modules/
 
+.IntelliJIdea*/
+
 # not sure if this will end up being a problem
 # the snap/ dir contains installed snaps and it's just full of annoying cruft
 snap/
