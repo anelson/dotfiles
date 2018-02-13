@@ -166,12 +166,28 @@ Plug 'MikeCoder/markdown-preview.vim' " preview markdown in a browser from vim
 "Plug 'plasticboy/vim-markdown'
 "Plug 'gabrielelana/vim-markdown'
 Plug 'reedes/vim-pencil' " modify vim to behave better when writing prose
+augroup pencil
+  autocmd!
+  " automatically enable pencil on common text editing tasks
+  autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'hard', 'autoformat': 1 })
+						\ | set textwidth=120
+
+  " regretably, the 'autoformat' feature doesn't play well with vimwiki.  it
+  " seems to bind <CR> in insert mode to something that results in newlines
+  " not being inserted into the text.  I can't be bothered to figure out why.
+  " I think there's a bug report on vim-pencil related to this
+  " incompatibility:
+  " [here](https://github.com/reedes/vim-pencil/issues/45)
+  autocmd FileType vimwiki call pencil#init({'wrap': 'hard', 'autoformat': 0 })
+						\ | set textwidth=120
+augroup END
 
 " vimwiki related plugins
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_list = [
-	    \ { 'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.mkd'}
+	    \ { 'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.mkd'}
 	\ ]
+
 " A lighter version of the powerline plugin
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
