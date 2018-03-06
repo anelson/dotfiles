@@ -371,8 +371,11 @@ bindsym $mod+control+l    exec --no-startup-id $HOME/.config/i3/transfer-sleep-l
 # In vim it's easy, just delete all of the entries already present, put the cursor
 # on last line of this comment block and run the following vim Ex command:
 # :r !%:p:h/configure-desktop-apps.sh
-for_window [instance="crx_fglpadnaeloagmjgkoncdgemigemmoen"] floating disable #Evernote
-for_window [instance="crx_oihmkpogbcncclhnjdcnbhpgmidhcoed"] floating disable #Todoist
+#Evernote
+for_window [instance="crx_fglpadnaeloagmjgkoncdgemigemmoen"] floating disable
+
+#Todoist
+for_window [instance="crx_oihmkpogbcncclhnjdcnbhpgmidhcoed"] floating disable
 
 # Experimental: automatically run my displays config script
 exec_always --no-startup-id $HOME/.config/i3/configure-monitors.sh
