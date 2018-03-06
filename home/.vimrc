@@ -83,7 +83,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'nixprime/cpsm', { 'do': './install.sh' }
 " By default <C-p> is mapped to :CtrlP, I want to add a mapping to :CtrlPBuffer
 " since I often use that too
-nnoremap <Leader>b :CtrlPBuffer<Enter>
+"nnoremap <Leader>b :CtrlPBuffer<Enter>
 
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard'] "respect gitignore
 let g:ctrlp_by_filename = 1 "searching by filename is a more sensible default; Ctrl-d in prompt to switch
@@ -151,6 +151,9 @@ Plug 'w0rp/ale'
 " vim-scala plugin to set up vim for scala coding
 Plug 'derekwyatt/vim-scala'
 
+" rust support
+Plug 'rust-lang/rust.vim'
+
 " markdown support plugins
 Plug 'tpope/vim-markdown'
 Plug 'godlygeek/tabular' " required by vim-markdown to support Markdown table formatting
@@ -172,6 +175,7 @@ augroup pencil
   " [here](https://github.com/reedes/vim-pencil/issues/45)
   autocmd FileType vimwiki call pencil#init({'wrap': 'hard', 'autoformat': 0 })
 						\ | set textwidth=120
+						\ | setlocal spell
 augroup END
 
 " vimwiki related plugins
@@ -301,6 +305,19 @@ map g# <Plug>(incsearch-nohl-g#)
 if executable("fzf")
     Plug 'junegunn/fzf' "the basic fzf pluging
     Plug 'junegunn/fzf.vim' "the more advanced one, ships separately
+
+    " when opening a buffer, jump to the existing window if possible
+    let g:fzf_buffers_jump = 1
+
+    " fzf.vim provides so many handy commands.  Here are bindings for a few:
+    " * Ctrl-T - Files - like ctrl-p but fast
+    " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
+    " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
+    " * <Leader>m - History - most recently used files
+    nmap <c-t> :Files<CR>
+    nmap <Leader>b :Buffers<Enter>
+    nmap <Leader>h :Helptags<Enter>
+    nmap <Leader>m :History<Enter>
 
     " Customize fzf colors to match your color scheme
     let g:fzf_colors =
