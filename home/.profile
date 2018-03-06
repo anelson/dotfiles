@@ -12,4 +12,7 @@ if [ -n "$DESKTOP_SESSION" ];then
     export SSH_AUTH_SOCK
 fi
 
+# use the user-local rust install if present
+[[ -s "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
