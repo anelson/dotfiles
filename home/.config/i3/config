@@ -416,6 +416,7 @@ exec firefox
 exec google-chrome-stable
 exec skype
 exec spotify-hidpi
+exec dropbox
 
 # execute a terminal running tmux in workspace two
 exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command tmux new-session -A -s loginshell'
