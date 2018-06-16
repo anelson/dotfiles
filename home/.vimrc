@@ -244,9 +244,30 @@ let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 
 " Use the autocompleter
-Plug 'Valloric/YouCompleteMe'
-let g:ycm_key_list_select_completion = ['<C-j>', '<Down>'] "Avoid collisions with UltiSnips
-let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>'] "Avoid collisions with UltiSnips
+" Trying out deoplete instead of YCM due to LSP support in deoplete
+"Plug 'Valloric/YouCompleteMe'
+"let g:ycm_key_list_select_completion = ['<C-j>', '<Down>'] "Avoid collisions with UltiSnips
+"let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>'] "Avoid collisions with UltiSnips
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+
+" LSP client for those languages that provide a language server
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+" TODO: add other languages' LSP configs here over time
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
+    \ }
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 
 " I simply MUST have automatic insertion of closing delimiters
 Plug 'Raimondi/delimitMate'
