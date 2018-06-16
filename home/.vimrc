@@ -134,6 +134,10 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 " Try to automatically deduce the proper tab settings for a particular file
 Plug 'tpope/vim-sleuth'
 
+" Implement async background running of compiles and tests.  Not used directly
+" but this makes vim-test better
+Plug 'tpope/vim-dispatch'
+
 " support saving vim sessions and restoring them later
 " this is used with the tmux plugin tmux-resurrect 
 Plug 'tpope/vim-obsession'
@@ -154,6 +158,9 @@ Plug 'derekwyatt/vim-scala'
 " rust support
 Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1 " automatically rustfmt on save
+
+" support for rust's cargo commands
+Plug 'timonv/vim-cargo'
 
 " markdown support plugins
 Plug 'tpope/vim-markdown'
@@ -236,12 +243,22 @@ autocmd FileType nerdtree setlocal relativenumber " make sure relative line numb
 " add smarter commenting-out logic
 Plug 'scrooloose/nerdcommenter'
 
-" UltiSnips which depends on vim-snippets
-Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips' 
-let g:UltiSnipsExpandTrigger = '<TAB>'
-let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+" LSP client for those languages that provide a language server
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+" TODO: add other languages' LSP configs here over time
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
+    \ }
+"FIXME: LanguageClient tries to create ad-hoc snippets for method calls but
+"the snippet plugin isn't involved so the result is craptastic
+"for now disable this until
+"https://github.com/autozimu/LanguageClient-neovim/issues/379 is fixed
+let g:LanguageClient_hasSnippetSupport = 0
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 
 " Use the autocompleter
 " Trying out deoplete instead of YCM due to LSP support in deoplete
@@ -256,18 +273,26 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#enable_smart_case = 1
 
-" LSP client for those languages that provide a language server
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-" TODO: add other languages' LSP configs here over time
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
-    \ }
+" Trying out neosnippet for its integration with deoplete
+"" UltiSnips which depends on vim-snippets
+"Plug 'honza/vim-snippets'
+"Plug 'SirVer/ultisnips' 
+"let g:UltiSnipsExpandTrigger = '<TAB>'
+"let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+"let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
 
 " I simply MUST have automatic insertion of closing delimiters
 Plug 'Raimondi/delimitMate'
@@ -360,6 +385,18 @@ if executable("fzf")
     " customize the layout
     let g:fzf_layout = { 'down': '~40%' }
 endif
+
+" vim-test makes it easy-ish to run tests in various languages, with some help
+" from vim-dispatch
+Plug 'janko-m/vim-test'
+
+" use vim-dispatch to handle the actual invocation of the test commands
+let test#strategy = "dispatch"
+nmap <silent> t<C-n> :TestNearest<CR> " t Ctrl+n
+nmap <silent> t<C-f> :TestFile<CR>    " t Ctrl+f
+nmap <silent> t<C-s> :TestSuite<CR>   " t Ctrl+s
+nmap <silent> t<C-l> :TestLast<CR>    " t Ctrl+l
+nmap <silent> t<C-g> :TestVisit<CR>   " t Ctrl+g
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 "Plug 'junegunn/vim-easy-align'

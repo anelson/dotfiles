@@ -28,7 +28,17 @@
 * With unimpaired plugin, ]e moves line down [e moves line up.
 * ](spacebar) adds a blank line below, [(spacebar) adds a blank line above
 
-* YouCompleteMe and UltiSnips provide some fussy but useful auto complete capabilities.  To move up/down the menu C-j/C-k.  Dismiss the popup with C-y.  If you've typed a snippet name, TAB will expand the snippet even if the YCM menu is visible.  Once the snippet is expanded, C-j/C-k to move up/down the placeholders in the snippet.
+* Switched to deoplete for completion and neosnippet for snippets due to their better integration together and the
+  Neovim language server's support for deoplete.  
+
+  Autocomplete works a bit differently.  Use C-n/C-p to navigate the list of possible completions.  For those
+  completions that are snippets, choose the snippet then C-k to expand the snippet, and keep pressing C-k to cycle
+  through the placeholders in the snippet.
+
+* UPDATE: No longer use these two plugins see above for autocomplete and snippets ~~YouCompleteMe and UltiSnips provide
+  some fussy but useful auto complete capabilities. To move up/down the menu C-j/C-k.  Dismiss the popup with C-y.  If
+  you've typed a snippet name, TAB will expand the snippet even if the YCM menu is visible.  Once the snippet is
+  expanded, C-j/C-k to move up/down the placeholders in the snippet.~~
 
 * Very annoying and hard to break issue with tabs in insert mode.  TAB adds a tab of course, but S-TAB doesn't work as expected.  Official VIM bindings are C-t to indent and C-d to de-indent.  This is not exactly like the TAB/S-TAB behavior I'm used to.  C-t indents the entire line, just like >> in normal mode.  C-d de-indents the entire line, which is what I expect.  I have not created a mapping from S-TAB to C-d since I'm trying to build up muscle memory that works with default vim bindings as much as possible.  We'll see if that persists.
 
