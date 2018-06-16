@@ -153,6 +153,7 @@ Plug 'derekwyatt/vim-scala'
 
 " rust support
 Plug 'rust-lang/rust.vim'
+let g:rustfmt_autosave = 1 " automatically rustfmt on save
 
 " markdown support plugins
 Plug 'tpope/vim-markdown'
