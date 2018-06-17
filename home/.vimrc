@@ -159,9 +159,6 @@ Plug 'derekwyatt/vim-scala'
 Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1 " automatically rustfmt on save
 
-" support for rust's cargo commands
-Plug 'timonv/vim-cargo'
-
 " markdown support plugins
 Plug 'tpope/vim-markdown'
 Plug 'godlygeek/tabular' " required by vim-markdown to support Markdown table formatting
@@ -250,7 +247,7 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 " TODO: add other languages' LSP configs here over time
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
+    \ 'rust': ['rustup', 'run', 'stable', 'rls']
     \ }
 "FIXME: LanguageClient tries to create ad-hoc snippets for method calls but
 "the snippet plugin isn't involved so the result is craptastic
