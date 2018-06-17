@@ -151,6 +151,11 @@ Plug 'ensime/ensime-vim'
 " ALE for syntax highlighting including Ensime-aware highlighting of
 " Scala and Java
 Plug 'w0rp/ale'
+" I am worried the ALE linters conflict with the LSP support which I've
+" enabled for rust.  TODO: If other languages are enabled exclude them from ALE also
+let g:ale_linters = { 
+\ 'rust': [ ], 
+\}
 
 " vim-scala plugin to set up vim for scala coding
 Plug 'derekwyatt/vim-scala'
@@ -245,7 +250,8 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-" TODO: add other languages' LSP configs here over time
+" TODO: add other languages' LSP configs here over time, and make sure if you add other languages here that you disable
+" ALE linters above so they don't step on each other
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'stable', 'rls']
     \ }
