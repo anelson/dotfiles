@@ -111,3 +111,12 @@ There might be another way on the horizon.  In SBT 1.0 there is a `server` comma
 This server accepts some simple JSON commands to send it command line options and it responds with JSON log output that includes rich warning and error info.  Not sure about tests but for compiles at least it's a good option.
 
 This means a VIM plugin could simply look for this service discovery file in a project root, and if found connect to the socket server and remotely drive an SBT instance.  Shipping SBT is not quite there yet but it's close.  I predict this will be the way forward for vim integration with SBT.
+
+# Rust
+
+I have configured the neovim language client plugin to start up the Rust language server.  In order for this to work you
+must have RLS installed.  Assuming you're running the version in `stable`, you need to do this to get it installed:
+
+    $ rustup component add rls-preview rust-analysis rust-src --toolchain stable
+
+
