@@ -253,7 +253,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 " TODO: add other languages' LSP configs here over time, and make sure if you add other languages here that you disable
 " ALE linters above so they don't step on each other
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'stable', 'rls']
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
     \ }
 "FIXME: LanguageClient tries to create ad-hoc snippets for method calls but
 "the snippet plugin isn't involved so the result is craptastic
