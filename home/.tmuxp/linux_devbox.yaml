@@ -1,0 +1,20 @@
+session_name: linux_devbox
+start_directory: ~/linux_devbox
+windows:
+    - window_name: editor
+      focus: true
+      layout: main-horizontal
+      options:
+          main-pane-height: 35
+      panes:
+          - shell_command:
+              - vim
+            focus: true
+          - shell_command:
+              - cd playbooks
+    - window_name: shells
+      layout: even-vertical
+      panes:
+          - pane
+          - pane
+

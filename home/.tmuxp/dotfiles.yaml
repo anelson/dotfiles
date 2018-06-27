@@ -1,0 +1,14 @@
+session_name: dotfiles
+start_directory: ~/
+windows:
+    - window_name: editor
+      focus: true
+      layout: main-horizontal
+      options:
+          main-pane-height: 35
+      panes:
+          - shell_command:
+              - vim
+            focus: true
+          - shell_command:
+              - homeshick cd dotfiles
