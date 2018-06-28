@@ -1,0 +1,12 @@
+session_name: rust
+windows:
+    - window_name: editor
+      focus: true
+      layout: main-horizontal
+      options:
+          main-pane-height: 35
+      panes:
+          - shell_command:
+              - vim
+            focus: true
+          - blank
