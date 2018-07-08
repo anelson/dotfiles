@@ -361,12 +361,12 @@ if executable("fzf")
 
     " fzf.vim provides so many handy commands.  Here are bindings for a few:
     " * Ctrl-T - Files - like ctrl-p but fast
-    " * Ctrl-Shift-T - Lines - Fuzzy search of all lines in current file, YUS!
+    " * Ctrl-L - Lines - Fuzzy search of all lines in current file, YUS!
     " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
     " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
     " * <Leader>m - History - most recently used files
     nmap <c-t> :Files<CR>
-    nmap <c-s-t> :Lines<CR>
+    nmap <c-l> :Lines<CR>
     nmap <Leader>b :Buffers<Enter>
     nmap <Leader>h :Helptags<Enter>
     nmap <Leader>m :History<Enter>
