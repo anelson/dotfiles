@@ -145,9 +145,6 @@ Plug 'tpope/vim-obsession'
 " Briefly highlight yanked regions for clarity
 Plug 'machakann/vim-highlightedyank'
 
-" Enable Ensime for Scala/Java code
-Plug 'ensime/ensime-vim'
-
 " ALE for syntax highlighting including Ensime-aware highlighting of
 " Scala and Java
 Plug 'w0rp/ale'
