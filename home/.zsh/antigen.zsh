@@ -1,6 +1,17 @@
 # load the antigen plugin manager
 # assumes the antigen-git package is already installed systemwide
-source /usr/share/zsh/share/antigen.zsh
+if [[ -a /usr/share/zsh/share/antigen.zsh ]] then
+  source /usr/share/zsh/share/antigen.zsh
+elif [[ -a /usr/share/antigen.zsh ]] then 
+  source /usr/share/antigen.zsh
+elif [[ -a $HOME/.zsh/antigen-git.zsh ]] then 
+  source $HOME/.zsh/antigen-git.zsh
+else
+  echo "antigen is missing; downloading it"
+  curl -L git.io/antigen > $HOME/.zsh/antigen-git.zsh
+  source $HOME/.zsh/antigen-git.zsh
+fi
+
 
 # I stopped using prezto, antigen provides all the functionality i need
 #antigen use prezto
