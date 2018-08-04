@@ -3,8 +3,8 @@
 # If you want to install gems for access as a user use RVM
 #PATH=$PATH:$(ruby -rubygems -e "puts Gem.user_dir")/bin
 
-# Set a TERMINAL variable so i3 will use alacritty
-[[ -x $(which alacritty) ]] && export TERMINAL=`which alacritty`
+# Set a TERMINAL variable so i3 will use alacritty if alacritty is installed
+command -v alacritty >/dev/null 2>&1 && export TERMINAL=`command -v alacritty`
 
 # make GNOME keyring available to CLI apps as well
 if [ -n "$DESKTOP_SESSION" ];then
