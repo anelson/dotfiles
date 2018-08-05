@@ -164,14 +164,11 @@ let g:rustfmt_autosave = 1 " automatically rustfmt on save
 " markdown support plugins
 Plug 'tpope/vim-markdown'
 Plug 'godlygeek/tabular' " required by vim-markdown to support Markdown table formatting
-Plug 'MikeCoder/markdown-preview.vim' " preview markdown in a browser from vim
-"Plug 'plasticboy/vim-markdown'
-"Plug 'gabrielelana/vim-markdown'
 Plug 'reedes/vim-pencil' " modify vim to behave better when writing prose
 augroup pencil
   autocmd!
   " automatically enable pencil on common text editing tasks
-  autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'hard', 'autoformat': 1 })
+  autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'soft', 'autoformat': 1 })
 						\ | set textwidth=120
 
   " regretably, the 'autoformat' feature doesn't play well with vimwiki.  it
