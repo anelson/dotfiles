@@ -398,6 +398,9 @@ exec --no-startup-id xset s 600 30 &
 # Invoke i3lock to lock the session when the screen saver setting above locks it, and also if the system suspends
 exec --no-startup-id xss-lock --transfer-sleep-lock --notifier $HOME/.config/i3/dim-screen.sh -- $HOME/.config/i3/transfer-sleep-lock-i3lock.sh &
 
+# Configure the X keyboard for both US and Russian with alt-shift to switch between
+exec --no-startup-id setxkbmap -layout "us,ru" -option "grp:lalt_lshift_toggle"
+
 # Always run dunst to handle notifications
 exec_always --no-startup-id "killall -q dunst; dunst &"
 
