@@ -1,0 +1,57 @@
+/* This is intended to be copied onto the profile directory for your profile in Firefox.
+ * This can't be automated because sadly Firefox generates this at random at each install.
+ * It's probably something like ~/.mozilla/firefox/[blah.blah].  You can `cat ~/.mozilla/firefox/profiles.ini` 
+ * to see which profile is default.
+ *
+ * This file should go into the `chrome/` subdirectory and be renamed to `userContent.css`.  I like to use a symlink to 
+ * this file, that way I don't forget and make changes to the one in the profile directory which get lost on other systems.
+ *
+ * The purpose of this file is to fix the color of text elements when using a dark GTK them, like Akto or Arc Dark.
+ *
+ * If you use a light theme, don't bother.
+ */
+input {
+    border: 2px inset white;
+    background-color: white;
+    color: black;
+}
+
+textarea {
+    border: 2px inset white;
+    background-color: white;
+    color: black;
+}
+
+select {
+    border: 2px inset white;
+    background-color: white;
+    color: black;
+}
+ 
+input[type="radio"],
+input[type="checkbox"] {
+    border: 2px inset white ! important;
+    background-color: white ! important;
+    color: ThreeDFace ! important;
+}
+
+*|*::-moz-radio {
+    background-color: white;
+}
+
+button, 
+input[type="reset"],
+input[type="button"],
+input[type="submit"] { 
+    border: 2px outset white;
+    background-color: #eeeeee;
+    color: black;
+}
+
+body {
+    background-color: white;
+    color: black;
+    display: block;
+    margin: 8px;
+}
+
