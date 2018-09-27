@@ -39,6 +39,28 @@ get_monitor_name_from_ordinal() {
     (grep '^[0-9]' <<< "$mons_output" | sed "${ordinal}q;d"  | tr --squeeze-repeats ' ' |  cut  -d ' ' -f2)
 }
 
+get_monitor_resolutions() {
+    local name=$1;
+    # Filter only for the output concerned with this specific monitor, and skip
+    # the first line which is a header and lists the current resolution
+    (xrandr | \
+      awk -v monitor="^$name connected" '/connected/ {p = 0} \
+        $0 ~ monitor {p = 1} \
+        p' | \
+      sed -e 1d
+    )
+}
+
+get_monitor_current_resolution() {
+    local name=$1;
+
+    local resolutions=$(get_monitor_resolutions $name)
+
+    # Filter the resolution lines that contain a WIDTHxHEIGHT  REFRESH +
+    # where the "+" indicates the current resolution
+    (grep -o '[0-9][0-9]*x[0-9][0-9]*\W*[0-9][0-9]*\.[0-9][0-9]*.*+' <<< "$resolutions")
+}
+
 xrandr_out=$(xrandr)
 
 # make arrays with the names of ALL monitors, and of just those that are connected
@@ -48,6 +70,11 @@ connected_monitors=( $(echo "$xrandr_out" | grep " connect" | cut -f1 -d ' ') )
 echo "Found ${#connected_monitors[@]} connected monitors:"
 for mon in "${connected_monitors[@]}"; do
     echo "    $mon"
+    # NOTE: As of now, this logic around getiing the current resolution isn't needed because I figured out why the 
+    # maximum resolution wasn't being reported propertly (hint: DP works better than HDMI)
+    # However, I'm leaving this code in here in case I need to make this script smarter in the future
+    resolutions=$(get_monitor_current_resolution "$mon")
+    echo "      Current resolution: $resolutions"
 done
 
 # just assume the built-in is always the first monitor in the output
@@ -80,8 +107,8 @@ elif [[ -z "$monitor2_name" ]]; then
     echo "Disabling built-in display and using single external display $monitor1_name"
     #mons -S "$builtin_name,$monitor1_name:R" --primary "$builtin_name" --dpi "$BUILTIN_MONITOR_DPI"
     xrandr --verbose --output $builtin_name --off 
-    xrandr --verbose --dpi $EXTERNAL_MONITOR_LOWDPI
-    xrandr --verbose --output $monitor1_name --auto --primary --dpi $EXTERNAL_MONITOR_LOWDPI
+    xrandr --verbose --dpi $EXTERNAL_MONITOR_HIDPI
+    xrandr --verbose --output $monitor1_name --auto --primary --dpi $EXTERNAL_MONITOR_HIDPI
     # xrandr --verbose --output $builtin_name --auto --primary 
     #xrandr --verbose --output $monitor1_name --auto --right-of $builtin_name 
     #xrandr --verbose --dpi $BUILTIN_MONITOR_DPI
