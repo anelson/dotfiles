@@ -3,8 +3,12 @@
  * It's probably something like ~/.mozilla/firefox/[blah.blah].  You can `cat ~/.mozilla/firefox/profiles.ini` 
  * to see which profile is default.
  *
- * This file should go into the `chrome/` subdirectory and be renamed to `userContent.css`.  I like to use a symlink to 
- * this file, that way I don't forget and make changes to the one in the profile directory which get lost on other systems.
+ * This file should go into the `chrome/` subdirectory and be renamed to `userContent.css`.  
+ *
+ * You'll be tempted to symlink this file to the one tracked by git but that would be too easy.  For some
+ * reason as of this writing (Firefox version 58) if `userContent.css` is a symlink it's not loaded.  So be
+ * very careful when editing this file to make sure you edit the authoritative copy in ~/.config/mozilla-userContent.css 
+ * and copy it manually into your profile.
  *
  * The purpose of this file is to fix the color of text elements when using a dark GTK them, like Akto or Arc Dark.
  *
