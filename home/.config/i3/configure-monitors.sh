@@ -19,7 +19,8 @@
 # so it's entirely possible the mons approach was perfectly adequate after all
 BUILTIN_MONITOR_NAME="eDP1" # this seems to be pretty consistent
 BUILTIN_MONITOR_DPI="192" #basically a 2x scaling factor when using the built-in monitor
-EXTERNAL_MONITOR_DPI="144" #my external 4K HiDPI monitors are big enough they don't need such a big scale factor. this is 1.5x
+EXTERNAL_MONITOR_HIDPI="144" #my external 4K HiDPI monitors are big enough they don't need such a big scale factor. this is 1.5x
+EXTERNAL_MONITOR_LOWDPI="96" #external 1080p HD monitors have pretty low resolution
 
 # the mons script assigns monitors numbers, from what I can tell it's based on their outpt order
 # in xrandr.  But they're not contiguous integers.  on my system the built-in display is 0, 
@@ -63,6 +64,7 @@ if [[ "$builtin_name" -ne "$BUILTIN_MONITOR_NAME" ]]; then
 fi
 
 # start with the xrandr auto config since it seems to get confused easily
+echo "Resetting xrandr config using --auto and DPI $BUILTIN_MONITOR_DPI"
 xrandr --auto --dpi "$BUILTIN_MONITOR_DPI"
 
 if [[ -z "$monitor1_name" && -z "$monitor2_name" ]]; then
@@ -73,14 +75,16 @@ if [[ -z "$monitor1_name" && -z "$monitor2_name" ]]; then
     #mons --primary "$builtin_name" --dpi "$BUILTIN_MONITOR_DPI"
 elif [[ -z "$monitor2_name" ]]; then
     # There is one external monitor connected.  This is a common scenario with projectors
-    # Extend the display to include the external
-    # Note that we keep the DPI set to the internal display's DPI, since we assume this
-    # external monitor is used for some secondary purpose like a presentation
-    echo "Extending the built-in display to include display $monitor1_name"
+    # It's unlikely that this one external monitor is 4K, and a mix of 4K and 1080p displays is a disaster
+    # Thus, disable the on-board display and use only the external
+    echo "Disabling built-in display and using single external display $monitor1_name"
     #mons -S "$builtin_name,$monitor1_name:R" --primary "$builtin_name" --dpi "$BUILTIN_MONITOR_DPI"
-    xrandr --verbose --output $builtin_name --auto --primary 
-    xrandr --verbose --output $monitor1_name --auto --right-of $builtin_name 
-    xrandr --verbose --dpi $BUILTIN_MONITOR_DPI
+    xrandr --verbose --output $builtin_name --off 
+    xrandr --verbose --dpi $EXTERNAL_MONITOR_LOWDPI
+    xrandr --verbose --output $monitor1_name --auto --primary --dpi $EXTERNAL_MONITOR_LOWDPI
+    # xrandr --verbose --output $builtin_name --auto --primary 
+    #xrandr --verbose --output $monitor1_name --auto --right-of $builtin_name 
+    #xrandr --verbose --dpi $BUILTIN_MONITOR_DPI
 else
     # Two monitors connected
     #
@@ -94,7 +98,7 @@ else
     xrandr --verbose --output $builtin_name --off 
     xrandr --verbose --output $monitor2_name --mode "3840x2160"   --pos 0x0
     xrandr --verbose --output $monitor1_name --mode "3840x2160"  --right-of $monitor2_name
-    xrandr --verbose --dpi $EXTERNAL_MONITOR_DPI
+    xrandr --verbose --dpi $EXTERNAL_MONITOR_HIDPI
 
 fi
 
