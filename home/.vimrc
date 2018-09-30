@@ -145,6 +145,9 @@ Plug 'tpope/vim-obsession'
 " Briefly highlight yanked regions for clarity
 Plug 'machakann/vim-highlightedyank'
 
+" Enable Ensime for Scala/Java code
+Plug 'ensime/ensime-vim'
+
 " ALE for syntax highlighting including Ensime-aware highlighting of
 " Scala and Java
 Plug 'w0rp/ale'
@@ -164,11 +167,14 @@ let g:rustfmt_autosave = 1 " automatically rustfmt on save
 " markdown support plugins
 Plug 'tpope/vim-markdown'
 Plug 'godlygeek/tabular' " required by vim-markdown to support Markdown table formatting
+Plug 'MikeCoder/markdown-preview.vim' " preview markdown in a browser from vim
+"Plug 'plasticboy/vim-markdown'
+"Plug 'gabrielelana/vim-markdown'
 Plug 'reedes/vim-pencil' " modify vim to behave better when writing prose
 augroup pencil
   autocmd!
   " automatically enable pencil on common text editing tasks
-  autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'soft', 'autoformat': 1 })
+  autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'hard', 'autoformat': 1 })
 						\ | set textwidth=120
 
   " regretably, the 'autoformat' feature doesn't play well with vimwiki.  it
@@ -185,7 +191,8 @@ augroup END
 " vimwiki related plugins
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_list = [
-	    \ { 'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.mkd'}
+	    \ { 'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.mkd'},
+	    \ { 'path': '~/vimwiki/русский', 'syntax': 'markdown', 'ext': '.mkd'}
 	\ ]
 
 " A lighter version of the powerline plugin
@@ -355,11 +362,10 @@ if executable("fzf")
 
     " fzf.vim provides so many handy commands.  Here are bindings for a few:
     " * Ctrl-T - Files - like ctrl-p but fast
-    " * <Leader>l - Lines - Fuzzy search of all lines in current file, YUS!  * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
+    " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
     " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
     " * <Leader>m - History - most recently used files
     nmap <c-t> :Files<CR>
-    nmap <Leader>l :Lines<CR>
     nmap <Leader>b :Buffers<Enter>
     nmap <Leader>h :Helptags<Enter>
     nmap <Leader>m :History<Enter>
