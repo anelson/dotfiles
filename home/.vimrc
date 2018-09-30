@@ -176,6 +176,7 @@ augroup pencil
   " automatically enable pencil on common text editing tasks
   autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'hard', 'autoformat': 1 })
 						\ | set textwidth=120
+						\ | setlocal spell spelllang=en_us,ru
 
   " regretably, the 'autoformat' feature doesn't play well with vimwiki.  it
   " seems to bind <CR> in insert mode to something that results in newlines
@@ -185,7 +186,7 @@ augroup pencil
   " [here](https://github.com/reedes/vim-pencil/issues/45)
   autocmd FileType vimwiki call pencil#init({'wrap': 'hard', 'autoformat': 0 })
 						\ | set textwidth=120
-						\ | setlocal spell
+						\ | setlocal spell spelllang=en_us,ru
 augroup END
 
 " vimwiki related plugins
