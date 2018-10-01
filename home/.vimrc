@@ -1,6 +1,10 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" put all swap files in one directory so I can easily purge them after a
+" laptop hang
+set directory=~/.vim/swap,.
+
 " Use the comma as the leader
 let mapleader = ","
 
