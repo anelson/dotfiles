@@ -1,4 +1,11 @@
-/* This is intended to be copied onto the profile directory for your profile in Firefox.
+/* 
+ * UPDATE 2018-10-08: I've found a workaround for this that doesn't involve custom CSS, so this is disabled for now.
+ * I've left this here in case the workaround stops working.
+ *
+ * For reference the workaround is: https://www.mkammerer.de/blog/gtk-dark-theme-and-firefox/
+ * The Mozilla bug, outstanding for 18 years now, is: https://bugzilla.mozilla.org/show_bug.cgi?id=70315
+ *
+ * This is intended to be copied onto the profile directory for your profile in Firefox.
  * This can't be automated because sadly Firefox generates this at random at each install.
  * It's probably something like ~/.mozilla/firefox/[blah.blah].  You can `cat ~/.mozilla/firefox/profiles.ini` 
  * to see which profile is default.
@@ -14,24 +21,14 @@
  *
  * If you use a light theme, don't bother.
  */
-input {
+/*
+input,textarea,select {
     border: 2px inset white;
-    background-color: white;
-    color: black;
+    background-color: white ! important;
+    color: black ! important;
+    -moz-appearance: none ! important;
 }
 
-textarea {
-    border: 2px inset white;
-    background-color: white;
-    color: black;
-}
-
-select {
-    border: 2px inset white;
-    background-color: white;
-    color: black;
-}
- 
 input[type="radio"],
 input[type="checkbox"] {
     border: 2px inset white ! important;
@@ -58,4 +55,4 @@ body {
     display: block;
     margin: 8px;
 }
-
+*/
