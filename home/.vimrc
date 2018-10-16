@@ -146,6 +146,10 @@ Plug 'tpope/vim-dispatch'
 " this is used with the tmux plugin tmux-resurrect 
 Plug 'tpope/vim-obsession'
 
+" detect and handle Jekyll files which have YAML front matter and Liquid
+" templates
+Plug 'tpope/vim-liquid'
+
 " Briefly highlight yanked regions for clarity
 Plug 'machakann/vim-highlightedyank'
 
@@ -169,16 +173,19 @@ Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1 " automatically rustfmt on save
 
 " markdown support plugins
-Plug 'tpope/vim-markdown'
+"Plug 'tpope/vim-markdown' "trying the platicboy/vim-markdown for richer
+"Jekyll support
 Plug 'godlygeek/tabular' " required by vim-markdown to support Markdown table formatting
-Plug 'MikeCoder/markdown-preview.vim' " preview markdown in a browser from vim
-"Plug 'plasticboy/vim-markdown'
-"Plug 'gabrielelana/vim-markdown'
+
+Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_math = 1	"enable LaTeX syntax highlighting in markdown
+let g:vim_markdown_frontmatter = 1 "enable YAML front matter highlighting for Jekyll content
+
 Plug 'reedes/vim-pencil' " modify vim to behave better when writing prose
 augroup pencil
   autocmd!
   " automatically enable pencil on common text editing tasks
-  autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'hard', 'autoformat': 1 })
+  autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'hard', 'autoformat': 0 })
 						\ | set textwidth=120
 						\ | setlocal spell spelllang=en_us,ru
 
