@@ -17,7 +17,7 @@
 # work properly due to errors reported from xrandr, so I modified it to call xrandr directly, but now I seem to get
 # errors as well.  This is at the same time that docking and undocking from my TB16 dock is unreliable
 # so it's entirely possible the mons approach was perfectly adequate after all
-BUILTIN_MONITOR_NAME="eDP1" # this seems to be pretty consistent
+BUILTIN_MONITOR_NAME="eDP" # this seems to be pretty consistent
 BUILTIN_MONITOR_DPI="192" #basically a 2x scaling factor when using the built-in monitor
 EXTERNAL_MONITOR_HIDPI="144" #my external 4K HiDPI monitors are big enough they don't need such a big scale factor. this is 1.5x
 EXTERNAL_MONITOR_LOWDPI="96" #external 1080p HD monitors have pretty low resolution
@@ -85,8 +85,8 @@ echo "Built in: $builtin_name"
 echo "External 1: $monitor1_name"
 echo "External 2: $monitor2_name"
 
-if [[ "$builtin_name" -ne "$BUILTIN_MONITOR_NAME" ]]; then
-    echo "ERROR: expecting the first monitor to be $BUILTIN_MONITOR_NAME!"
+if [[ "$builtin_name" != "$BUILTIN_MONITOR_NAME"* ]]; then
+    echo "ERROR: expecting the first monitor to start with prefix $BUILTIN_MONITOR_NAME!"
     exit -1;
 fi
 
