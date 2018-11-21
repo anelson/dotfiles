@@ -5,7 +5,7 @@
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
-#env:
+env:
   # TERM variable
   #
   # This value is used to set the `$TERM` environment variable for
@@ -124,7 +124,9 @@ font:
   # screens and make reading text a little easier.
   # On X11 it is possible to change the DPI for each instance of alacritty by using
   # `WINIT_HIDPI_FACTOR=1.0 alacritty` to scale the font.
-  scale_with_dpi: true
+  # NB: This config parameter is no longer supported; use WINIT_HIDPI_FACTOR to override winit's built-in
+  # heuristics to detect DPI
+  # scale_with_dpi: true
 
 # Display the time it takes to redraw each frame.
 render_timer: false
