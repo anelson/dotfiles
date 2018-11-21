@@ -67,6 +67,20 @@ set foldlevelstart=99
 
 set conceallevel=3 "enable all syntax concealing, like rendering _Markdown_ in italics
 
+" to help when writing Russian, enable a Russian keymap in input mode
+" This command will make the Russian keymap the default, which isn't quite
+" right, but follow along
+set keymap=russian-jcukenwin
+
+" Disable the use of a keymap in insert mode, which should make Vim default to
+" English (or rather ,whatever the system keyboard layout is) and toggle
+" Russian on with CTRL-^
+set iminsert=0
+
+" don't remember a separate keymap setting for searching; it should be the
+" same as insert mode
+set imsearch=-1
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
