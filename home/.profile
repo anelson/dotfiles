@@ -3,6 +3,16 @@
 # If you want to install gems for access as a user use RVM
 #PATH=$PATH:$(ruby -rubygems -e "puts Gem.user_dir")/bin
 
+export EDITOR=nvim
+export VISUAL=nvim
+export DIFFPROG='nvim -d'
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# Put my own binaries on the path.  Note this specifically must be done BEFORE lookign for alacritty 
+# since I like to install it in the user-specific binary path
+export PATH="$HOME/.local/bin:$PATH"
+
 # Set a TERMINAL variable so i3 will use alacritty if alacritty is installed
 command -v alacritty >/dev/null 2>&1 && export TERMINAL=`command -v alacritty`
 
