@@ -332,7 +332,8 @@ animation-charging-framerate = 750
 [module/cpu-temperature]
 type = internal/temperature
 # on my xps 13 9370 thermal zone 10 is x86_pkg_temp
-hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon2/temp1_input
+hwmon-path = /sys/devices/class/hwmon/hwmon1/temp1_input
+
 ;intel specs say max junction temp 100C
 warn-temperature = 90
 
@@ -354,7 +355,7 @@ ramp-foreground = ${colors.foreground-alt}
 
 [module/pch-temperature]
 type = internal/temperature
-hwmon-path = /sys/devices/virtual/hwmon/hwmon3/temp1_input
+hwmon-path = /sys/devices/class/hwmon/hwmon3/temp1_input
 warn-temperature = 60
 
 format = <ramp> <label>
