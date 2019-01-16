@@ -431,6 +431,10 @@ let g:indent_guides_enable_on_vim_startup = 0
 let g:indent_guides_start_level=1
 let g:indent_guides_guide_size=1
 
+" some file types don't fold with syntax and work better with indent. YAML
+" specifically.  Fortunately, Theres a Plugin for That (tm)
+Plug 'pedrohdz/vim-yaml-folds'
+
 " vim-test makes it easy-ish to run tests in various languages, with some help
 " from vim-dispatch
 Plug 'janko-m/vim-test'
