@@ -351,6 +351,7 @@ let g:EasyMotion_smartcase = 1 "use something similar to Vim's smartcase
 " bidi)
 map s <Plug>(easymotion-bd-f2)
 nmap s <Plug>(easymotion-overwin-f2)
+map <Leader><Leader> <Plug>(easymotion-bd-w)
 
 " JK motions: Line motions
 map <Leader>j <Plug>(easymotion-j)
