@@ -417,6 +417,16 @@ if executable("fzf")
     let g:fzf_layout = { 'down': '~40%' }
 endif
 
+" use a plugin to render indent guides which are helpful dealing with
+" indent-based languages like YAML and Python
+Plug 'nathanaelkane/vim-indent-guides'
+"enable on startup because I won't remember the leader combo to enable
+"(it's <Leader>ig BTW)
+let g:indent_guides_enable_on_vim_startup = 1
+"tweak the layout a bit to make it less visually distracting
+let g:indent_guides_start_level=1
+let g:indent_guides_guide_size=1
+
 " vim-test makes it easy-ish to run tests in various languages, with some help
 " from vim-dispatch
 Plug 'janko-m/vim-test'
