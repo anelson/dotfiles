@@ -80,10 +80,18 @@ You can use `V` to block select lines and then `>>` to indent once and then `.` 
 
 I've configured my `.vimrc` to enable folding by default, fully expand all folds, and to fold based on syntax information in the file.   There are a few handy folding commands.
 
+I've mapped `<Leader>z` to `za` and `<Leader>Z` to `zO`.  Yes that's a bit inconsistent; I'd like to map `<Leader>Z` to
+something that would do what `za` does but for all descendant folds of the current fold, but that's the opposite of what
+`zA` actually does.
 `zR` opens all folds in a file, if for some reason they have closed
+`zr` decreases the document-wide fold level (meaning opens folds one level down).  After a `zM` this can be used to reveal the first level of folds
 `zM` closes all folds
+`zm` increases the fold level document wide (meaning closes folds one level up)
 `zv` opens only the folds needed to reveal the cursor
-`za` toggles open/closed a fold
+`za` toggles open/closed a fold.  I'm longing for something like `za` that operates recursively on children.  There
+seems to be no such thing.  `zA` operates recursively on _parents_ not children.  `zO` will recursively open a fold and
+it's childen.  How do I recursively close all child folds?
+`zo` opens a fold; `za` is more useful.  But `zO` recursively opens all folds, sometimes that's handy.
 `zc` closes a fold; if it's on a closed fold it closes the parent fold, so you can work your way up folds that way
 
 # Git hacks
