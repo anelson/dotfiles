@@ -65,6 +65,10 @@ set diffopt+=vertical
 set foldmethod=syntax
 set foldlevelstart=99
 
+"I like to quickly toggle folds open and closed
+nnoremap <Leader>z  za
+nnoremap <Leader>Z  zA
+
 set conceallevel=3 "enable all syntax concealing, like rendering _Markdown_ in italics
 
 " to help when writing Russian, enable a Russian keymap in input mode
