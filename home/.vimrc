@@ -68,8 +68,9 @@ set foldlevelstart=99
 "I like to quickly toggle folds open and closed
 nnoremap <Leader>z  za
 "This seems contradictory but there's a section in `vimnotes` that has the
-"reasoning
-nnoremap <Leader>Z  zO
+"reasoning.  If the current fold is open, `zO` doesn't do anything, but if
+"it's closed then `zO` recursively opens all child folds.
+nnoremap <Leader>Z  zczO
 
 set conceallevel=3 "enable all syntax concealing, like rendering _Markdown_ in italics
 
