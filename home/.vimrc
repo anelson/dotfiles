@@ -88,6 +88,25 @@ set iminsert=0
 " same as insert mode
 set imsearch=-1
 
+" normal vim paste behavior with p or P is to leave the cursor at the
+" beginning of the pasted text.  For whatever reason most other editors do the
+" opposite, leaving the cursor at the end of the pasted text.  I've gotten
+" used to this behavior, so the Vim behavior is jarring.  Often the cursor is
+" towards the bottom of the screen, then I `p` some text in and the pasted
+" text is scrolled off the screen forcing me to `zz` or `zt` to see what I
+" just pasted.
+"
+" In Vim the bindings `gp` and `gP` are equivalent to `p` and `P` but with the
+" cursor at the end of the pasted text.  I want to swap these.
+"
+" Remember also that '[ and '] are marks that correspond to the beginning and
+" end of the last pasted text, respectively, in case you want to move back to
+" the beginning of the pasted text
+noremap p gp
+noremap P gP
+noremap gp p
+noremap gP P
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
