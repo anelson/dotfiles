@@ -70,7 +70,7 @@ nnoremap <Leader>z  za
 "This seems contradictory but there's a section in `vimnotes` that has the
 "reasoning.  If the current fold is open, `zO` doesn't do anything, but if
 "it's closed then `zO` recursively opens all child folds.
-nnoremap <Leader>Z  zczO
+nnoremap <Leader>Z  zozczO
 
 set conceallevel=3 "enable all syntax concealing, like rendering _Markdown_ in italics
 
