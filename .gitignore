@@ -5,3 +5,5 @@ home/.ssh/
 # so it just won't work right
 home/.vim/plugged
 
+# Dont' track vim swap files
+**/*.swp
