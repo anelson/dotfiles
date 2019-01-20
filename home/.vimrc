@@ -5,6 +5,11 @@ filetype off                  " required
 " laptop hang
 set directory=~/.vim/swap,.
 
+" make sure that swap directory exists.  for obvious reasons it's not in git.
+if !isdirectory($HOME.'/.vim/swap')
+  silent call mkdir ($HOME.'/.vim/swap', 'p')
+endif
+
 " Use the comma as the leader
 let mapleader = ","
 
@@ -139,7 +144,7 @@ let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 
 if executable('fd')
    " if present, 'fd' is the best option for listing files
-   " ripgrep is meant to search inside files 
+   " ripgrep is meant to search inside files
    let g:ctrlp_user_command = 'fd --type file --color never --hidden --exclude .git "" %s'
     " fd is fast no need to cache
     let g:ctrlp_use_caching = 0
@@ -183,7 +188,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-dispatch'
 
 " support saving vim sessions and restoring them later
-" this is used with the tmux plugin tmux-resurrect 
+" this is used with the tmux plugin tmux-resurrect
 Plug 'tpope/vim-obsession'
 
 " detect and handle Jekyll files which have YAML front matter and Liquid
@@ -201,8 +206,8 @@ Plug 'ensime/ensime-vim'
 Plug 'w0rp/ale'
 " I am worried the ALE linters conflict with the LSP support which I've
 " enabled for rust.  TODO: If other languages are enabled exclude them from ALE also
-let g:ale_linters = { 
-\ 'rust': [ ], 
+let g:ale_linters = {
+\ 'rust': [ ],
 \}
 
 " vim-scala plugin to set up vim for scala coding
@@ -257,7 +262,7 @@ let g:airline#extensions#ale#enabled = 1
 let g:airline_theme='gruvbox'
 let g:airline_solarized_bg='dark'
 let g:airline_powerline_fonts=1
-let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline 
+let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline
 
 " Use tmuxline to generate a tmux statusline config that matches our airline
 " config.  It's a bit odd to use vim code to generate a tmux config, but it's
@@ -274,7 +279,7 @@ let g:tmuxline_preset = {
 " Use the same keys to navigate vim windows and tmux panes seamlessly
 Plug 'christoomey/vim-tmux-navigator'
 
-" Show git status line by line 
+" Show git status line by line
 Plug 'airblade/vim-gitgutter'
 
 " Use a fancy plugin to render nested parens in different colors
@@ -335,7 +340,7 @@ let g:deoplete#enable_smart_case = 1
 " Trying out neosnippet for its integration with deoplete
 "" UltiSnips which depends on vim-snippets
 "Plug 'honza/vim-snippets'
-"Plug 'SirVer/ultisnips' 
+"Plug 'SirVer/ultisnips'
 "let g:UltiSnipsExpandTrigger = '<TAB>'
 "let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 "let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
