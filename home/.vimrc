@@ -31,13 +31,6 @@ nnoremap <Leader>vc :split ~/.vimrc<CR>
 " A cheap poor mans 'find usages'
 nnoremap <Leader>* :silent grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-" Improve the experience in terminal mode
-" UPDATE: I disabled this.  I never use terminal mode as a terminal, and
-" plugins like fugitive and fzf.vim open terminals that I want to close with
-" escape but I can't because of this
-" :tnoremap <Esc> <C-\><C-n> "Pressing <ESC> in terminal mode switches to normal mode
-:tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi' "Use Ctrl-R to paste from a register in terminal insert mode
-
 " Use relative line numbers
 set relativenumber
 
@@ -45,7 +38,6 @@ set relativenumber
 set number
 
 " Use a faster updatetime to vim-gutter reflects changes faster
-" TODO: Make sure this doesn't slow things down
 set updatetime=250
 
 " Configure sane defaults for tabs
@@ -128,30 +120,6 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-"" CtrlP for fuzzy file/MRU/buffer navigation
-"Plug 'ctrlpvim/ctrlp.vim'
-"" also install a compiled fuzzy matcher library for added performance
-"Plug 'nixprime/cpsm', { 'do': './install.sh' }
-"" By default <C-p> is mapped to :CtrlP, I want to add a mapping to :CtrlPBuffer
-"" since I often use that too
-""nnoremap <Leader>b :CtrlPBuffer<Enter>
-
-"let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard'] "respect gitignore
-"let g:ctrlp_by_filename = 1 "searching by filename is a more sensible default; Ctrl-d in prompt to switch
-"let g:ctrlp_match_window='bottom,order:ttb' "why would anyone want bottom-to-top by default??
-"let g:ctrlp_open_new_file='r' " open files in the current window, dont' open a new window or a new tab
-"let g:ctrlp_mruf_max = 500 "remember more files
-"let g:ctrlp_show_hidden = 1 "working with dotfiles requires this
-"let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
-
-"if executable('fd')
-"   " if present, 'fd' is the best option for listing files
-"   " ripgrep is meant to search inside files
-"   let g:ctrlp_user_command = 'fd --type file --color never --hidden --exclude .git "" %s'
-"    " fd is fast no need to cache
-"    let g:ctrlp_use_caching = 0
-"endif
-
 " optionally use a more powerful external tool for grep
 if executable('rg')
     " use ripgrep it's even faster than ag
@@ -202,6 +170,7 @@ Plug 'machakann/vim-highlightedyank'
 
 " Enable Ensime for Scala/Java code
 Plug 'ensime/ensime-vim'
+let ensime_server_v2=1
 
 " ALE for syntax highlighting including Ensime-aware highlighting of
 " Scala and Java
@@ -220,10 +189,7 @@ Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1 " automatically rustfmt on save
 
 " markdown support plugins
-"Plug 'tpope/vim-markdown' "trying the platicboy/vim-markdown for richer
-"Jekyll support
 Plug 'godlygeek/tabular' " required by vim-markdown to support Markdown table formatting
-
 Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_math = 1	"enable LaTeX syntax highlighting in markdown
 let g:vim_markdown_frontmatter = 1 "enable YAML front matter highlighting for Jekyll content
@@ -286,6 +252,7 @@ Plug 'airblade/vim-gitgutter'
 
 " Use a fancy plugin to render nested parens in different colors
 Plug 'luochen1990/rainbow'
+let g:rainbow_active=1 " use :RainbowToggle to turn on and off
 
 " because netrw tree mode sucks in cruel and unusual ways
 Plug 'scrooloose/nerdtree'
@@ -304,6 +271,12 @@ autocmd FileType nerdtree setlocal relativenumber " make sure relative line numb
 
 " add smarter commenting-out logic
 Plug 'scrooloose/nerdcommenter'
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
 
 " LSP client for those languages that provide a language server
 Plug 'autozimu/LanguageClient-neovim', {
@@ -347,10 +320,8 @@ endfunction
 autocmd FileType * call LC_maps()
 
 " Use the autocompleter
-" Trying out deoplete instead of YCM due to LSP support in deoplete
-"Plug 'Valloric/YouCompleteMe'
-"let g:ycm_key_list_select_completion = ['<C-j>', '<Down>'] "Avoid collisions with UltiSnips
-"let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>'] "Avoid collisions with UltiSnips
+" I used YouCompleteMe (YCM) for a long time but switched to deoplete due to
+" it's compatibility with LanguageClient, and haven't looked back
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -362,13 +333,9 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_start_length = 1
 let g:deoplete#enable_smart_case = 1
 
-" Trying out neosnippet for its integration with deoplete
-"" UltiSnips which depends on vim-snippets
-"Plug 'honza/vim-snippets'
-"Plug 'SirVer/ultisnips'
-"let g:UltiSnipsExpandTrigger = '<TAB>'
-"let g:UltiSnipsJumpForwardTrigger = '<C-j>'
-"let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+" I used to use Ultisnips but switched to neosnippet because it integrates
+" with deoplete.  Maybe Ultisnips does too by now but I am happy with it as it
+" is.
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -509,52 +476,16 @@ Plug 'ntpeters/vim-better-whitespace'
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-"Plug 'junegunn/vim-easy-align'
-
-" Any valid git URL is allowed
-"Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-
-" Group dependencies, vim-snippets depends on ultisnips
-"Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-" On-demand loading
-"Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-"Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-
-" Using a non-master branch
-" Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-
-" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-" Plug 'fatih/vim-go', { 'tag': '*' }
-
-" Plugin options
-" Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
-
-" Plugin outside ~/.vim/plugged with post-update hook
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
-" Unmanaged plugin (manually installed and updated)
-" Plug '~/my-prototype-plugin'
-
 " Add plugins to &runtimepath
 call plug#end()
 
 syntax on "enable syntax highlighting
+
 " according to the answer at https://vi.stackexchange.com/questions/3576/trouble-using-color-scheme-in-neovim
 " one should not ever set t_Co in neovim
 "set t_Co=256 "tell vim our terminal supports 256 colors (it does, right))
 set termguicolors "if the term supports 24-bit color even better
-" color dracula "Use the Dracula color scheme
-"colorscheme solarized "use the solarized scheme
-colorscheme gruvbox
+
+colorscheme gruvbox " activate my current preferred scheme
 set background=dark "specifically the dark variant
-
-" Ensime config
-let ensime_server_v2=1
-
-" Underline errors and warnings from ale
-"highlight ALEError cterm=underline
-"highlight ALEWarning cterm=underline
-
 
