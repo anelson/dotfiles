@@ -16,8 +16,10 @@ let mapleader = ","
 " Use jj instead of <ESC> to exit insert mode
 inoremap jj <ESC>
 
-" Make a quick shortcut to hide the highlights from a search
-nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
+" Make a quick shortcut to hide the highlights from a search and close the
+" preview window.  Yes they seem unrelated, but they're both annoying
+" distractions
+nnoremap <Esc><Esc> :nohlsearch<CR>:pclose<CR><ESC>
 
 " Make it easy to open my vimnotes file to note something
 nnoremap <Leader>vn :split ~/.vim/vimnotes.txt<CR>
@@ -319,7 +321,30 @@ let g:LanguageClient_serverCommands = {
 "https://github.com/autozimu/LanguageClient-neovim/issues/379 is fixed
 let g:LanguageClient_hasSnippetSupport = 0
 
+" The LC context menu lists all available actions which can be chosen by a
+" fuzzy match
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+
+" create mappings to LanguageClient commands if and only if there is an active
+" RLS for the current file type
+function! LC_maps()
+  if has_key(g:LanguageClient_serverCommands, &filetype)
+    nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
+    nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+    " Override the text-based lines search which I usually use to find
+    " symbols, and instead actually use the language server document and
+    " workspace symbols pickers
+    nnoremap <buffer> <silent> <c-p> :call LanguageClient#textDocument_documentSymbol()<CR>
+    nnoremap <buffer> <silent> <Leader>p :call LanguageClient#workspace_symbol()<CR>
+
+    " Integrate the `gq` formatting command with the language client
+    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+  endif
+endfunction
+
+autocmd FileType * call LC_maps()
 
 " Use the autocompleter
 " Trying out deoplete instead of YCM due to LSP support in deoplete
