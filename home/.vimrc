@@ -3,7 +3,9 @@
 "
 " My .vimrc.  The vim modeline trickery above allows me to create nested folds
 " using a sort of Markdown header syntax in VIM comments.  Use `zR` to fully
-" expand all the folds, or `za` to toggle folds on a particular line.
+" expand all the folds, or `za` to toggle folds on a particular line.  Use
+" `zv` to expand the folds necessary to reveal the current line.  That's handy
+" if you've searched for a string and it is obscured by the folds.
 
 "# Standard boilerplate
 
@@ -351,11 +353,9 @@ Plug 'autozimu/LanguageClient-neovim', {
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls']
     \ }
-"FIXME: LanguageClient tries to create ad-hoc snippets for method calls but
-"the snippet plugin isn't involved so the result is craptastic
-"for now disable this until
-"https://github.com/autozimu/LanguageClient-neovim/issues/379 is fixed
-let g:LanguageClient_hasSnippetSupport = 0
+
+" Experimental change: prefer textEdits from the LSP.  I can't tell which LSPs need this.
+let g:LanguageClient_completionPreferTextEdit = 1
 
 " The LC context menu lists all available actions which can be chosen by a
 " fuzzy match
@@ -382,32 +382,95 @@ endfunction
 
 autocmd FileType * call LC_maps()
 
-"## deoplete autocompleter
+"## ncm2 autocompleter (replaces deoplete)
 
-" Use the autocompleter
-" I used YouCompleteMe (YCM) for a long time but switched to deoplete due to
-" it's compatibility with LanguageClient, and haven't looked back
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#auto_complete_start_length = 1
-let g:deoplete#enable_smart_case = 1
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+
+" enable ncm2 for all buffers
+autocmd BufEnter * call ncm2#enable_for_buffer()
+
+" Use two different sets of completeop values: one for Ncm2PopupOpen, and the
+" other when neovim's built-in completion is being used (like the command
+" line)
+au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+au User Ncm2PopupClose set completeopt=menuone
+
+" suppress the annoying 'match x of y', 'The only match' and 'Pattern not
+" found' messages
+set shortmess+=c
+
+"### Completion source plugins
+
+" NOTE: you need to install completion sources to get completions. Check
+" our wiki page for a list of sources: https://github.com/ncm2/ncm2/wiki
+"
+" I have not included any of the language-specific completion plugins.  They
+" exist for just about every popular language, but right now I'm working with
+" langauges that have LSP support which is obviously going to be much richer.
+" Down the road it may be necessary to bring in some language support if LSP
+" is lacking.
+Plug 'ncm2/ncm2-bufword' " any word that appears in the current buffer
+Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' } " any word that appears in other open buffers
+Plug 'ncm2/ncm2-path'  " paths relative to the current and project directories
+Plug 'wellle/tmux-complete.vim'  " words in other tmux panes
+Plug 'Shougo/neco-syntax'  " dependency of ncm2-syntax
+Plug 'ncm2/ncm2-syntax' " keywords from the current language's syntax highlighting config
+Plug 'yuki-ycino/ncm2-dictionary' " dictionary words
+
+"### Other ncm2-related plugins
+
+Plug 'ncm2/ncm2-neosnippet'  " integrate with neosnippet for snippet autocompletion
+Plug 'ncm2/ncm2-html-subscope'  " detect language subscopes in HTML (CSS, JS, etc)
+Plug 'ncm2/ncm2-markdown-subscope'   " detect language subscopes in Markdown
+Plug 'ncm2/ncm2-match-highlight'   " experimentally abuse unicode fonts to create a highlight effect
 
 "## neosnippet for snippets
 
 " I used to use Ultisnips but switched to neosnippet because it integrates
 " with deoplete.  Maybe Ultisnips does too by now but I am happy with it as it
 " is.
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neosnippet.vim'      " the snippet plugin itself
+Plug 'Shougo/context_filetype.vim' " another plugin which detects the filetype at the cursor for complex files
+Plug 'Shougo/neosnippet-snippets' " a default collection of snippets
+Plug 'honza/vim-snippets'	  " some additional third-party snippets
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+func! TabPressed()
+  echom "TabPressed"
+
+  echom "neosnippet#expandable_or_jumpable(): " . neosnippet#expandable_or_jumpable()
+  echom "pumvisible(): ". pumvisible()
+  echom "ncm2_neosnippet#completed_is_snippet(): " . ncm2_neosnippet#completed_is_snippet()
+  echom "Completed item:"
+  echom json_encode(v:completed_item)
+
+  if ncm2_neosnippet#completed_is_snippet()
+    "return "\<Plug>(ncm2_neosnippet_expand_completed)"
+    "return "\<Plug>(neosnippet_expand_or_jump)"
+    "call feedkeys("\<Plug>(neosnippet_expand_or_jump)", "im")
+    return "\<C-k>"
+  elseif pumvisible()
+    return "\<C-n>"
+  else
+    return "\<TAB>"
+  endif
+endfunction
+
+" SuperTab like snippets behavior.  I want this to work whether a popup is
+" currently displayed or not.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"imap <expr><TAB> TabPressed()
+  "\ ncm2_neosnippet#completed_is_snippet() ? "\<Plug>(ncm2_neosnippet_expand_completed)" :
+  "\ pumvisible() ? "\<C-n>" : "\<TAB>"
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
 "## delimitMate to automatically insert closing delimiters
 
