@@ -378,7 +378,7 @@ for_window [instance="crx_fglpadnaeloagmjgkoncdgemigemmoen"] floating disable
 for_window [instance="crx_oihmkpogbcncclhnjdcnbhpgmidhcoed"] floating disable
 
 # Experimental: automatically run my displays config script
-exec_always --no-startup-id $HOME/.config/i3/configure-monitors.sh
+# exec_always --no-startup-id $HOME/.config/i3/configure-monitors.sh
 
 # Run compton compositor to enable fancy transparency trickery
 exec --no-startup-id $HOME/.config/i3/run-compton.sh
