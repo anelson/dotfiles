@@ -128,29 +128,29 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-" CtrlP for fuzzy file/MRU/buffer navigation
-Plug 'ctrlpvim/ctrlp.vim'
-" also install a compiled fuzzy matcher library for added performance
-Plug 'nixprime/cpsm', { 'do': './install.sh' }
-" By default <C-p> is mapped to :CtrlP, I want to add a mapping to :CtrlPBuffer
-" since I often use that too
-"nnoremap <Leader>b :CtrlPBuffer<Enter>
+"" CtrlP for fuzzy file/MRU/buffer navigation
+"Plug 'ctrlpvim/ctrlp.vim'
+"" also install a compiled fuzzy matcher library for added performance
+"Plug 'nixprime/cpsm', { 'do': './install.sh' }
+"" By default <C-p> is mapped to :CtrlP, I want to add a mapping to :CtrlPBuffer
+"" since I often use that too
+""nnoremap <Leader>b :CtrlPBuffer<Enter>
 
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard'] "respect gitignore
-let g:ctrlp_by_filename = 1 "searching by filename is a more sensible default; Ctrl-d in prompt to switch
-let g:ctrlp_match_window='bottom,order:ttb' "why would anyone want bottom-to-top by default??
-let g:ctrlp_open_new_file='r' " open files in the current window, dont' open a new window or a new tab
-let g:ctrlp_mruf_max = 500 "remember more files
-let g:ctrlp_show_hidden = 1 "working with dotfiles requires this
-let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
+"let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard'] "respect gitignore
+"let g:ctrlp_by_filename = 1 "searching by filename is a more sensible default; Ctrl-d in prompt to switch
+"let g:ctrlp_match_window='bottom,order:ttb' "why would anyone want bottom-to-top by default??
+"let g:ctrlp_open_new_file='r' " open files in the current window, dont' open a new window or a new tab
+"let g:ctrlp_mruf_max = 500 "remember more files
+"let g:ctrlp_show_hidden = 1 "working with dotfiles requires this
+"let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 
-if executable('fd')
-   " if present, 'fd' is the best option for listing files
-   " ripgrep is meant to search inside files
-   let g:ctrlp_user_command = 'fd --type file --color never --hidden --exclude .git "" %s'
-    " fd is fast no need to cache
-    let g:ctrlp_use_caching = 0
-endif
+"if executable('fd')
+"   " if present, 'fd' is the best option for listing files
+"   " ripgrep is meant to search inside files
+"   let g:ctrlp_user_command = 'fd --type file --color never --hidden --exclude .git "" %s'
+"    " fd is fast no need to cache
+"    let g:ctrlp_use_caching = 0
+"endif
 
 " optionally use a more powerful external tool for grep
 if executable('rg')
@@ -445,10 +445,14 @@ if executable("fzf")
 
     " fzf.vim provides so many handy commands.  Here are bindings for a few:
     " * Ctrl-T - Files - like ctrl-p but fast
+    " * Ctrl-P - Lines in the current buffer
+    " * <leader>p - BLines - Lines in all open buffers
     " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
     " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
     " * <Leader>m - History - most recently used files
     nmap <c-t> :Files<CR>
+    nmap <c-p> :BLines<CR>
+    nmap <Leader>p :Lines<Enter>
     nmap <Leader>b :Buffers<Enter>
     nmap <Leader>h :Helptags<Enter>
     nmap <Leader>m :History<Enter>
