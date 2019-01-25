@@ -51,6 +51,9 @@ nnoremap <Leader>vc :split ~/.vimrc<CR>
 " A cheap poor mans 'find usages'
 nnoremap <Leader>* :silent grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
+" Need a faster way to close a preview window
+nnoremap <Leader>pc :pclose<CR>
+
 "## Line numbering
 
 " Use relative line numbers
@@ -363,6 +366,7 @@ function! LC_maps()
     nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
     nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
     nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+    nnoremap <buffer> <silent> <Leader>ee :call LanguageClient#explainErrorAtPoint()<CR>
 
     " Override the text-based lines search which I usually use to find
     " symbols, and instead actually use the language server document and
