@@ -495,6 +495,13 @@ if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 
+"## echodoc to preview function signatures
+Plug 'Shougo/echodoc.vim'
+
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'signature'
+
 "## delimitMate to automatically insert closing delimiters
 
 " I simply MUST have automatic insertion of closing delimiters
