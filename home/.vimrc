@@ -103,11 +103,6 @@ elseif executable('ag')
     set grepprg=ag\ --nogroup\ --no-color
 endif
 
-" For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
-
 "# Folding
 
 " enable folding based on the syntax information for a file, but start out
@@ -434,43 +429,64 @@ Plug 'Shougo/neosnippet.vim'      " the snippet plugin itself
 Plug 'Shougo/context_filetype.vim' " another plugin which detects the filetype at the cursor for complex files
 Plug 'Shougo/neosnippet-snippets' " a default collection of snippets
 Plug 'honza/vim-snippets'	  " some additional third-party snippets
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-func! TabPressed()
-  echom "TabPressed"
-
-  echom "neosnippet#expandable_or_jumpable(): " . neosnippet#expandable_or_jumpable()
-  echom "pumvisible(): ". pumvisible()
-  echom "ncm2_neosnippet#completed_is_snippet(): " . ncm2_neosnippet#completed_is_snippet()
-  echom "Completed item:"
-  echom json_encode(v:completed_item)
-
+func! ExpandOrJumpSnippet()
+  " Expand a snippet if at all possible.
+  "
+  " There are a few possibilities:
+  " * ncm2 autocomplete is being used and a snippet item is currently
+  " selected.  In that case expand that snippet.  Note that ncm2 exposes some
+  " snippets beyond those neosnippet knows about, even though it uses
+  " neosnippet to expand them.  These are "anonymous" snippets like the ones
+  " it gets from an LSP.  Thus if ncm2 has been used to pick a snippet it's
+  " important to use ncm2's neosnippet API to do the completion.  IF it is a
+  " built-in neosnippet snippet then it'll call down into neosnippet anyway.
+  "
+  " * ncm2 is not active, but a neocomplete snippet trigger has been typed.
+  " In that case expand the snippet.
+  "
+  " * a neosnippet snippet has been expanded, and there is another placeholder
+  " still to navigate to.  In that case, jump to the next placeholder.
   if ncm2_neosnippet#completed_is_snippet()
-    "return "\<Plug>(ncm2_neosnippet_expand_completed)"
-    "return "\<Plug>(neosnippet_expand_or_jump)"
-    "call feedkeys("\<Plug>(neosnippet_expand_or_jump)", "im")
-    return "\<C-k>"
+    echom "ncm2_neosnippet expanding"
+    return "\<Plug>(ncm2_neosnippet_expand_completed)"
+  elseif neosnippet#expandable_or_jumpable()
+    echom "neosnippet expanding"
+    if neosnippet#mappings#expandable()
+      echom "snippet expandable"
+    endif
+
+    if neosnippet#mappings#jumpable()
+      echom "snippet jumpable"
+    endif
+
+    echom "completed_item: " . json_encode(v:completed_item)
+
+    return "\<Plug>(neosnippet_expand_or_jump)"
   elseif pumvisible()
-    return "\<C-n>"
+    " No kind of snippet but the autocomplete is visible.  Probably I
+    " accidentally or out of force of habit hit C-k on an autocomplete item
+    " that wasn't actually a snippet.  If that happens just dismiss the
+    " autocomplete but stay in insert mode so it doesn't disrupt my workflow
+    echom "dismissing popup"
+    return "\<C-y>"
   else
-    return "\<TAB>"
+    echom "nothing to do; passing through to underlying C-k binding"
+    return "\<C-k>"
   endif
 endfunction
 
-" SuperTab like snippets behavior.  I want this to work whether a popup is
-" currently displayed or not.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-"imap <expr><TAB> TabPressed()
-  "\ ncm2_neosnippet#completed_is_snippet() ? "\<Plug>(ncm2_neosnippet_expand_completed)" :
-  "\ pumvisible() ? "\<C-n>" : "\<TAB>"
-imap <expr><TAB>
- \ pumvisible() ? "\<C-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+" When pressing <C-k> in insert or select mode, be smart about snippet
+" expansion/jumping no matter the state
+imap <expr><C-k> ExpandOrJumpSnippet()
+smap <expr><C-k> ExpandOrJumpSnippet()
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" For conceal markers, which I think are used by neosnippet to put snippet
+" placeholder markers in the editor without the markers being visible
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
 
 "## delimitMate to automatically insert closing delimiters
 
