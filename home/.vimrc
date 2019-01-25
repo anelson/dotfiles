@@ -372,6 +372,13 @@ function! LC_maps()
 
     " Integrate the `gq` formatting command with the language client
     set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+
+    " always show the sign column, even if at a given moment there aren't any
+    " diag messages
+    set signcolumn=yes
+  else
+    " don't always show the sign column if there's no LSP
+    set signcolumn=auto
   endif
 endfunction
 
