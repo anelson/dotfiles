@@ -346,7 +346,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 " TODO: add other languages' LSP configs here over time, and make sure if you add other languages here that you disable
 " ALE linters above so they don't step on each other
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
+    \ 'rust': ['~/.local/bin/run-rust-rls.sh']
     \ }
 
 " Experimental change: prefer textEdits from the LSP.  I can't tell which LSPs need this.
