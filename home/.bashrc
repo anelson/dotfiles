@@ -2,6 +2,11 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# the gpg-agent manpage insists GPG_TTY should be set so GPG knows the current TTY.  I'm not sure that's
+# required since I use the gnome3 pinentry program but better safe than sorry.
+GPG_TTY=$(tty)
+export GPG_TTY
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
