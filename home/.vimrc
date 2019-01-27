@@ -406,6 +406,12 @@ au User Ncm2PopupClose set completeopt=menuone
 " found' messages
 set shortmess+=c
 
+" In insert mode if the auto-complete popup is displayed and Enter (<CR>) is
+" pressed, it dismisses the popup but does not insert a newline.  I never use
+" <CR> meaning to dismiss the popup, so if this happens I want the popup to be
+" dismissed _and_ a newline to be inserted
+imap <expr><CR>	    pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
 "### Completion source plugins
 
 " NOTE: you need to install completion sources to get completions. Check
@@ -459,19 +465,19 @@ func! ExpandOrJumpSnippet()
   " * a neosnippet snippet has been expanded, and there is another placeholder
   " still to navigate to.  In that case, jump to the next placeholder.
   if ncm2_neosnippet#completed_is_snippet()
-    echom "ncm2_neosnippet expanding"
+    "echom "ncm2_neosnippet expanding"
     return "\<Plug>(ncm2_neosnippet_expand_completed)"
   elseif neosnippet#expandable_or_jumpable()
-    echom "neosnippet expanding"
-    if neosnippet#mappings#expandable()
-      echom "snippet expandable"
-    endif
+    "echom "neosnippet expanding"
+    "if neosnippet#mappings#expandable()
+    "  echom "snippet expandable"
+    "endif
+    "
+    "if neosnippet#mappings#jumpable()
+    "  echom "snippet jumpable"
+    "endif
 
-    if neosnippet#mappings#jumpable()
-      echom "snippet jumpable"
-    endif
-
-    echom "completed_item: " . json_encode(v:completed_item)
+    "echom "completed_item: " . json_encode(v:completed_item)
 
     return "\<Plug>(neosnippet_expand_or_jump)"
   elseif pumvisible()
@@ -479,10 +485,10 @@ func! ExpandOrJumpSnippet()
     " accidentally or out of force of habit hit C-k on an autocomplete item
     " that wasn't actually a snippet.  If that happens just dismiss the
     " autocomplete but stay in insert mode so it doesn't disrupt my workflow
-    echom "dismissing popup"
+    "echom "dismissing popup"
     return "\<C-y>"
   else
-    echom "nothing to do; passing through to underlying C-k binding"
+    "echom "nothing to do; passing through to underlying C-k binding"
     return "\<C-k>"
   endif
 endfunction
@@ -492,6 +498,7 @@ endfunction
 imap <expr><C-k> ExpandOrJumpSnippet()
 smap <expr><C-k> ExpandOrJumpSnippet()
 xmap <C-k>     <Plug>(neosnippet_expand_target)
+
 
 " For conceal markers, which I think are used by neosnippet to put snippet
 " placeholder markers in the editor without the markers being visible
