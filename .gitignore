@@ -1,7 +1,10 @@
 # Don't track anything in .ssh since it's all either noisy or sensitive
-home/.ssh/
+# when i say "don't track anything" obviously I don't mean to include the SSH config file!
+home/.ssh/*
+!home/.ssh/config
 
-# Don't track the vim-plug managed plugins, since each of them is a git clone 
+
+# Don't track the vim-plug managed plugins, since each of them is a git clone
 # so it just won't work right
 home/.vim/plugged
 
