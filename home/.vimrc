@@ -286,18 +286,6 @@ let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline
 
 "## tmux sync and integration plugins
 
-" Use tmuxline to generate a tmux statusline config that matches our airline
-" config.  It's a bit odd to use vim code to generate a tmux config, but it's
-" that or use a shell script to generate the vim config, and I like this
-" better
-Plug 'edkolev/tmuxline.vim'
-let g:tmuxline_preset = {
-      \'a'    : '#S',
-      \'win'  : ['#I', '#W'],
-      \'cwin' : ['#I', '#W', '#F'],
-      \'y'    : ['%R', '%a', '%Y'],
-      \'z'    : '#H'}
-
 " Use the same keys to navigate vim windows and tmux panes seamlessly
 Plug 'christoomey/vim-tmux-navigator'
 
