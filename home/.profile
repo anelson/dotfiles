@@ -30,8 +30,8 @@ fi
 
 # Terminate any gpg agent that might have been run by the system, then start it and ensure it's SSH agent socket is the one
 # ssh clients will be using
-gpgconf --kill gpg-agent
-gpg-connect-agent /bye
+gpgconf --kill gpg-agent >/dev/null 2>&1
+gpg-connect-agent /bye >/dev/null 2>&1
 
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
