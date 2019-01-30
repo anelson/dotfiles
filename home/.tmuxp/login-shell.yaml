@@ -1,0 +1,14 @@
+session_name: login-shell
+start_directory: ~/
+windows:
+    - window_name: shell
+      focus: true
+      panes:
+          - pane
+    - window_name: journalctl
+      panes:
+          - shell-command:
+              - journalctl -ef
+    - window_name: updates
+      panes:
+          - pane
