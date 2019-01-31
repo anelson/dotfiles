@@ -7,8 +7,7 @@ windows:
           - pane
     - window_name: journalctl
       panes:
-          - shell-command:
-              - journalctl -ef
+          - journalctl -ef
     - window_name: updates
       panes:
           - pane
