@@ -21,7 +21,8 @@ alias htrack=homeshick track
 # If this is a TMUX session over SSH, alias ssh so it also pulls in
 # the updated SSH_AUTH_SOCK
 if [ -n "$TMUX" ] && [ -n "$SSH_TTY" ] && [ -x "$HOME/.local/bin/tmux-ssh" ]; then
-  alias ssh=$HOME/.local/bin/tmux-ssh
+  alias ssh="$HOME/.local/bin/tmux-ssh"
+  alias git="GIT_SSH_COMMAND=$HOME/.local/bin/tmux-ssh git"
 fi
 
 # Sometimes I trust a host enough to pass through agent auth
