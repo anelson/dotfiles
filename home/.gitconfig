@@ -2,6 +2,13 @@
 	email = anelson@users.noreply.github.com
 	name = Adam Nelson
 
+# I would really like this to be the new libsecret-based helper.  Unfortunately it's
+# not a good fit for boxes one SSH's into with key-based authentication, because gnome-keyring
+# absolutely will not unlock the keyring for you, and it wants an X11-based SystemPrompter service to
+# prompt for the password which obviously doesn't work over an SSH connection (yes one could redirect X11 but I
+# don't want to do that and I use mosh which doesn't support redirecting TCP traffic anyway).
+#
+# Hopefully someday a better solution will exist
 [credential]
  	helper = store
 
