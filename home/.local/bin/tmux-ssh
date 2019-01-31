@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Assuming we're running in a TMUX environment
+# copy the SSH_AUTH_SOCK env var
+eval $(tmux showenv -s SSH_AUTH_SOCK)
+
+ssh $*

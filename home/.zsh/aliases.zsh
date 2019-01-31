@@ -15,3 +15,10 @@ alias hs=homeshick
 alias hcd=homeshick cd
 alias htrack=homeshick track
 
+# Ugly hack:
+# If this is a TMUX session over SSH, alias ssh so it also pulls in
+# the updated SSH_AUTH_SOCK
+if [ -n "$TMUX" ] && [ -n "$SSH_TTY" ] && [ -x "$HOME/.local/bin/tmux-ssh" ]; then
+  alias ssh=$HOME/.local/bin/tmux-ssh
+fi
+
