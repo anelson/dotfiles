@@ -15,6 +15,3 @@ source $HOME/.zsh/antigen.zsh
 
 # TODO: this isn't working right.  flooding with tmux sessions
 #source $HOME/.zsh/autorun-tmux.sh
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
