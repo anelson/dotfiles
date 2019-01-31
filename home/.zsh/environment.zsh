@@ -1,4 +1,10 @@
-export DISABLE_AUTO_TITLE='false'
+# tmuxp nags if this is not enabled.  it doesn't matter anyway
+# since I don't have tmux configured to allow the windows to be renamed
+if [ -n "$TMUX" ]; then
+  export DISABLE_AUTO_TITLE='true'
+else
+  export DISABLE_AUTO_TITLE='false'
+fi
 
 # Tell the zsh agnoster theme my normal usename
 export DEFAULT_USER=rupert
