@@ -21,6 +21,8 @@
 .rvm/
 .vim/plugged/
 .cargo/
+.rustup/
+.multirust/
 
 node_modules/
 
@@ -29,6 +31,10 @@ node_modules/
 # not sure if this will end up being a problem
 # the snap/ dir contains installed snaps and it's just full of annoying cruft
 snap/
+
+# This is where I have local installs of python and such
+# It's not useful to search it with fd
+.local/lib/
 
 *.class
 
