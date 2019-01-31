@@ -4,6 +4,4 @@ windows:
     - window_name: turing
       focus: true
       panes:
-          - shell_command:
-              - mosh turing
-            focus: true
+          - pane
