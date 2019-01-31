@@ -42,13 +42,13 @@ fi
 # If this session is running over SSH but is not part of a tmux session, try to make it one
 # Note this should only detect when the SSH session has a tty, so things like ansible should
 # still work
-#if type "tmux" >/dev/null 2>&1 && [ -n "$SSH_TTY" ] && [ -z "$TMUX" ]; then
-#  echo Automatically switching to TMUX session
-#  tmux attach -t login-shell || tmuxp load login-shell --yes || tmux new-session -t login-shell
-#
-#  # exit this shell when tmux exits
-#  exit
-#fi;
+if type "tmux" >/dev/null 2>&1 && [ -n "$SSH_TTY" ] && [ -z "$TMUX" ]; then
+  echo Automatically switching to TMUX session
+  tmux attach -t login-shell || tmuxp load login-shell --yes || tmux new-session -t login-shell
+
+  # exit this shell when tmux exits
+  exit
+fi;
 
 # use the user-local rust install if present
 [[ -s "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
