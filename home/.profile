@@ -23,7 +23,7 @@ command -v alacritty >/dev/null 2>&1 && export TERMINAL=`command -v alacritty`
 # I don't _think_ I need to do that since after this I'm starting the gpg-agent which will use its own socket for the ssh-agent
 # protocol.
 if [ -n "$DESKTOP_SESSION" ];then
-    eval $(gnome-keyring-daemon --start)
+    eval $(gnome-keyring-daemon --start --components=secrets)
     # NB: I specifically do NOT want to export SSH_AUTH_SOCK because I'm not interested in using GNOME Keyring as my SSH agent
     #export SSH_AUTH_SOCK
 fi
