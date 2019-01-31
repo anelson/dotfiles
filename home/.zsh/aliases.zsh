@@ -13,5 +13,9 @@ alias gvim=gnvim
 alias fzf=fzf-tmux
 alias hs=homeshick
 alias hcd=homeshick cd
+alias hp=homeshick pull
+alias hlink=homeshick link
 alias htrack=homeshick track
 
+# Sometimes I trust a host enough to pass through agent auth
+alias ssha=ssh -A
