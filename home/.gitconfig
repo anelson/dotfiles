@@ -3,7 +3,7 @@
 	name = Adam Nelson
 
 [credential]
-	helper = /usr/lib/git-core/git-credential-libsecret
+ 	helper = store
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
