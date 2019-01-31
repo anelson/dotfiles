@@ -1,6 +1,6 @@
 # This is used by tools like ag, rg, fd to configure paths they ignore
 #
-# This file in particular configures a bunch of directories in my home dir 
+# This file in particular configures a bunch of directories in my home dir
 # that are not to be searched for various reasons.
 
 .ammonite/
@@ -19,9 +19,10 @@
 .wine/
 .vmware/
 .rvm/
-.tmux/
 .vim/plugged/
 .cargo/
+.rustup/
+.multirust/
 
 node_modules/
 
@@ -30,6 +31,10 @@ node_modules/
 # not sure if this will end up being a problem
 # the snap/ dir contains installed snaps and it's just full of annoying cruft
 snap/
+
+# This is where I have local installs of python and such
+# It's not useful to search it with fd
+.local/lib/
 
 *.class
 
