@@ -21,6 +21,8 @@
 
 * When navigating or selecting in code, remember the text motion objects that start with `]` and `[`.  For example `]}` moves to the closing `}`, `])` to the closing parens, etc.  There's also `]m` which moves to the next method, and `]M` which moves to the END of the method.  Want to select an entire method regardless of the language syntax?  `[mV]M` will do the job.
 
+* In VISUAL mode, `o` moves the cursor to the opposite end of the block so you can expand or retract the selection
+
 * <Leader>h clears the current search highlight without disabling search highlighting in general
 
 * with the nerdcommenter plugin, <Leader>c[space] toggles comments on the line or selection
@@ -29,7 +31,7 @@
 * ](spacebar) adds a blank line below, [(spacebar) adds a blank line above
 
 * Switched to deoplete for completion and neosnippet for snippets due to their better integration together and the
-  Neovim language server's support for deoplete.  
+  Neovim language server's support for deoplete.
 
   Autocomplete works a bit differently.  Use C-n/C-p to navigate the list of possible completions.  For those
   completions that are snippets, choose the snippet then C-k to expand the snippet, and keep pressing C-k to cycle

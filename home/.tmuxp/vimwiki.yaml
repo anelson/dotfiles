@@ -4,6 +4,8 @@ windows:
     - window_name: vim
       focus: true
       panes:
-          - shell_command:
-              - vim
-            focus: true
+          - vim
+    - window_name: shell
+      shell_command_before: cd ~/vimwiki
+      panes:
+          - pane

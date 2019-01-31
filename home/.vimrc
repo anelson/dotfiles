@@ -620,6 +620,11 @@ let g:indent_guides_enable_on_vim_startup = 0
 let g:indent_guides_start_level=1
 let g:indent_guides_guide_size=1
 
+"## vim-yaml override
+
+" replace the built-in YAML support
+Plug 'stephpy/vim-yaml'
+
 "## vim-yaml-folds
 " some file types don't fold with syntax and work better with indent. YAML
 " specifically.  Fortunately, Theres a Plugin for That (tm)
