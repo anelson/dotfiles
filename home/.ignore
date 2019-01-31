@@ -1,6 +1,6 @@
 # This is used by tools like ag, rg, fd to configure paths they ignore
 #
-# This file in particular configures a bunch of directories in my home dir 
+# This file in particular configures a bunch of directories in my home dir
 # that are not to be searched for various reasons.
 
 .ammonite/
@@ -19,7 +19,6 @@
 .wine/
 .vmware/
 .rvm/
-.tmux/
 .vim/plugged/
 .cargo/
 
