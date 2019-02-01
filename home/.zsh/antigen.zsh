@@ -1,10 +1,5 @@
 # load the antigen plugin manager
-# assumes the antigen-git package is already installed systemwide
-if [[ -a /usr/share/zsh/share/antigen.zsh ]] then
-  source /usr/share/zsh/share/antigen.zsh
-elif [[ -a /usr/share/antigen.zsh ]] then 
-  source /usr/share/antigen.zsh
-elif [[ -a $HOME/.zsh/antigen-git.zsh ]] then 
+if [[ -a $HOME/.zsh/antigen-git.zsh ]] then
   source $HOME/.zsh/antigen-git.zsh
 else
   echo "antigen is missing; downloading it"
