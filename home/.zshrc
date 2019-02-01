@@ -10,8 +10,8 @@ source $HOME/.zsh/fzf.zsh
 source $HOME/.zsh/zsh-notify.zsh
 source $HOME/.zsh/antigen.zsh
 
-#TODO: is this still needed with the latest config?
-#. $HOME/.config/gsettings/gsettings.sh
+# use the user-local rust install if present
+[[ -s "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
-# TODO: this isn't working right.  flooding with tmux sessions
-#source $HOME/.zsh/autorun-tmux.sh
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"

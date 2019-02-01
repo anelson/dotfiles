@@ -50,8 +50,3 @@ if type "tmux" >/dev/null 2>&1 && [ -n "$SSH_TTY" ] && [ -z "$TMUX" ]; then
   exit
 fi;
 
-# use the user-local rust install if present
-[[ -s "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
-
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
