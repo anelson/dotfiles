@@ -30,6 +30,7 @@ antigen bundles <<EOB
   marzocchi/zsh-notify
   rupa/z
   changyuheng/fz
+  changyuheng/zsh-interactive-cd
   Tarrasch/zsh-bd
   zsh-users/zsh-syntax-highlighting
 EOB
