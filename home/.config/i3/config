@@ -362,7 +362,7 @@ bindsym $mod+control+l    exec --no-startup-id $HOME/.config/i3/transfer-sleep-l
 
 # I have some Chromium desktop apps, meaning websites with their own desktop entry and browser instance
 # For some reason chromium has these as 'popup' but they are not popups.
-# Unfortunately it's not possible to set for_window rules with i3-msg, 
+# Unfortunately it's not possible to set for_window rules with i3-msg,
 # so updating this is a manual process.  I've written a script that does the work
 # but you have to update the i3 config manually.
 #
@@ -424,6 +424,6 @@ exec spotify-hidpi
 exec --no-startup-id dropbox start
 
 # execute a terminal running tmux in workspace two
-exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command tmux new-session -A -s loginshell'
+exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell'
 
 
