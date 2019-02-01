@@ -5,16 +5,20 @@
 
 .ammonite/
 .antigen/
+.bundle/
 .cache/
+.conan/
 .docker/
 .dropbox/
 .gem/
 .git/
 .gradle/
+.ivy2/
 .m2/
 .mozilla/
 .node-gyp/
 .npm/
+.oh-my-zsh/
 .thunderbird/
 .wine/
 .vmware/

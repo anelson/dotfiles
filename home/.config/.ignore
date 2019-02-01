@@ -1,0 +1,6 @@
+# None of these settings are useful to search with fzf or fd
+google-chrome/
+Mailspring/
+chromium/
+Slack/
+
