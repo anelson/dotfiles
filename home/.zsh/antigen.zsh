@@ -35,6 +35,8 @@ antigen bundles <<EOB
 EOB
 
 # this uses the agnoster oh-my-zsh theme
-antigen theme agnoster
+# antigen theme agnoster
+# Use the official agnoster repo instead of the one in oh-my-zsh
+antigen theme agnoster/agnoster-zsh-theme agnoster
 
 antigen apply
