@@ -271,6 +271,9 @@ let g:vimwiki_list = [
 	    \ { 'path': '~/vimwiki/русский', 'syntax': 'markdown', 'ext': '.mkd'}
 	\ ]
 
+"## Rice the vim terminal with nerd icons
+Plug 'ryanoasis/vim-devicons'
+
 "## A lighter version of the powerline plugin
 
 Plug 'vim-airline/vim-airline'
