@@ -14,4 +14,12 @@ export DEFAULT_USER=rupert
 GPG_TTY=$(tty)
 export GPG_TTY
 
-#export TERMINAL=alacritty # this is set in .profile
+# If the bcc-tools are installed in the location the Arch package puts them they won't be
+# on the path by default
+if [ -d /usr/share/bcc/man ]; then
+  MANPATH=$MANPATH:/usr/share/bcc/man
+fi
+
+if [ -d /usr/share/bcc/tools ]; then
+  PATH=$PATH:/usr/share/bcc/tools
+fi
