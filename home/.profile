@@ -9,6 +9,31 @@ export DIFFPROG='nvim -d'
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+# Detect if this is a local or remote session so we can base other conditional logic
+# on these results
+export IS_SSH_SESSION=0
+export IS_TMUX_SESSION=0
+export IS_LOCAL_SESSION=0
+
+if [ -n "$DESKTOP_SESSION" ]; then
+  # We're running under some kind of desktop environment
+  export IS_LOCAL_SESSION=1
+fi
+
+if [ -n "$TMUX" ]; then
+  # We're running under tmux; maybe local or maybe remote
+  export IS_TMUX_SESSION=1
+fi
+
+if [ -n "$SSH_TTY" ]; then
+  # There is an SSH TTY so this must be an SSH session
+  export IS_SSH_SESSION=1
+fi
+
+#echo "IsLocal: ${IS_LOCAL_SESSION}"
+#echo "IsTmux: ${IS_TMUX_SESSION}"
+#echo "IsSSH: ${IS_SSH_SESSION}"
+
 # Put my own binaries on the path.  Note this specifically must be done BEFORE lookign for alacritty
 # since I like to install it in the user-specific binary path
 export PATH="$HOME/.local/bin:$PATH"
@@ -22,27 +47,29 @@ command -v alacritty >/dev/null 2>&1 && export TERMINAL=`command -v alacritty`
 #
 # I don't _think_ I need to do that since after this I'm starting the gpg-agent which will use its own socket for the ssh-agent
 # protocol.
-if [ -n "$DESKTOP_SESSION" ];then
+if [ "$IS_LOCAL_SESSION" -eq 1 ];then
     eval $(gnome-keyring-daemon --start --components=secrets)
     # NB: I specifically do NOT want to export SSH_AUTH_SOCK because I'm not interested in using GNOME Keyring as my SSH agent
     #export SSH_AUTH_SOCK
-fi
 
-# Terminate any gpg agent that might have been run by the system, then start it and ensure it's SSH agent socket is the one
-# ssh clients will be using
-gpgconf --kill gpg-agent >/dev/null 2>&1
-gpg-connect-agent /bye >/dev/null 2>&1
+    # Terminate any gpg agent that might have been run by the system, then start it and ensure it's SSH agent socket is the one
+    # ssh clients will be using
+    gpgconf --kill gpg-agent >/dev/null 2>&1
+    gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
 
-unset SSH_AGENT_PID
-if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-  # This is how we force ssh clients to use the GPG agent to get ssh keys from the Yubikey
-  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    # Ensure the gpg-agent we just started is the one used by SSH.  We do NOT want to use the gnome-keyring OR the built-in ssh-agent
+    unset SSH_AGENT_PID
+    if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+      # This is how we force ssh clients to use the GPG agent to get ssh keys from the Yubikey
+      export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    fi
+
 fi
 
 # If this session is running over SSH but is not part of a tmux session, try to make it one
 # Note this should only detect when the SSH session has a tty, so things like ansible should
 # still work
-if type "tmux" >/dev/null 2>&1 && [ -n "$SSH_TTY" ] && [ -z "$TMUX" ]; then
+if type "tmux" >/dev/null 2>&1 && [ "$IS_SSH_SESSION" -eq 1 ] && [ "$IS_TMUX_SESSION" -eq 0 ]; then
   echo Automatically switching to TMUX session
   tmux attach -t login-shell || tmuxp load login-shell --yes || tmux new-session -t login-shell
 
