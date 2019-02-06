@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# Reset the local GPG agent which sometimes gets wedged
+gpgconf --kill gpg-agent >/dev/null 2>&1
+gpg-connect-agent /bye >/dev/null 2>&1
+
+echo GPG agent reset.  SSH keys:
+
+ssh-add -L
+
