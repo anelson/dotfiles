@@ -401,7 +401,8 @@ set shortmess+=c
 " pressed, it dismisses the popup but does not insert a newline.  I never use
 " <CR> meaning to dismiss the popup, so if this happens I want the popup to be
 " dismissed _and_ a newline to be inserted
-imap <expr><CR>	    pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+"imap <expr><CR>	    pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+imap <expr><CR>	    pumvisible() ? "\<C-y>\<CR>" : "\<Plug>delimitMateCR"
 
 "### Completion source plugins
 
