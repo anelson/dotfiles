@@ -424,6 +424,6 @@ exec spotify-hidpi
 exec --no-startup-id dropbox start
 
 # execute a terminal running tmux in workspace two
-exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell'
+exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command /bin/sh -c "tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell"'
 
 
