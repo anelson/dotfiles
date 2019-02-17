@@ -273,11 +273,11 @@ label = %date% %time%
 [module/volume]
 type = internal/alsa
 
-format-volume = <label-volume> <bar-volume>
-label-volume = vol
-label-volume-foreground = ${root.foreground}
+format-volume = <bar-volume>
+format-volume-prefix = " "
+format-volume-foreground = ${root.foreground}
 
-format-muted-prefix = " "
+format-muted-prefix = " "
 format-muted-foreground = ${colors.foreground-alt}
 label-muted = sound muted
 
