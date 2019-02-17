@@ -204,7 +204,7 @@ type = custom/script
 exec = ~/.config/polybar/processor-clock-speed.sh
 interval = 5
 
-label =   %output% GHz
+label = 龍 %output% GHz
 format = <label>
 format-underline = #f50a4d
 
@@ -356,7 +356,8 @@ ramp-foreground = ${colors.foreground-alt}
 [module/pch-temperature]
 type = internal/temperature
 hwmon-path = /sys/class/hwmon/hwmon3/temp1_input
-warn-temperature = 60
+; my XPS 9370 idles at around 43 but my 9560 is usually around 60
+warn-temperature = 70
 
 format = <ramp> <label>
 format-underline = #f50a4d
@@ -379,7 +380,7 @@ type = custom/script
 exec = ~/.config/polybar/processor-fan-speed.sh
 interval = 10
 
-label =   %output% RPM
+label =   %output% RPM
 format = <label>
 format-underline = #f50a4d
 
