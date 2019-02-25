@@ -54,6 +54,12 @@ nnoremap <Leader>* :silent grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 " Need a faster way to close a preview window
 nnoremap <Leader>pc :pclose<CR>
 
+" Ditto for quickfix
+nnoremap <Leader>qc :cclose<CR>
+
+" Fast saving (but only if there are unsaved changes)
+nnoremap <Leader>s :update<CR>
+
 "## Line numbering
 
 " Use relative line numbers
