@@ -114,11 +114,11 @@ let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
 
 " optionally use a more powerful external tool for grep
 if executable('rg')
-    " use ripgrep it's even faster than ag
-    set grepprg=rg\ --vimgrep
+  " use ripgrep it's even faster than ag
+  set grepprg=rg\ --vimgrep
 elseif executable('ag')
-    " the silver searcher grep alternative is installed so use that
-    set grepprg=ag\ --nogroup\ --no-color
+  " the silver searcher grep alternative is installed so use that
+  set grepprg=ag\ --nogroup\ --no-color
 endif
 
 "# Folding
@@ -245,8 +245,8 @@ Plug 'w0rp/ale'
 " I am worried the ALE linters conflict with the LSP support which I've
 " enabled for rust.  TODO: If other languages are enabled exclude them from ALE also
 let g:ale_linters = {
-\ 'rust': [ ],
-\}
+      \ 'rust': [ ],
+      \}
 
 "## rust support
 
@@ -265,8 +265,8 @@ augroup pencil
   autocmd!
   " automatically enable pencil on common text editing tasks
   autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'hard', 'autoformat': 0 })
-						\ | set textwidth=120
-						\ | setlocal spell spelllang=en_us,ru
+    \ | set textwidth=120
+    \ | setlocal spell spelllang=en_us,ru
 
   " regretably, the 'autoformat' feature doesn't play well with vimwiki.  it
   " seems to bind <CR> in insert mode to something that results in newlines
@@ -275,16 +275,16 @@ augroup pencil
   " incompatibility:
   " [here](https://github.com/reedes/vim-pencil/issues/45)
   autocmd FileType vimwiki call pencil#init({'wrap': 'hard', 'autoformat': 0 })
-						\ | set textwidth=120
-						\ | setlocal spell spelllang=en_us,ru
+    \ | set textwidth=120
+    \ | setlocal spell spelllang=en_us,ru
 augroup END
 
 "## vimwiki related plugins
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_list = [
-	    \ { 'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.mkd'},
-	    \ { 'path': '~/vimwiki/русский', 'syntax': 'markdown', 'ext': '.mkd'}
-	\ ]
+      \ { 'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.mkd'},
+      \ { 'path': '~/vimwiki/русский', 'syntax': 'markdown', 'ext': '.mkd'}
+      \ ]
 
 "## Rice the vim terminal with nerd icons
 Plug 'ryanoasis/vim-devicons'
@@ -349,14 +349,14 @@ let g:NERDTrimTrailingWhitespace = 1
 
 " LSP client for those languages that provide a language server
 Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
 " TODO: add other languages' LSP configs here over time, and make sure if you add other languages here that you disable
 " ALE linters above so they don't step on each other
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.local/bin/run-rust-rls.sh']
-    \ }
+      \ 'rust': ['~/.local/bin/run-rust-rls.sh']
+      \ }
 
 " Experimental change: prefer textEdits from the LSP.  I can't tell which LSPs need this.
 let g:LanguageClient_completionPreferTextEdit = 1
@@ -587,44 +587,44 @@ map g# <Plug>(incsearch-nohl-g#)
 
 " use fzf as a plugin
 if executable("fzf")
-    Plug 'junegunn/fzf' "the basic fzf pluging
-    Plug 'junegunn/fzf.vim' "the more advanced one, ships separately
+  Plug 'junegunn/fzf' "the basic fzf pluging
+  Plug 'junegunn/fzf.vim' "the more advanced one, ships separately
 
-    " when opening a buffer, jump to the existing window if possible
-    let g:fzf_buffers_jump = 1
+  " when opening a buffer, jump to the existing window if possible
+  let g:fzf_buffers_jump = 1
 
-    " fzf.vim provides so many handy commands.  Here are bindings for a few:
-    " * Ctrl-T - Files - like ctrl-p but fast
-    " * Ctrl-P - Lines in the current buffer
-    " * <leader>p - BLines - Lines in all open buffers
-    " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
-    " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
-    " * <Leader>m - History - most recently used files
-    nmap <c-t> :Files<CR>
-    nmap <c-p> :BLines<CR>
-    nmap <Leader>p :Lines<Enter>
-    nmap <Leader>b :Buffers<Enter>
-    nmap <Leader>h :Helptags<Enter>
-    nmap <Leader>m :History<Enter>
+  " fzf.vim provides so many handy commands.  Here are bindings for a few:
+  " * Ctrl-T - Files - like ctrl-p but fast
+  " * Ctrl-P - Lines in the current buffer
+  " * <leader>p - BLines - Lines in all open buffers
+  " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
+  " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
+  " * <Leader>m - History - most recently used files
+  nmap <c-t> :Files<CR>
+  nmap <c-p> :BLines<CR>
+  nmap <Leader>p :Lines<Enter>
+  nmap <Leader>b :Buffers<Enter>
+  nmap <Leader>h :Helptags<Enter>
+  nmap <Leader>m :History<Enter>
 
-    " Customize fzf colors to match your color scheme
-    let g:fzf_colors =
+  " Customize fzf colors to match your color scheme
+  let g:fzf_colors =
     \ { 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Comment'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Statement'],
-      \ 'info':    ['fg', 'PreProc'],
-      \ 'border':  ['fg', 'Ignore'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment'] }
+    \ 'bg':      ['bg', 'Normal'],
+    \ 'hl':      ['fg', 'Comment'],
+    \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+    \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+    \ 'hl+':     ['fg', 'Statement'],
+    \ 'info':    ['fg', 'PreProc'],
+    \ 'border':  ['fg', 'Ignore'],
+    \ 'prompt':  ['fg', 'Conditional'],
+    \ 'pointer': ['fg', 'Exception'],
+    \ 'marker':  ['fg', 'Keyword'],
+    \ 'spinner': ['fg', 'Label'],
+    \ 'header':  ['fg', 'Comment'] }
 
-    " customize the layout
-    let g:fzf_layout = { 'down': '~40%' }
+  " customize the layout
+  let g:fzf_layout = { 'down': '~40%' }
 endif
 
 "## vim-indent-guides
