@@ -289,6 +289,14 @@ let g:vimwiki_list = [
 "## Rice the vim terminal with nerd icons
 Plug 'ryanoasis/vim-devicons'
 
+" Work around the ugly excessive indenting of the file nodes in
+" the nerdtree caused by this plugin
+"
+" Per https://github.com/ryanoasis/vim-devicons/issues/248
+let g:WebDevIconsNerdTreeBeforeGlyphPadding = ""
+let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
+
+
 "## A lighter version of the powerline plugin
 
 Plug 'vim-airline/vim-airline'
