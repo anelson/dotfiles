@@ -83,6 +83,13 @@ set noexpandtab
 set hidden
 set confirm
 
+"## Auto saving when leaving insert mode
+" This silently runs the 'update' command when leaving insert mode.  This is
+" preferable to `write` because `update` only does any I/O if there are
+" unsaved changes, and `silent!` avoids hassles and prompts if the current
+" buffer isn't named.
+autocmd InsertLeave * silent! update
+
 "## Showing unprintable characters
 
 set list          " Display unprintable characters f12 - switches
