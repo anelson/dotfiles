@@ -323,6 +323,7 @@ let g:rainbow_active=1 " use :RainbowToggle to turn on and off
 " because netrw tree mode sucks in cruel and unusual ways
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 nnoremap <Leader>f :NERDTreeToggle<Enter>
 nnoremap <Leader>F :NERDTreeFind<Enter>
