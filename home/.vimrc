@@ -32,6 +32,8 @@ endif
 let mapleader = ","
 
 " Use jj instead of <ESC> to exit insert mode
+" NOTE: I'm experimenting with using Caps Lock for this; maybe this will go
+" away soon
 inoremap jj <ESC>
 
 " Make a quick shortcut to hide the highlights from a search and close the
