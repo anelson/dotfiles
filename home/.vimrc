@@ -668,6 +668,7 @@ nmap <silent> t<C-g> :TestVisit<CR>   " t Ctrl+g
 Plug 'ntpeters/vim-better-whitespace'
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
+let g:strip_whitespace_confirm=0
 
 "## end plugins
 " Add plugins to &runtimepath
