@@ -358,6 +358,8 @@ let g:WebDevIconsNerdTreeBeforeGlyphPadding = ""
 let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
 let g:webdevicons_conceal_nerdtree_brackets = 1
 
+let g:DevIconsEnableFoldersOpenClose = 1
+
 "## LanguageClient-neovim LSP support
 
 " LSP client for those languages that provide a language server
@@ -698,4 +700,11 @@ set termguicolors "if the term supports 24-bit color even better
 
 colorscheme gruvbox " activate my current preferred scheme
 set background=dark "specifically the dark variant
+
+"# vim-devicons .vimrc refresh support
+"This is needed to avoid messing up the vim-devicons state when sourcing
+".vimrc
+if exists("g:loaded_webdevicons")
+  call webdevicons#refresh()
+endif
 
