@@ -356,6 +356,7 @@ Plug 'ryanoasis/vim-devicons'
 " Per https://github.com/ryanoasis/vim-devicons/issues/248
 let g:WebDevIconsNerdTreeBeforeGlyphPadding = ""
 let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
+let g:webdevicons_conceal_nerdtree_brackets = 1
 
 "## LanguageClient-neovim LSP support
 
