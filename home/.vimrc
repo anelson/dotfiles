@@ -376,6 +376,11 @@ let g:LanguageClient_serverCommands = {
 " Experimental change: prefer textEdits from the LSP.  I can't tell which LSPs need this.
 let g:LanguageClient_completionPreferTextEdit = 1
 
+" Enable logging on the client and server to help debug problems
+let g:LanguageClient_loggingLevel = 'INFO'
+let g:LanguageClient_loggingFile = expand('~/.LanguageClient.log')
+let g:LanguageClient_serverStderr = expand('~/.LanguageServer.log')
+
 " The LC context menu lists all available actions which can be chosen by a
 " fuzzy match
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
@@ -396,7 +401,11 @@ function! LC_maps()
     nnoremap <buffer> <silent> <Leader>p :call LanguageClient#workspace_symbol()<CR>
 
     " Integrate the `gq` formatting command with the language client
-    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+    " NOTE: As of 2019-02-27 enabling this causes the auto wrapping of
+    " comments in Rust code to screw up and swallow the space that separates
+    " words.  As a result, comments wrap with the first two words of the new
+    " linenot separated with a space (<-- like this line just now for example)
+    "set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 
     " always show the sign column, even if at a given moment there aren't any
     " diag messages
@@ -538,8 +547,8 @@ let g:echodoc#type = 'signature'
 "## delimitMate to automatically insert closing delimiters
 
 " I simply MUST have automatic insertion of closing delimiters
-Plug 'Raimondi/delimitMate'
-let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
+"Plug 'Raimondi/delimitMate'
+"let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
 
 "## Some themes
 
