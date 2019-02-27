@@ -547,8 +547,8 @@ let g:echodoc#type = 'signature'
 "## delimitMate to automatically insert closing delimiters
 
 " I simply MUST have automatic insertion of closing delimiters
-"Plug 'Raimondi/delimitMate'
-"let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
+Plug 'Raimondi/delimitMate'
+let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
 
 "## Some themes
 
