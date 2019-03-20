@@ -401,6 +401,9 @@ exec --no-startup-id xss-lock --transfer-sleep-lock --notifier $HOME/.config/i3/
 # Configure the X keyboard for both US and Russian with alt-shift to switch between
 exec_always --no-startup-id setxkbmap -layout "us,ru" -option "grp:lalt_lshift_toggle"
 
+# Set up the remapping of Caps Lock to Escape for better vim ergonomics
+exec_always --no-startup-id $HOME/.config/i3/config-xmodmap.sh
+
 # Always run dunst to handle notifications
 exec_always --no-startup-id "killall -q dunst; dunst &"
 
