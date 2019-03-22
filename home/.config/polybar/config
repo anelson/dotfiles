@@ -21,8 +21,8 @@ alert = #bd2c40
 [bar/top]
 ; Use the 'run-polybar.sh' script which sets the monitor env var
 monitor = ${env:MONITOR:eDP1}
-; use system dpi from xrandr
-dpi = -1
+; calculate the appropraite DPI based on the screen size
+dpi = 0
 width = 100%
 height = 2%
 ;offset-x = 1%
@@ -54,7 +54,7 @@ modules-left = i3
 ;modules-center = xwindow
 modules-right = filesystem xbacklight volume xkeyboard memory cpu cpu-freq system-fan-speed cpu-temperature pch-temperature wlan eth battery  date powermenu
 
-; let the tray position be overridden by an env var.  The `run-polybar.sh` script will set this to `none` for all but the first monitor, 
+; let the tray position be overridden by an env var.  The `run-polybar.sh` script will set this to `none` for all but the first monitor,
 ; so the tray consistently appears on the same monitor each run
 tray-position = ${env:TRAY_POSITION:right}
 tray-padding = 2
