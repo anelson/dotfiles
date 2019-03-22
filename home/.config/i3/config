@@ -300,8 +300,6 @@ for_window [window_type="menu"] floating enable
 
 for_window [class="(?i)gsimplecal"] floating enable, move position mouse, move down $height px
 for_window [class="(?i)qemu-system"] floating enable
-#for_window [class="(?i)VirtualBox" title="(?i)Manager"] floating enable
-#for_window [class="(?i)VirtualBox"] floating enable
 for_window [class="(?i)blueman"] floating enable
 for_window [class="(?i)pinentry"] floating enable
 for_window [class="(?i)nm-connection-editor"] floating enable
@@ -326,7 +324,10 @@ for_window [class="Firefox"] move to workspace $ws1
 for_window [class="Google-chrome"] move to workspace $ws10
 for_window [class="Chromium"] move to workspace $ws10
 for_window [class="Vmware"] move to workspace $ws5
+for_window [class="Crossover"] move to workspace $ws5
 for_window [class="Skype"] move to workspace $ws8
+for_window [class="Slack"] move to workspace $ws8
+for_window [class="Mailspring"] move to workspace $ws9
 
 # assign doesn't work for spotify due to a bug
 # https://community.spotify.com/t5/Desktop-Linux/WM-CLASS-window-property-on-Linux/td-p/1247042
@@ -423,7 +424,8 @@ exec --no-startup-id "unclutter &"
 exec firefox
 exec google-chrome-stable
 exec skype
-exec spotify-hidpi
+exec slack
+exec mailspring
 exec --no-startup-id dropbox start
 
 # execute a terminal running tmux in workspace two
