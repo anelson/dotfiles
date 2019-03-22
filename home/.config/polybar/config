@@ -54,8 +54,11 @@ modules-left = i3
 ;modules-center = xwindow
 modules-right = filesystem xbacklight volume xkeyboard memory cpu cpu-freq system-fan-speed cpu-temperature pch-temperature wlan eth battery  date powermenu
 
-tray-position = right
+; let the tray position be overridden by an env var.  The `run-polybar.sh` script will set this to `none` for all but the first monitor, 
+; so the tray consistently appears on the same monitor each run
+tray-position = ${env:TRAY_POSITION:right}
 tray-padding = 2
+tray-maxsize = 32
 ;tray-transparent = true
 ;tray-background = #0063ff
 
