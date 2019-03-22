@@ -7,6 +7,11 @@
 # i3 is being reloaded with the reload sequence) then xmodmap fails to load the
 # new bindings.  Yes that seems dumb to me too
 
+# This pains me but it seems to be required to wait a few seconds so there are no keys pressed
+# in order for these settings to work.  I do not understand why but this seems to be the consensus
+# solution online
+sleep 5
+
 # Disable capslock
 xmodmap -e "clear lock"
 
