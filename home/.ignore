@@ -7,7 +7,9 @@
 .antigen/
 .bundle/
 .cache/
+.cargo/
 .conan/
+.cxoffice/
 .docker/
 .dropbox/
 .gem/
@@ -29,6 +31,8 @@
 .multirust/
 
 node_modules/
+
+cxoffice/
 
 .IntelliJIdea*/
 
