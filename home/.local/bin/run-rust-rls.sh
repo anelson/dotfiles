@@ -13,5 +13,5 @@
 # This script runs the RLS corresponding to the overridden toolchain of the current directory, if applicable, otherwise
 # it runs the stable RLS.
 
-toolchain=$(rustup show active-toolchain)
+toolchain=$(rustup show active-toolchain | cut -f1 -d " ")
 rustup run $toolchain rls
