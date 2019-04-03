@@ -396,6 +396,9 @@ exec --no-startup-id redshift-gtk &
 # Configure the X screensaver API to dim the screen after 10 minutes, and to lock the screen 30 seconds after that
 exec --no-startup-id xset s 600 30 &
 
+# Start the corsiar keyboard applet, on the off chance I have the corsair keyboard plugged in
+exec --no-startup-id ckb-next --background --profile Professional &
+
 # Invoke i3lock to lock the session when the screen saver setting above locks it, and also if the system suspends
 exec --no-startup-id xss-lock --transfer-sleep-lock --notifier $HOME/.config/i3/dim-screen.sh -- $HOME/.config/i3/transfer-sleep-lock-i3lock.sh &
 
