@@ -10,7 +10,7 @@
 #
 # If there are no external displays, I want all workspaces displayed on the built-in screen
 #
-# If there is just one external display, I want to extend the screen to that display and keep using the 
+# If there is just one external display, I want to extend the screen to that display and keep using the
 # built-in display
 #
 # This script started out just wrapping 'mons', but then I had problems where mons would fail sometimes to
@@ -23,14 +23,14 @@ EXTERNAL_MONITOR_HIDPI="144" #my external 4K HiDPI monitors are big enough they 
 EXTERNAL_MONITOR_LOWDPI="96" #external 1080p HD monitors have pretty low resolution
 
 # the mons script assigns monitors numbers, from what I can tell it's based on their outpt order
-# in xrandr.  But they're not contiguous integers.  on my system the built-in display is 0, 
+# in xrandr.  But they're not contiguous integers.  on my system the built-in display is 0,
 # one displayport monitor is 5, and the other is 6.
 #
 # this function takes as a parameter the ordinal number of the monitor (starting from 1)
 # and returns the number used to identify this display by mons.
 #
 # This works just like the abov get_monitor_number_from_orginal except
-# is returns the monitors name (eg "eDP1") instead 
+# is returns the monitors name (eg "eDP1") instead
 get_monitor_name_from_ordinal() {
     local ordinal=$1;
 
@@ -70,7 +70,7 @@ connected_monitors=( $(echo "$xrandr_out" | grep " connect" | cut -f1 -d ' ') )
 echo "Found ${#connected_monitors[@]} connected monitors:"
 for mon in "${connected_monitors[@]}"; do
     echo "    $mon"
-    # NOTE: As of now, this logic around getiing the current resolution isn't needed because I figured out why the 
+    # NOTE: As of now, this logic around getiing the current resolution isn't needed because I figured out why the
     # maximum resolution wasn't being reported propertly (hint: DP works better than HDMI)
     # However, I'm leaving this code in here in case I need to make this script smarter in the future
     resolutions=$(get_monitor_current_resolution "$mon")
@@ -85,49 +85,59 @@ echo "Built in: $builtin_name"
 echo "External 1: $monitor1_name"
 echo "External 2: $monitor2_name"
 
+# builtin is a concept for a laptop
+# if it's missing it means this is a desktop
 if [[ "$builtin_name" != "$BUILTIN_MONITOR_NAME"* ]]; then
-    echo "ERROR: expecting the first monitor to start with prefix $BUILTIN_MONITOR_NAME!"
-    exit -1;
-fi
+    echo "WARNING: expecting the first monitor to start with prefix $BUILTIN_MONITOR_NAME!  Assuming this is a dekstop system"
+    monitor2_name="${monitor1_name}"
+    monitor1_name="${builtin_name}"
 
-# start with the xrandr auto config since it seems to get confused easily
-echo "Resetting xrandr config using --auto and DPI $BUILTIN_MONITOR_DPI"
-xrandr --auto --dpi "$BUILTIN_MONITOR_DPI"
-
-if [[ -z "$monitor1_name" && -z "$monitor2_name" ]]; then
-    # No external monitors configured
-    # Use only the built-in monitor
-    echo "Using only built in display"
-    xrandr --verbose --output "$builtin_name" --primary --auto --dpi "$BUILTIN_MONITOR_DPI" # I think maybe mons is a no-op when there's only one monitor
-    #mons --primary "$builtin_name" --dpi "$BUILTIN_MONITOR_DPI"
-elif [[ -z "$monitor2_name" ]]; then
-    # There is one external monitor connected.  This is a common scenario with projectors
-    # It's unlikely that this one external monitor is 4K, and a mix of 4K and 1080p displays is a disaster
-    # Thus, disable the on-board display and use only the external
-    echo "Disabling built-in display and using single external display $monitor1_name"
-    #mons -S "$builtin_name,$monitor1_name:R" --primary "$builtin_name" --dpi "$BUILTIN_MONITOR_DPI"
-    xrandr --verbose --output $builtin_name --off 
-    xrandr --verbose --dpi $EXTERNAL_MONITOR_HIDPI
-    xrandr --verbose --output $monitor1_name --auto --primary --dpi $EXTERNAL_MONITOR_HIDPI
-    # xrandr --verbose --output $builtin_name --auto --primary 
-    #xrandr --verbose --output $monitor1_name --auto --right-of $builtin_name 
-    #xrandr --verbose --dpi $BUILTIN_MONITOR_DPI
+    if [[ -z "$monitor2_name" ]]; then
+        # there's only one monitor connected.  We don't need to config that.  xrandr will have activated it
+        echo "Single monitor ${monitor1_name} detected; no further configuration needed"
+    else
+        # Two monitors connected
+        echo "Dual monitors detected; configuring ${monitor2_name} to be left of ${monitor1_name}"
+        xrandr --verbose --output $monitor2_name --left-of $monitor1_name
+    fi
 else
-    # Two monitors connected
-    #
-    # Disable the built-in monitor, and enable both of the external ones assuming the first
-    # one in the sort order is positioned to the left of the second one.
-    # NOTE: At this point I make a very environmentaly specific assumption, that the only time 
-    # I connect two monitors at once, they are my 4k HiDPI monitors at home.  If regular HD
-    # monitors are used this will result in a bad time
-    echo "Enabling both external displays and disabling internal display"
-    #mons -S "$monitor1_name,$monitor2_name:R" --primary "$builtin_name" --dpi "$EXTERNAL_MONITOR_DPI"
-    xrandr --verbose --output $builtin_name --off 
-    xrandr --verbose --output $monitor2_name --mode "3840x2160"   --pos 0x0
-    xrandr --verbose --output $monitor1_name --mode "3840x2160"  --right-of $monitor2_name
-    xrandr --verbose --dpi $EXTERNAL_MONITOR_HIDPI
+    # start with the xrandr auto config since it seems to get confused easily
+    echo "Resetting xrandr config using --auto and DPI $BUILTIN_MONITOR_DPI"
+    xrandr --auto --dpi "$BUILTIN_MONITOR_DPI"
 
+    if [[ -z "$monitor1_name" && -z "$monitor2_name" ]]; then
+        # No external monitors configured
+        # Use only the built-in monitor
+        echo "Using only built in display"
+        xrandr --verbose --output "$builtin_name" --primary --auto --dpi "$BUILTIN_MONITOR_DPI" # I think maybe mons is a no-op when there's only one monitor
+        #mons --primary "$builtin_name" --dpi "$BUILTIN_MONITOR_DPI"
+    elif [[ -z "$monitor2_name" ]]; then
+        # There is one external monitor connected.  This is a common scenario with projectors
+        # It's unlikely that this one external monitor is 4K, and a mix of 4K and 1080p displays is a disaster
+        # Thus, disable the on-board display and use only the external
+        echo "Disabling built-in display and using single external display $monitor1_name"
+        #mons -S "$builtin_name,$monitor1_name:R" --primary "$builtin_name" --dpi "$BUILTIN_MONITOR_DPI"
+        xrandr --verbose --output $builtin_name --off
+        xrandr --verbose --dpi $EXTERNAL_MONITOR_HIDPI
+        xrandr --verbose --output $monitor1_name --auto --primary --dpi $EXTERNAL_MONITOR_HIDPI
+        # xrandr --verbose --output $builtin_name --auto --primary
+        #xrandr --verbose --output $monitor1_name --auto --right-of $builtin_name
+        #xrandr --verbose --dpi $BUILTIN_MONITOR_DPI
+    else
+        # Two monitors connected
+        #
+        # Disable the built-in monitor, and enable both of the external ones assuming the first
+        # one in the sort order is positioned to the left of the second one.
+        # NOTE: At this point I make a very environmentaly specific assumption, that the only time
+        # I connect two monitors at once, they are my 4k HiDPI monitors at home.  If regular HD
+        # monitors are used this will result in a bad time
+        echo "Enabling both external displays and disabling internal display"
+        #mons -S "$monitor1_name,$monitor2_name:R" --primary "$builtin_name" --dpi "$EXTERNAL_MONITOR_DPI"
+        xrandr --verbose --output $builtin_name --off
+        xrandr --verbose --output $monitor2_name --mode "3840x2160"   --pos 0x0
+        xrandr --verbose --output $monitor1_name --mode "3840x2160"  --right-of $monitor2_name
+        xrandr --verbose --dpi $EXTERNAL_MONITOR_HIDPI
+
+    fi
 fi
-
-
 
