@@ -625,6 +625,11 @@ if executable("fzf")
   " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
   " * <Leader>m - History - most recently used files
   nmap <c-t> :Files<CR>
+
+  " For files that have LSP support the <C-p> and <Leader>p mappings are
+  " overridden to use the LSP.  But I always want to be able to do a fzf lines
+  " search so also bind to <Leader>l
+  nmap <Leader>l :Lines<CR>
   nmap <c-p> :BLines<CR>
   nmap <Leader>p :Lines<Enter>
   nmap <Leader>b :Buffers<Enter>
