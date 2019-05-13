@@ -68,7 +68,10 @@ res=$?
 [ "$res" -eq "0" ] || exit $res
 
 # We have the window ID which is unique.  Find it's session
-target_session=$(tmux list-windows -a -F "#{window_id} #{session_name}" | grep -sw "$target_window_id" | cut -d' ' -f2)
+target_session=$(tmux list-windows -a -F "#{window_id} #{session_name}" | grep -sw "$target_window_id" | head -n 1 | cut -d' ' -f2)
+
+#echo "Target window ID: ${target_window_id}"
+#echo "Target session: ${target_session}"
 
 tmux switch-client -t "$target_session"
 tmux select-window -t "$target_window_id"
