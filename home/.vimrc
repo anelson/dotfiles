@@ -185,6 +185,11 @@ endif
 "# vim plugins
 call plug#begin('~/.vim/plugged')
 
+"## secure modelines alternative since modelines are now disabled by default
+"and considered insecure
+
+Plug 'ciaranm/securemodelines'
+
 "## tpope gets his own section
 
 " Apply tpope's sensible defaults
@@ -252,6 +257,7 @@ let g:ale_linters = {
 
 Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1 " automatically rustfmt on save
+let g:rust_fold = 0 "seems to cause slow rustfmt per https://github.com/rust-lang/rust.vim/issues/293
 
 "## markdown support plugins
 
@@ -285,6 +291,15 @@ let g:vimwiki_list = [
       \ { 'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.mkd'},
       \ { 'path': '~/vimwiki/русский', 'syntax': 'markdown', 'ext': '.mkd'}
       \ ]
+
+"## TOML support
+Plug 'cespare/vim-toml'
+
+"## Hashicorp Terraform support
+Plug 'hashivim/vim-terraform'
+
+" Auto-format terraform files on save
+let g:terraform_fmt_on_save=1
 
 "## A lighter version of the powerline plugin
 
@@ -596,12 +611,21 @@ map / <Plug>(incsearch-easymotion-/)
 map ? <Plug>(incsearch-easymotion-?)
 map g/ <Plug>(incsearch-easymotion-stay)
 
+" With a z prefix do incremental fuzzy search
+map z/ <Plug>(incsearch-fuzzy-/)
+map z? <Plug>(incsearch-fuzzy-?)
+map zg/ <Plug>(incsearch-fuzzy-stay)
+
 " Automatically turn off highlighted search after it's not needed using
 " the incsearch auto_nohlsearch feature
 set hlsearch
 let g:incsearch#auto_nohlsearch = 1
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
+
+"use the easymotion version of n/N so repeat easymotion searches
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
+
+" use incsearch plugin for the usual search operators
 map *  <Plug>(incsearch-nohl-*)
 map #  <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
@@ -700,6 +724,10 @@ Plug 'ntpeters/vim-better-whitespace'
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 let g:strip_whitespace_confirm=0
+
+"## capnproto syntax support
+
+Plug 'cstrahan/vim-capnp'
 
 "## end plugins
 " Add plugins to &runtimepath
