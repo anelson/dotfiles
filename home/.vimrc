@@ -228,6 +228,9 @@ Plug 'tpope/vim-obsession'
 " templates
 Plug 'tpope/vim-liquid'
 
+"## vim-polyglot for language support for over 100 langauges
+Plug 'sheerun/vim-polyglot'
+
 "## machakann/vim-highlightedyank
 
 " Briefly highlight yanked regions for clarity
