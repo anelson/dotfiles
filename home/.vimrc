@@ -472,7 +472,7 @@ imap <expr><CR>	    pumvisible() ? "\<C-y>\<CR>" : "\<Plug>delimitMateCR"
 " Down the road it may be necessary to bring in some language support if LSP
 " is lacking.
 Plug 'ncm2/ncm2-bufword' " any word that appears in the current buffer
-Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' } " any word that appears in other open buffers
+Plug 'fgrsnau/ncm2-otherbuf' " any word that appears in other open buffers
 Plug 'ncm2/ncm2-path'  " paths relative to the current and project directories
 Plug 'wellle/tmux-complete.vim'  " words in other tmux panes
 Plug 'Shougo/neco-syntax'  " dependency of ncm2-syntax
