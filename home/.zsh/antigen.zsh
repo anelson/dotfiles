@@ -27,7 +27,6 @@ antigen bundles <<EOB
   robbyrussell/oh-my-zsh plugins/tmux
   robbyrussell/oh-my-zsh plugins/vi-mode
   hlissner/zsh-autopair
-  marzocchi/zsh-notify
   rupa/z
   changyuheng/fz
   changyuheng/zsh-interactive-cd
