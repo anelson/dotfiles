@@ -7,9 +7,8 @@ else
   source $HOME/.zsh/antigen-git.zsh
 fi
 
-
-# I stopped using prezto, antigen provides all the functionality i need
-#antigen use prezto
+# Disable 'magic' functions which are breaking paste operations on Fedora 31
+DISABLE_MAGIC_FUNCTIONS=true
 antigen use oh-my-zsh
 
 antigen bundles <<EOB
