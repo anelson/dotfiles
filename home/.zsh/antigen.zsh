@@ -33,9 +33,8 @@ antigen bundles <<EOB
   zsh-users/zsh-syntax-highlighting
 EOB
 
-# this uses the agnoster oh-my-zsh theme
-# antigen theme agnoster
 # Use the official agnoster repo instead of the one in oh-my-zsh
+setopt prompt_subst # try to fix the $(prompt_agnoster_main) issue; based on    https://github.com/agnoster/agnoster-zsh-theme/pull/114
 antigen theme agnoster/agnoster-zsh-theme agnoster
 
 antigen apply
