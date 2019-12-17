@@ -261,6 +261,7 @@ let g:ale_linters = {
 Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1 " automatically rustfmt on save
 let g:rust_fold = 0 "seems to cause slow rustfmt per https://github.com/rust-lang/rust.vim/issues/293
+let g:rustfmt_options = '--edition 2018' "https://github.com/rust-lang/rust.vim/issues/368
 
 "## markdown support plugins
 
