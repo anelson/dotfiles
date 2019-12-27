@@ -21,6 +21,47 @@ set $term alacritty
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu rofi -combi-modi window,drun,run -show combi -modi combi -display-combi '' -drun-match-fields name,generic,categories | xargs swaymsg exec --
 
+set $bg-color 	         #2f343f
+set $inactive-bg-color   #2f343f
+set $text-color          #f3f4f5
+set $inactive-text-color #676E7D
+set $urgent-bg-color     #E53935
+
+# set $height 34
+# pick fontawesome icons from https://fontawesome.bootstrapcheatsheets.com/
+# firefox
+set $ws1  "1: "
+
+# terminals
+set $ws2  "2:  "
+
+# code
+set $ws3  "3:  "
+
+# ???
+set $ws4  "4: "
+
+# windows VM
+set $ws5  "5:  "
+
+# file explorer
+set $ws6  "6:  "
+
+# spotify or other music
+set $ws7  "7: "
+
+# skype (and other chats)
+set $ws8  "8: "
+
+# mail client
+set $ws9  "9:  "
+
+# chrome
+set $ws10 "10:  "
+
+set $default_gaps_inner 10
+set $default_gaps_outer 0
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
@@ -32,6 +73,13 @@ output eDP-1 {
     scale 2
 }
 
+font pango:System San Francisco Display 8
+
+# Put gaps between windows on the same workspace for better visual ergonomics
+gaps inner $default_gaps_inner
+gaps outer $default_gaps_outer
+
+# Font is not typically used since I hide the labels
 #
 # Example configuration:
 #
@@ -66,6 +114,15 @@ output eDP-1 {
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
+
+input * {
+    # Enable US english and Russian keyboard layouts
+    xkb_layout us,ru
+
+    # Toggle keyboard layouts with left shift + alt
+    # Map the caps lock key to Escape
+    xkb_options grp:lalt_lshift_toggle,caps:escape
+}
 
 ### Key bindings
 #
