@@ -59,9 +59,6 @@ set $ws9  "9:  "
 # chrome
 set $ws10 "10:  "
 
-set $default_gaps_inner 10
-set $default_gaps_outer 0
-
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
@@ -73,11 +70,29 @@ output eDP-1 {
     scale 2
 }
 
-font pango:System San Francisco Display 8
+#
+# Various blobal options
+#
+    # this is annoying; just use Mod-Tab
+    workspace_auto_back_and_forth no
 
-# Put gaps between windows on the same workspace for better visual ergonomics
-gaps inner $default_gaps_inner
-gaps outer $default_gaps_outer
+    force_display_urgency_hint 500 ms
+    focus_on_window_activation urgent
+
+    # this is very annoying
+    focus_follows_mouse no
+    font pango:System San Francisco Display 8
+
+    floating_minimum_size -1 x -1
+    floating_maximum_size -1 x -1
+
+#
+# Window colors
+#
+client.focused          $bg-color           $bg-color          $text-color          #00ff00 $bg-color
+client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00 $inactive-bg-color
+client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00 $inactive-bg-color
+client.urgent           $urgent-bg-color $urgent-bg-color $text-color #00ff00 $urgent-bg-color
 
 # Font is not typically used since I hide the labels
 #
@@ -149,6 +164,26 @@ input * {
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+#
+# Audio controls
+#
+    # Pulse Audio controls
+    bindsym XF86AudioRaiseVolume exec --no-startup-id "pamixer -i 5; notify-send --expire-time=250 '  Raise Volume ['$(pamixer --get-volume)'%]'"
+    bindsym XF86AudioLowerVolume    exec --no-startup-id "pamixer -d 5; notify-send --expire-time=250 '  Lower Volume ['$(pamixer --get-volume)'%]'"
+    bindsym XF86AudioMute       exec --no-startup-id "pamixer -t; notify-send --expire-time=250 ' /  Toggle'"
+
+    # Sreen brightness controls
+    bindsym XF86MonBrightnessUp exec xbacklight -inc 10  -time 500 # increase screen brightness
+    bindsym XF86MonBrightnessDown exec xbacklight -dec 10 -time 500 # decrease screen brightness
+
+    # Media player controls
+    bindsym XF86AudioPlay exec playerctl play
+    bindsym XF86AudioPause exec playerctl pause
+    bindsym XF86AudioNext exec playerctl next
+    bindsym XF86AudioPrev exec playerctl previous
+
+#
 #
 # Moving around:
 #
@@ -176,30 +211,103 @@ input * {
 #
 # Workspaces:
 #
-    # Switch to workspace
-    bindsym $mod+1 workspace 1
-    bindsym $mod+2 workspace 2
-    bindsym $mod+3 workspace 3
-    bindsym $mod+4 workspace 4
-    bindsym $mod+5 workspace 5
-    bindsym $mod+6 workspace 6
-    bindsym $mod+7 workspace 7
-    bindsym $mod+8 workspace 8
-    bindsym $mod+9 workspace 9
-    bindsym $mod+0 workspace 10
-    # Move focused container to workspace
-    bindsym $mod+Shift+1 move container to workspace 1
-    bindsym $mod+Shift+2 move container to workspace 2
-    bindsym $mod+Shift+3 move container to workspace 3
-    bindsym $mod+Shift+4 move container to workspace 4
-    bindsym $mod+Shift+5 move container to workspace 5
-    bindsym $mod+Shift+6 move container to workspace 6
-    bindsym $mod+Shift+7 move container to workspace 7
-    bindsym $mod+Shift+8 move container to workspace 8
-    bindsym $mod+Shift+9 move container to workspace 9
-    bindsym $mod+Shift+0 move container to workspace 10
+    # switch to workspace
+    bindsym $mod+1 workspace $ws1
+    bindsym $mod+2 workspace $ws2
+    bindsym $mod+3 workspace $ws3
+    bindsym $mod+4 workspace $ws4
+    bindsym $mod+5 workspace $ws5
+    bindsym $mod+6 workspace $ws6
+    bindsym $mod+7 workspace $ws7
+    bindsym $mod+8 workspace $ws8
+    bindsym $mod+9 workspace $ws9
+    bindsym $mod+0 workspace $ws10
+    bindsym $mod+Tab workspace back_and_forth
+
+    # move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace number $ws1
+    bindsym $mod+Shift+2 move container to workspace number $ws2
+    bindsym $mod+Shift+3 move container to workspace number $ws3
+    bindsym $mod+Shift+4 move container to workspace number $ws4
+    bindsym $mod+Shift+5 move container to workspace number $ws5
+    bindsym $mod+Shift+6 move container to workspace number $ws6
+    bindsym $mod+Shift+7 move container to workspace number $ws7
+    bindsym $mod+Shift+8 move container to workspace number $ws8
+    bindsym $mod+Shift+9 move container to workspace number $ws9
+    bindsym $mod+Shift+0 move container to workspace number $ws10
+
+    # move focused container to workspace and switch to that workspace
+    bindsym $mod+Control+1 move container to workspace number $ws1, workspace $ws1
+    bindsym $mod+Control+2 move container to workspace number $ws2, workspace $ws2
+    bindsym $mod+Control+3 move container to workspace number $ws3, workspace $ws3
+    bindsym $mod+Control+4 move container to workspace number $ws4, workspace $ws4
+    bindsym $mod+Control+5 move container to workspace number $ws5, workspace $ws5
+    bindsym $mod+Control+6 move container to workspace number $ws6, workspace $ws6
+    bindsym $mod+Control+7 move container to workspace number $ws7, workspace $ws7
+    bindsym $mod+Control+8 move container to workspace number $ws8, workspace $ws8
+    bindsym $mod+Control+9 move container to workspace number $ws9, workspace $ws9
+    bindsym $mod+Control+0 move container to workspace number $ws10, workspace $ws10
+
+    # move workspaces between monitors
+    bindsym $mod+Shift+bracketright   move workspace to output right
+    bindsym $mod+Shift+bracketleft   move workspace to output left
+
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
+
+#
+# Gaps related config
+#
+    set $mode_gaps gaps
+    set $mode_gaps_outer outer gaps
+    set $mode_gaps_inner inner gaps
+    set $default_gaps_inner 10
+    set $default_gaps_outer 0
+
+    gaps inner $default_gaps_inner
+    gaps outer $default_gaps_outer
+
+    bindsym $mod+Shift+g mode "$mode_gaps"
+    mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+
+        bindsym 0      mode "default", exec --no-startup-id i3-msg "gaps inner current set 0" && i3-msg "gaps outer current set 0"
+        bindsym d      mode "default", exec --no-startup-id i3-msg "gaps inner current set $default_gaps_inner" && i3-msg "gaps outer current set $default_gaps_outer"
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+    }
+
+    mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     mode "default", gaps inner current set 0
+        bindsym d     mode "default", gaps inner current set $default_gaps_inner
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     mode "default", gaps inner all set 0
+        bindsym Shift+d     mode "default", gaps inner all set $default_gaps_inner
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+    }
+
+    mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     mode "default", gaps outer current set 0
+        bindsym d     mode "default", gaps outer current set $default_gaps_outer
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     mode "default", gaps outer all set 0
+        bindsym Shift+d     mode "default", gaps outer all set $default_gaps_outer
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+    }
 #
 # Layout stuff:
 #
@@ -225,7 +333,52 @@ input * {
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
-#
+
+    # fix graphics glitch
+    default_border none
+
+    #for_window [class=(?i)termite] border pixel 3
+    for_window [class="^.*"] border pixel 0
+    for_window [window_role="pop-up"] floating enable
+    for_window [window_role="bubble"] floating enable
+    for_window [window_role="task_dialog"] floating enable
+    for_window [window_role="Preferences"] floating enable
+
+    for_window [window_type="dialog"] floating enable
+    for_window [window_type="menu"] floating enable
+
+    for_window [class="(?i)gsimplecal"] floating enable, move position mouse, move down $height px
+    for_window [class="(?i)qemu-system"] floating enable
+    for_window [class="(?i)blueman"] floating enable
+    for_window [class="(?i)pinentry"] floating enable
+    for_window [class="(?i)nm-connection-editor"] floating enable
+
+    #for_window [instance="sun-awt-X11-XFramePeer"] floating enable
+    for_window [instance="__scratchpad"] floating enable
+    for_window [instance="__nmtui"] floating enable
+    for_window [class="(?i)recordmydesktop"] floating enable
+
+    for_window [class="(?i)pavucontrol"] floating enable, move position mouse
+    for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down $height px
+
+    for_window [class="Skype"] floating disable
+
+    # Move various windows automatically to the appropriate workspace
+    for_window [class="Firefox"] move to workspace $ws1
+    for_window [class="Google-chrome"] move to workspace $ws10
+    for_window [class="Chromium"] move to workspace $ws10
+    for_window [class="Vmware"] move to workspace $ws5
+    for_window [class="Crossover"] move to workspace $ws5
+    for_window [class="Skype"] move to workspace $ws8
+    for_window [class="Slack"] move to workspace $ws8
+    for_window [class="Mailspring"] move to workspace $ws9
+
+    # assign doesn't work for spotify due to a bug
+    # https://community.spotify.com/t5/Desktop-Linux/WM-CLASS-window-property-on-Linux/td-p/1247042
+    # so use a workaround
+    #assign [class="Spotify"] workspace $ws7
+    for_window [class="Spotify"] move to workspace $ws7
+
 # Scratchpad:
 #
     # Sway has a "scratchpad", which is a bag of holding for windows.
@@ -279,4 +432,26 @@ bar {
         inactive_workspace #32323200 #32323200 #5c5c5c
     }
 }
+
+#
+# Initial programs executed on startup
+#
+    # nm-applet at startup for configuring wifi connections
+    exec --no-startup-id nm-applet &
+
+    # bluetooth config
+    exec --no-startup-id blueman-applet &
+
+    # adjust color temperature for better eye comfort
+    exec --no-startup-id redshift-gtk &
+
+    # always start firefox
+    exec firefox
+    exec google-chrome-stable
+    exec skype
+    exec slack
+
+    # execute a terminal running tmux in workspace two
+    exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command /bin/sh -c "tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell"'
+
 
