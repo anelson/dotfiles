@@ -291,11 +291,19 @@ Plug 'vim-airline/vim-airline-themes'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 let g:airline#extensions#tabline#show_tab_type = 1
-let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline
+
+" Enable languageclient-neovim integration with airline
+let g:airline#extensions#languageclient#enabled = 1
+let g:airline#extensions#languageclient#error_symbol = 'E:'
+let g:airline#extensions#languageclient#warning_symbol = 'W:'
+let g:airline#extensions#languageclient#show_line_numbers = 1
+let g:airline#extensions#languageclient#open_lnum_symbol = '(L'
+let g:airline#extensions#languageclient#close_lnum_symbol = ')'
+
 let g:airline_theme='gruvbox'
 let g:airline_solarized_bg='dark'
 let g:airline_powerline_fonts=1
-let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline
 
 "## tmux sync and integration plugins
 
