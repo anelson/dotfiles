@@ -236,26 +236,6 @@ Plug 'sheerun/vim-polyglot'
 " Briefly highlight yanked regions for clarity
 Plug 'machakann/vim-highlightedyank'
 
-"## scala support plugins
-
-" Enable Ensime for Scala/Java code
-Plug 'ensime/ensime-vim'
-let ensime_server_v2=1
-
-" vim-scala plugin to set up vim for scala coding
-Plug 'derekwyatt/vim-scala'
-
-"## ale for syntax highlighting (non-LSP languages)
-
-" ALE for syntax highlighting including Ensime-aware highlighting of
-" Scala and Java
-Plug 'w0rp/ale'
-" I am worried the ALE linters conflict with the LSP support which I've
-" enabled for rust.  TODO: If other languages are enabled exclude them from ALE also
-let g:ale_linters = {
-      \ 'rust': [ ],
-      \}
-
 "## rust support
 
 Plug 'rust-lang/rust.vim'
