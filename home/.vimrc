@@ -379,6 +379,20 @@ let g:LanguageClient_serverCommands = {
       \ 'rust': ['~/.local/bin/run-rust-rls.sh']
       \ }
 
+" Override the root markers because often my Rust workspaces have a
+" `Cargo.toml` for the workspace and `Cargo.toml`s in the child directories
+" for each crate.
+"
+" Highest priority indicator is if I put an empty `.project_root`
+" where I want the root to be.
+"
+" Failing that, the root of the git repo
+"
+" If it's not a git repo, the dir the contains `Cargo.toml
+let g:LanguageClient_rootMarkers = {
+        \ 'rust': ['.project_root', '.git', 'Cargo.toml']
+        \ }
+
 " Experimental change: prefer textEdits from the LSP.  I can't tell which LSPs need this.
 let g:LanguageClient_completionPreferTextEdit = 1
 
