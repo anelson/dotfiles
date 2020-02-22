@@ -1,1 +1,13 @@
-{}
+{
+    // Of _course_ I need a Russian dictionary also
+    "cSpell.language": "en,ru",
+
+    "diagnostic.virtualText": true,
+
+    "codeLens.enable": true,
+
+    "rust-analyzer.trace.server": "verbose",
+
+    // The default list height of 10 feels too cramped on my big screen terminals
+    "list.maxHeight": 20,
+}

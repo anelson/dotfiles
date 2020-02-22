@@ -138,3 +138,24 @@ your target.
 Another useful shortcut is `<Leader><Leader>`, which puts an easymotion sequence on every word on the screen.  Need to
 experiment to see which is more convenient, but both are probably more intuitive than `s`.
 
+# coc and rust-analyzer
+
+The [rust-analyzer](https://github.com/fannheyward/coc-rust-analyzer) extension has a lot of useful commands:
+
+You can use these commands by :CocCommand XYZ.
+
+    rust-analyzer.analyzerStatus: Show rust-analyzer status
+    rust-analyzer.applySourceChange: Apply source change
+    rust-analyzer.selectAndApplySourceChange: Apply selected source change
+    rust-analyzer.collectGarbage: Run garbage collection
+    rust-analyzer.expandMacro: Expand macro recursively
+    rust-analyzer.joinLines: Join lines
+    rust-analyzer.matchingBrace: Find matching brace
+    rust-analyzer.parentModule: Locate parent module
+    rust-analyzer.reload: Restart rust-analyzer server
+    rust-analyzer.run: List available runnables of current file
+    rust-analyzer.runSingle: Run runnable at position
+    rust-analyzer.syntaxTree: Show syntax tree
+    rust-analyzer.upgrade: Download latest rust-analyzer from GitHub release
+
+I've aliased some of these to custom commands with a prefix `RA`
