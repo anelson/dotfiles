@@ -129,4 +129,12 @@ must have RLS installed.  Assuming you're running the version in `stable`, you n
 
     $ rustup component add rls-preview rust-analysis rust-src --toolchain stable
 
+# Motions
+
+I already use the `s` motion often.  But remember to use `z/` and `z?` to perform a fuzzy incremental search instead of
+a regular incremental search.  This is often better than `s` because you can keep typing characters until you narrow to
+your target.
+
+Another useful shortcut is `<Leader><Leader>`, which puts an easymotion sequence on every word on the screen.  Need to
+experiment to see which is more convenient, but both are probably more intuitive than `s`.
 
