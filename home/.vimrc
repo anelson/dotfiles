@@ -149,6 +149,11 @@ set smartcase "assume all-lowercase searches are case insensitive; upper or mixe
 set diffopt+=vertical
 set conceallevel=3 "enable all syntax concealing, like rendering _Markdown_ in italics
 
+" when openning vertical splits, they should open to the right
+" when openning horizontal splits, they should open below
+set splitright
+set splitbelow
+
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
 let g:netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
@@ -724,6 +729,16 @@ if executable("fzf")
 
   " customize the layout
   let g:fzf_layout = { 'down': '~40%' }
+
+  " set non-default actions to open in a tab, split, etc
+  let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \}
+
+  " TODO: use the fzf_action function trick with `Rg` to dump `Rg` output into
+  " the quickfix list!
 endif
 
 "## vim-indent-guides
