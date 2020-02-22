@@ -17,13 +17,24 @@ syntax on "enable syntax highlighting
 
 "## Swap file location
 
-" put all swap files in one directory so I can easily purge them after a
-" laptop hang
-set directory=~/.vim/swap,.
+" completely disable swap files.  I've never once had my ass saved by this
+" feature, and I've been nagged about already-existing swap files at least a
+" million times already.  Enough.
+set noswapfile
 
-" make sure that swap directory exists.  for obvious reasons it's not in git.
-if !isdirectory($HOME.'/.vim/swap')
-  silent call mkdir ($HOME.'/.vim/swap', 'p')
+" put backup files in the `.vim` directory for the same reason
+set backupdir=~/.vim/backup//
+
+" and undo files also
+set undodir=~/.vim/undo//
+
+" make sure that directories exists.  for obvious reasons they're not in git.
+if !isdirectory($HOME.'/.vim/backup')
+  silent call mkdir ($HOME.'/.vim/backup', 'p')
+endif
+
+if !isdirectory($HOME.'/.vim/undo')
+  silent call mkdir ($HOME.'/.vim/undo', 'p')
 endif
 
 "## Leader and escape bindings
@@ -91,6 +102,36 @@ set confirm
 " unsaved changes, and `silent!` avoids hassles and prompts if the current
 " buffer isn't named.
 autocmd InsertLeave * silent! update
+
+"## Preserve not only the cursor position but also the location of the cursor
+" on the screen when switching between buffers in a window.  Astonishingly this
+" is not the default behavior.
+" https://vim.fandom.com/wiki/Avoid_scrolling_when_switch_buffers
+function! AutoSaveWinView()
+    if !exists("w:SavedBufView")
+        let w:SavedBufView = {}
+    endif
+    let w:SavedBufView[bufnr("%")] = winsaveview()
+endfunction
+
+" Restore current view settings.
+function! AutoRestoreWinView()
+    let buf = bufnr("%")
+    if exists("w:SavedBufView") && has_key(w:SavedBufView, buf)
+        let v = winsaveview()
+        let atStartOfFile = v.lnum == 1 && v.col == 0
+        if atStartOfFile && !&diff
+            call winrestview(w:SavedBufView[buf])
+        endif
+        unlet w:SavedBufView[buf]
+    endif
+endfunction
+
+" When switching buffers, preserve window view.
+if v:version >= 700
+    autocmd BufLeave * call AutoSaveWinView()
+    autocmd BufEnter * call AutoRestoreWinView()
+endif
 
 "## Showing unprintable characters
 
