@@ -17,13 +17,24 @@ syntax on "enable syntax highlighting
 
 "## Swap file location
 
-" put all swap files in one directory so I can easily purge them after a
-" laptop hang
-set directory=~/.vim/swap,.
+" completely disable swap files.  I've never once had my ass saved by this
+" feature, and I've been nagged about already-existing swap files at least a
+" million times already.  Enough.
+set noswapfile
 
-" make sure that swap directory exists.  for obvious reasons it's not in git.
-if !isdirectory($HOME.'/.vim/swap')
-  silent call mkdir ($HOME.'/.vim/swap', 'p')
+" put backup files in the `.vim` directory for the same reason
+set backupdir=~/.vim/backup//
+
+" and undo files also
+set undodir=~/.vim/undo//
+
+" make sure that directories exists.  for obvious reasons they're not in git.
+if !isdirectory($HOME.'/.vim/backup')
+  silent call mkdir ($HOME.'/.vim/backup', 'p')
+endif
+
+if !isdirectory($HOME.'/.vim/undo')
+  silent call mkdir ($HOME.'/.vim/undo', 'p')
 endif
 
 "## Leader and escape bindings
