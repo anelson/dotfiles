@@ -685,25 +685,6 @@ if executable("fzf")
   " when opening a buffer, jump to the existing window if possible
   let g:fzf_buffers_jump = 1
 
-  " fzf.vim provides so many handy commands.  Here are bindings for a few:
-  " * Ctrl-T - Files - like ctrl-p but fast
-  " * Ctrl-P - Lines in the current buffer
-  " * <leader>p - BLines - Lines in all open buffers
-  " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
-  " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
-  " * <Leader>m - History - most recently used files
-  nmap <c-t> :Files<CR>
-
-  " For files that have LSP support the <C-p> and <Leader>p mappings are
-  " overridden to use the LSP.  But I always want to be able to do a fzf lines
-  " search so also bind to <Leader>l
-  nmap <Leader>l :Lines<CR>
-  nmap <c-p> :BLines<CR>
-  nmap <Leader>p :Lines<Enter>
-  nmap <Leader>b :Buffers<Enter>
-  nmap <Leader>h :Helptags<Enter>
-  nmap <Leader>m :History<Enter>
-
   " Customize fzf colors to match your color scheme
   let g:fzf_colors =
     \ { 'fg':      ['fg', 'Normal'],
@@ -723,12 +704,68 @@ if executable("fzf")
   " customize the layout
   let g:fzf_layout = { 'down': '~40%' }
 
+  " The `Rg` fzf command, which uses Ripgrep to search the current directory,
+  " is more useful if we can combine the interactive search results with the
+  " quickfix list.
+  function! s:build_quickfix_list(lines)
+    " Note 'r' means replace the existing contents, and the 'title' makes it
+    " clear which quickfix list we want replaced.
+    "
+    " BUG: This doesn't work right currently.  LanguageClient-neovim puts
+    " errors in its own quickfix list, and when it does so for some reason all
+    " other quickfix lists get cleared.
+    "
+    " ANOTHER BUG: The neovim docs are very clear about the use of a 'title'
+    " element in the third arg to specify a title of the list, but it doesn't
+    " work.  The title is always ":setqflist()".
+    let items = map(copy(a:lines), '{ "filename": v:val }')
+    call setqflist([], 'r', {'title' : 'ripgrep results', 'items' : items})
+    copen
+    cc
+  endfunction
+
   " set non-default actions to open in a tab, split, etc
   let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit'
+    \ 'ctrl-q': function('s:build_quickfix_list'),
+    \ 'ctrl-t': 'tab split',
+    \ 'ctrl-x': 'split',
+    \ 'ctrl-v': 'vsplit'
   \}
+
+  " The default Ctrl-A to select all items in the FZF results doesn't work
+  " because we use Ctrl-A for tmux.  So use Ctrl-S instead, even though that
+  " feels wrong.
+  let $FZF_DEFAULT_OPTS .= ' --bind ctrl-s:select-all'
+
+  " Define a custom command `AllFiles`, which is like `Files` but provides a
+  " different command to `fd` so that it does not filter out files that are
+  " ignored by `.gitignore`.  This is useful because sometimes you want to get
+  " to a file produced by a build system but it's normally invisible to
+  " `Files` due to `.gitignore`
+  "
+  " The help topic about customizing files command was helpful in figuring out
+  " how to customize the behavior of #files
+  command  -bang -nargs=? -complete=dir AllFiles       call fzf#vim#files(<q-args>, {'source': $FZF_DEFAULT_COMMAND . ' --no-ignore' }, <bang>0)
+
+  " fzf.vim provides so many handy commands.  Here are bindings for a few:
+  " * Ctrl-T - Files - like ctrl-p but fast
+  " * Ctrl-P - Lines in the current buffer
+  " * <leader>p - BLines - Lines in all open buffers
+  " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
+  " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
+  " * <Leader>m - History - most recently used files
+  nmap <c-t> :Files<CR>
+  nmap <Leader>af :AllFiles<CR>
+
+  " For files that have LSP support the <C-p> and <Leader>p mappings are
+  " overridden to use the LSP.  But I always want to be able to do a fzf lines
+  " search so also bind to <Leader>l
+  nmap <Leader>l :Lines<CR>
+  nmap <c-p> :BLines<CR>
+  nmap <Leader>p :Lines<Enter>
+  nmap <Leader>b :Buffers<Enter>
+  nmap <Leader>h :Helptags<Enter>
+  nmap <Leader>m :History<Enter>
 endif
 
 "## vim-indent-guides
