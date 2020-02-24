@@ -323,6 +323,13 @@ let g:vimwiki_list = [
       \ { 'path': '~/vimwiki/русский', 'syntax': 'markdown', 'ext': '.mkd'}
       \ ]
 
+"## zoom and un-zoom vim windows
+Plug 'dhruvasagar/vim-zoom'
+" override the default vim keybinding, which makes a window full screen by
+" making it the only window (the :only command).  That's, obviously,
+" completely useless
+nmap <C-w>o <Plug>(zoom-toggle)
+
 "## TOML support
 Plug 'cespare/vim-toml'
 
