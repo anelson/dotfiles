@@ -9,12 +9,9 @@
 # was released, so one can hope the next dot release will include it
 #
 # This script doesn't work at all well with binary data or with non-ascii characters.  It's just a hack really
-contents=`cat`
+contents=`base64`
 #echo "Contents: $contents"
 
-contents_b64=$(printf $contents | base64)
-#echo "Contents(base64): $contents_b64"
-
 echo "Copying to client clipboard"
-printf "\e]52;c;$(printf $contents_b64)\a"
+printf "\e]52;c;$(printf $contents)\a"
 
