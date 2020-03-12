@@ -347,8 +347,8 @@ let g:terraform_fmt_on_save=1
 " commit is in a release:
 "
 " https://github.com/neoclide/coc.nvim/commit/bf092608a14f3915c39ce1c7057e9c8342c6914c
-"Plug 'neoclide/coc.nvim', {'branch': 'release'} " Install latest release branch
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Install from master and build from source
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Install latest release branch
+"Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Install from master and build from source
 
 " Automatically install these CoC extensons.  Most of these are obvious based
 " on the name.  Some less obvious ones:
