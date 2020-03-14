@@ -1,5 +1,5 @@
-"" vim:fdm=expr:fdl=0
-"" vim:fde=getline(v\:lnum)=~'^"#'?'>'.(matchend(getline(v\:lnum),'"#*')-1)\:'='
+" " vim:fdm=expr:fdl=0
+" " vim:fde=getline(v\:lnum)=~'^"#'?'>'.(matchend(getline(v\:lnum),'"#*')-1)\:'='
 "
 " My .vimrc.  The vim modeline trickery above allows me to create nested folds
 " using a sort of Markdown header syntax in VIM comments.  Use `zR` to fully
@@ -17,13 +17,22 @@ syntax on "enable syntax highlighting
 
 "## Swap file location
 
-" put all swap files in one directory so I can easily purge them after a
-" laptop hang
-set directory=~/.vim/swap,.
+" completely disable swap files.  I've never once had my ass saved by this
+" feature, and I've been nagged about already-existing swap files at least a
+" million times already.  Enough.
+set noswapfile
 
-" make sure that swap directory exists.  for obvious reasons it's not in git.
-if !isdirectory($HOME.'/.vim/swap')
-  silent call mkdir ($HOME.'/.vim/swap', 'p')
+" disable backup, because it conflicts with coc.vim and is generally useless
+" anyway (https://github.com/neoclide/coc.nvim/issues/649)
+set nobackup
+set nowritebackup
+
+" Keep undo files in the .vim directory where they wont' bother anyone
+set undodir=~/.vim/undo//
+
+" make sure that directories exists.  for obvious reasons they're not in git.
+if !isdirectory($HOME.'/.vim/undo')
+  silent call mkdir ($HOME.'/.vim/undo', 'p')
 endif
 
 "## Leader and escape bindings
@@ -92,6 +101,36 @@ set confirm
 " buffer isn't named.
 autocmd InsertLeave * silent! update
 
+"## Preserve not only the cursor position but also the location of the cursor
+" on the screen when switching between buffers in a window.  Astonishingly this
+" is not the default behavior.
+" https://vim.fandom.com/wiki/Avoid_scrolling_when_switch_buffers
+function! AutoSaveWinView()
+    if !exists("w:SavedBufView")
+        let w:SavedBufView = {}
+    endif
+    let w:SavedBufView[bufnr("%")] = winsaveview()
+endfunction
+
+" Restore current view settings.
+function! AutoRestoreWinView()
+    let buf = bufnr("%")
+    if exists("w:SavedBufView") && has_key(w:SavedBufView, buf)
+        let v = winsaveview()
+        let atStartOfFile = v.lnum == 1 && v.col == 0
+        if atStartOfFile && !&diff
+            call winrestview(w:SavedBufView[buf])
+        endif
+        unlet w:SavedBufView[buf]
+    endif
+endfunction
+
+" When switching buffers, preserve window view.
+if v:version >= 700
+    autocmd BufLeave * call AutoSaveWinView()
+    autocmd BufEnter * call AutoRestoreWinView()
+endif
+
 "## Showing unprintable characters
 
 set list          " Display unprintable characters f12 - switches
@@ -102,11 +141,20 @@ set listchars=tab:•-,trail:•,extends:»,precedes:« " Unprintable chars mapp
 " Use a faster updatetime so vim-gutter reflects changes faster
 set updatetime=250
 
+" Give more space for displaying messages.
+" This is particularly helpful with CoC
+set cmdheight=2
+
 set smartcase "assume all-lowercase searches are case insensitive; upper or mixed is case sensitive
 
 " diffs should always use a vertical split, why would anyone want horizonal??
 set diffopt+=vertical
 set conceallevel=3 "enable all syntax concealing, like rendering _Markdown_ in italics
+
+" when openning vertical splits, they should open to the right
+" when openning horizontal splits, they should open below
+set splitright
+set splitbelow
 
 " apply the same line number settings to newrw windows
 " inspired by https://stackoverflow.com/questions/8730702/how-do-i-configure-vimrc-so-that-line-numbers-display-in-netrw-in-vim?rq=1
@@ -236,32 +284,11 @@ Plug 'sheerun/vim-polyglot'
 " Briefly highlight yanked regions for clarity
 Plug 'machakann/vim-highlightedyank'
 
-"## scala support plugins
-
-" Enable Ensime for Scala/Java code
-Plug 'ensime/ensime-vim'
-let ensime_server_v2=1
-
-" vim-scala plugin to set up vim for scala coding
-Plug 'derekwyatt/vim-scala'
-
-"## ale for syntax highlighting (non-LSP languages)
-
-" ALE for syntax highlighting including Ensime-aware highlighting of
-" Scala and Java
-Plug 'w0rp/ale'
-" I am worried the ALE linters conflict with the LSP support which I've
-" enabled for rust.  TODO: If other languages are enabled exclude them from ALE also
-let g:ale_linters = {
-      \ 'rust': [ ],
-      \}
-
 "## rust support
 
 Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1 " automatically rustfmt on save
 let g:rust_fold = 0 "seems to cause slow rustfmt per https://github.com/rust-lang/rust.vim/issues/293
-let g:rustfmt_options = '--edition 2018' "https://github.com/rust-lang/rust.vim/issues/368
 
 "## markdown support plugins
 
@@ -296,6 +323,13 @@ let g:vimwiki_list = [
       \ { 'path': '~/vimwiki/русский', 'syntax': 'markdown', 'ext': '.mkd'}
       \ ]
 
+"## zoom and un-zoom vim windows
+Plug 'dhruvasagar/vim-zoom'
+" override the default vim keybinding, which makes a window full screen by
+" making it the only window (the :only command).  That's, obviously,
+" completely useless
+nmap <C-w>o <Plug>(zoom-toggle)
+
 "## TOML support
 Plug 'cespare/vim-toml'
 
@@ -305,6 +339,193 @@ Plug 'hashivim/vim-terraform'
 " Auto-format terraform files on save
 let g:terraform_fmt_on_save=1
 
+"## coc, the LSP client and autocompleter
+
+" As of 2020-02-24, a bug with the behavior of the codeaction command in the
+" release branch makes that critical feature useless.  So for now use the
+" latest master.  That's far from ideal.  Switch back to release once this
+" commit is in a release:
+"
+" https://github.com/neoclide/coc.nvim/commit/bf092608a14f3915c39ce1c7057e9c8342c6914c
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Install latest release branch
+"Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'} " Install from master and build from source
+
+" Automatically install these CoC extensons.  Most of these are obvious based
+" on the name.  Some less obvious ones:
+" * css-tssserver - uses tsserver to support javascript and typescript
+" * css-rust-analyzer - support Rust using rust-analyzer (and not rust-rls which seems out of date now)
+" * coc-calc - evaluate arithmetic expressions right in the editor, wow
+" * coc-spell-checker - a spell checker that, unlike vim's, is aware of camelCase
+" * coc-cspec-dicts - non-english dictionaries (why would anyone need those??)
+" * coc-dicionary - Use the dictionary as a completion source
+" * coc-emoji - use the markdown placeholder names for emojits as a completion
+" source
+" * coc-syntax - Use each language's syntax keywords as a completion source
+"
+let g:coc_global_extensions = [
+  \ 'coc-json',
+  \ 'coc-html',
+  \ 'coc-css',
+  \ 'coc-tsserver',
+  \ 'coc-rust-analyzer',
+  \ 'coc-yaml',
+  \ 'coc-snippets',
+  \ 'coc-markdownlint',
+  \ 'coc-calc',
+  "\ 'coc-spell-checker',
+  \ 'coc-cspell-dicts',
+  \ 'coc-dictionary',
+  \ 'coc-emoji',
+  \ 'coc-syntax',
+  \ 'coc-actions'
+\ ]
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+if has('patch8.1.1068')
+  " Use `complete_info` if your (Neo)Vim version supports it.
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Define some custom commands for interacting with the Rust analyzer
+" specifically
+command! -nargs=0 RAStatus :CocCommand rust-analyzer.analyzerStatus
+command! -nargs=0 RAGarbageCollect :CocCommand rust-analyzer.collectGarbage
+command! -nargs=0 RAExpand :CocCommand rust-analyzer.expandMacro
+command! -nargs=0 RAParentMod :CocCommand rust-analyzer.parentModule
+command! -nargs=0 RAReload :CocCommand rust-analyzer.reload
+command! -nargs=0 RARunnables :CocCommand rust-analyzer.run
+command! -nargs=0 RARun :CocCommand rust-analyzer.runSingle
+command! -nargs=0 RASyntaxTree :CocCommand rust-analyzer.syntaxTree
+command! -nargs=0 RAUpgrade :CocCommand rust-analyzer.upgrade
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+"xmap <leader>a  <Plug>(coc-codeaction-selected)
+"nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Use the coc-action extension to display a floating action menu
+"
+" <leader>a for the current selected range
+" <leader>aw for the current word
+" <leader>aas for the current sentence
+" <leader>aap for the current paragraph
+function! s:cocActionsOpenFromSelected(type) abort
+  execute 'CocCommand actions.open ' . a:type
+endfunction
+xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
+
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Introduce function text object
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <TAB> for selections ranges.
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
+nmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <TAB> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Mappings using CoCList:
+
+" Show a list of all code actions
+nnoremap <F5> :<C-u>CocList actions<CR>
+" Show all diagnostics.
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
 "## A lighter version of the powerline plugin
 
 Plug 'vim-airline/vim-airline'
@@ -312,16 +533,20 @@ Plug 'vim-airline/vim-airline-themes'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 let g:airline#extensions#tabline#show_tab_type = 1
-let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline
+let g:airline#extensions#coc#enabled = 1 " enable coc integration
 let g:airline_theme='gruvbox'
 let g:airline_solarized_bg='dark'
 let g:airline_powerline_fonts=1
-let g:airline#extensions#tmuxline#enabled=0 " don't try to sync with tmuxline
 
 "## tmux sync and integration plugins
 
 " Use the same keys to navigate vim windows and tmux panes seamlessly
 Plug 'christoomey/vim-tmux-navigator'
+
+" Use the contents of other tmux windows as a completion source.  supposedly
+" this plugin automatically integrates with coc as a completion source
+Plug 'wellle/tmux-complete.vim'
 
 "## vim-gitgutter
 
@@ -378,190 +603,6 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
 let g:webdevicons_conceal_nerdtree_brackets = 1
 
 let g:DevIconsEnableFoldersOpenClose = 1
-
-"## LanguageClient-neovim LSP support
-
-" LSP client for those languages that provide a language server
-Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
-" TODO: add other languages' LSP configs here over time, and make sure if you add other languages here that you disable
-" ALE linters above so they don't step on each other
-let g:LanguageClient_serverCommands = {
-      \ 'rust': ['~/.local/bin/run-rust-rls.sh']
-      \ }
-
-" Experimental change: prefer textEdits from the LSP.  I can't tell which LSPs need this.
-let g:LanguageClient_completionPreferTextEdit = 1
-
-" Enable logging on the client and server to help debug problems
-let g:LanguageClient_loggingLevel = 'INFO'
-let g:LanguageClient_loggingFile = expand('~/.LanguageClient.log')
-let g:LanguageClient_serverStderr = expand('~/.LanguageServer.log')
-
-" The LC context menu lists all available actions which can be chosen by a
-" fuzzy match
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-
-" create mappings to LanguageClient commands if and only if there is an active
-" RLS for the current file type
-function! LC_maps()
-  if has_key(g:LanguageClient_serverCommands, &filetype)
-    nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
-    nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-    nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-    nnoremap <buffer> <silent> <Leader>ee :call LanguageClient#explainErrorAtPoint()<CR>
-
-    " Override the text-based lines search which I usually use to find
-    " symbols, and instead actually use the language server document and
-    " workspace symbols pickers
-    nnoremap <buffer> <silent> <c-p> :call LanguageClient#textDocument_documentSymbol()<CR>
-    nnoremap <buffer> <silent> <Leader>p :call LanguageClient#workspace_symbol()<CR>
-
-    " Integrate the `gq` formatting command with the language client
-    " NOTE: As of 2019-02-27 enabling this causes the auto wrapping of
-    " comments in Rust code to screw up and swallow the space that separates
-    " words.  As a result, comments wrap with the first two words of the new
-    " linenot separated with a space (<-- like this line just now for example)
-    "set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-
-    " always show the sign column, even if at a given moment there aren't any
-    " diag messages
-    set signcolumn=yes
-  else
-    " don't always show the sign column if there's no LSP
-    set signcolumn=auto
-  endif
-endfunction
-
-autocmd FileType * call LC_maps()
-
-"## ncm2 autocompleter (replaces deoplete)
-
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-
-" enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
-
-" Use two different sets of completeop values: one for Ncm2PopupOpen, and the
-" other when neovim's built-in completion is being used (like the command
-" line)
-au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-au User Ncm2PopupClose set completeopt=menuone
-
-" suppress the annoying 'match x of y', 'The only match' and 'Pattern not
-" found' messages
-set shortmess+=c
-
-" In insert mode if the auto-complete popup is displayed and Enter (<CR>) is
-" pressed, it dismisses the popup but does not insert a newline.  I never use
-" <CR> meaning to dismiss the popup, so if this happens I want the popup to be
-" dismissed _and_ a newline to be inserted
-"imap <expr><CR>	    pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-imap <expr><CR>	    pumvisible() ? "\<C-y>\<CR>" : "\<Plug>delimitMateCR"
-
-"### Completion source plugins
-
-" NOTE: you need to install completion sources to get completions. Check
-" our wiki page for a list of sources: https://github.com/ncm2/ncm2/wiki
-"
-" I have not included any of the language-specific completion plugins.  They
-" exist for just about every popular language, but right now I'm working with
-" langauges that have LSP support which is obviously going to be much richer.
-" Down the road it may be necessary to bring in some language support if LSP
-" is lacking.
-Plug 'ncm2/ncm2-bufword' " any word that appears in the current buffer
-Plug 'fgrsnau/ncm2-otherbuf' " any word that appears in other open buffers
-Plug 'ncm2/ncm2-path'  " paths relative to the current and project directories
-Plug 'wellle/tmux-complete.vim'  " words in other tmux panes
-Plug 'Shougo/neco-syntax'  " dependency of ncm2-syntax
-Plug 'ncm2/ncm2-syntax' " keywords from the current language's syntax highlighting config
-Plug 'yuki-ycino/ncm2-dictionary' " dictionary words
-
-"### Other ncm2-related plugins
-
-Plug 'ncm2/ncm2-neosnippet'  " integrate with neosnippet for snippet autocompletion
-Plug 'ncm2/ncm2-html-subscope'  " detect language subscopes in HTML (CSS, JS, etc)
-Plug 'ncm2/ncm2-markdown-subscope'   " detect language subscopes in Markdown
-Plug 'ncm2/ncm2-match-highlight'   " experimentally abuse unicode fonts to create a highlight effect
-
-"## neosnippet for snippets
-
-" I used to use Ultisnips but switched to neosnippet because it integrates
-" with deoplete.  Maybe Ultisnips does too by now but I am happy with it as it
-" is.
-Plug 'Shougo/neosnippet.vim'      " the snippet plugin itself
-Plug 'Shougo/context_filetype.vim' " another plugin which detects the filetype at the cursor for complex files
-Plug 'Shougo/neosnippet-snippets' " a default collection of snippets
-Plug 'honza/vim-snippets'	  " some additional third-party snippets
-
-func! ExpandOrJumpSnippet()
-  " Expand a snippet if at all possible.
-  "
-  " There are a few possibilities:
-  " * ncm2 autocomplete is being used and a snippet item is currently
-  " selected.  In that case expand that snippet.  Note that ncm2 exposes some
-  " snippets beyond those neosnippet knows about, even though it uses
-  " neosnippet to expand them.  These are "anonymous" snippets like the ones
-  " it gets from an LSP.  Thus if ncm2 has been used to pick a snippet it's
-  " important to use ncm2's neosnippet API to do the completion.  IF it is a
-  " built-in neosnippet snippet then it'll call down into neosnippet anyway.
-  "
-  " * ncm2 is not active, but a neocomplete snippet trigger has been typed.
-  " In that case expand the snippet.
-  "
-  " * a neosnippet snippet has been expanded, and there is another placeholder
-  " still to navigate to.  In that case, jump to the next placeholder.
-  if ncm2_neosnippet#completed_is_snippet()
-    "echom "ncm2_neosnippet expanding"
-    return "\<Plug>(ncm2_neosnippet_expand_completed)"
-  elseif neosnippet#expandable_or_jumpable()
-    "echom "neosnippet expanding"
-    "if neosnippet#mappings#expandable()
-    "  echom "snippet expandable"
-    "endif
-    "
-    "if neosnippet#mappings#jumpable()
-    "  echom "snippet jumpable"
-    "endif
-
-    "echom "completed_item: " . json_encode(v:completed_item)
-
-    return "\<Plug>(neosnippet_expand_or_jump)"
-  elseif pumvisible()
-    " No kind of snippet but the autocomplete is visible.  Probably I
-    " accidentally or out of force of habit hit C-k on an autocomplete item
-    " that wasn't actually a snippet.  If that happens just dismiss the
-    " autocomplete but stay in insert mode so it doesn't disrupt my workflow
-    "echom "dismissing popup"
-    return "\<C-y>"
-  else
-    "echom "nothing to do; passing through to underlying C-k binding"
-    return "\<C-k>"
-  endif
-endfunction
-
-" When pressing <C-k> in insert or select mode, be smart about snippet
-" expansion/jumping no matter the state
-imap <expr><C-k> ExpandOrJumpSnippet()
-smap <expr><C-k> ExpandOrJumpSnippet()
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-
-" For conceal markers, which I think are used by neosnippet to put snippet
-" placeholder markers in the editor without the markers being visible
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
-
-"## echodoc to preview function signatures
-Plug 'Shougo/echodoc.vim'
-
-set cmdheight=2
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'signature'
 
 "## delimitMate to automatically insert closing delimiters
 
@@ -645,25 +686,6 @@ if executable("fzf")
   " when opening a buffer, jump to the existing window if possible
   let g:fzf_buffers_jump = 1
 
-  " fzf.vim provides so many handy commands.  Here are bindings for a few:
-  " * Ctrl-T - Files - like ctrl-p but fast
-  " * Ctrl-P - Lines in the current buffer
-  " * <leader>p - BLines - Lines in all open buffers
-  " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
-  " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
-  " * <Leader>m - History - most recently used files
-  nmap <c-t> :Files<CR>
-
-  " For files that have LSP support the <C-p> and <Leader>p mappings are
-  " overridden to use the LSP.  But I always want to be able to do a fzf lines
-  " search so also bind to <Leader>l
-  nmap <Leader>l :Lines<CR>
-  nmap <c-p> :BLines<CR>
-  nmap <Leader>p :Lines<Enter>
-  nmap <Leader>b :Buffers<Enter>
-  nmap <Leader>h :Helptags<Enter>
-  nmap <Leader>m :History<Enter>
-
   " Customize fzf colors to match your color scheme
   let g:fzf_colors =
     \ { 'fg':      ['fg', 'Normal'],
@@ -682,6 +704,69 @@ if executable("fzf")
 
   " customize the layout
   let g:fzf_layout = { 'down': '~40%' }
+
+  " The `Rg` fzf command, which uses Ripgrep to search the current directory,
+  " is more useful if we can combine the interactive search results with the
+  " quickfix list.
+  function! s:build_quickfix_list(lines)
+    " Note 'r' means replace the existing contents, and the 'title' makes it
+    " clear which quickfix list we want replaced.
+    "
+    " BUG: This doesn't work right currently.  LanguageClient-neovim puts
+    " errors in its own quickfix list, and when it does so for some reason all
+    " other quickfix lists get cleared.
+    "
+    " ANOTHER BUG: The neovim docs are very clear about the use of a 'title'
+    " element in the third arg to specify a title of the list, but it doesn't
+    " work.  The title is always ":setqflist()".
+    let items = map(copy(a:lines), '{ "filename": v:val }')
+    call setqflist([], 'r', {'title' : 'ripgrep results', 'items' : items})
+    copen
+    cc
+  endfunction
+
+  " set non-default actions to open in a tab, split, etc
+  let g:fzf_action = {
+    \ 'ctrl-q': function('s:build_quickfix_list'),
+    \ 'ctrl-t': 'tab split',
+    \ 'ctrl-x': 'split',
+    \ 'ctrl-v': 'vsplit'
+  \}
+
+  " The default Ctrl-A to select all items in the FZF results doesn't work
+  " because we use Ctrl-A for tmux.  So use Ctrl-S instead, even though that
+  " feels wrong.
+  let $FZF_DEFAULT_OPTS .= ' --bind ctrl-s:select-all'
+
+  " Define a custom command `AllFiles`, which is like `Files` but provides a
+  " different command to `fd` so that it does not filter out files that are
+  " ignored by `.gitignore`.  This is useful because sometimes you want to get
+  " to a file produced by a build system but it's normally invisible to
+  " `Files` due to `.gitignore`
+  "
+  " The help topic about customizing files command was helpful in figuring out
+  " how to customize the behavior of #files
+  command!  -bang -nargs=? -complete=dir AllFiles       call fzf#vim#files(<q-args>, {'source': $FZF_DEFAULT_COMMAND . ' --no-ignore' }, <bang>0)
+
+  " fzf.vim provides so many handy commands.  Here are bindings for a few:
+  " * Ctrl-T - Files - like ctrl-p but fast
+  " * Ctrl-P - Lines in the current buffer
+  " * <leader>p - BLines - Lines in all open buffers
+  " * <leader>b - Buffers - like ctrl-p's buffer list but, again, fast
+  " * <Leader>h - Helptags - fuzzy search help tags, lolwut??
+  " * <Leader>m - History - most recently used files
+  nmap <c-t> :Files<CR>
+  nmap <Leader>af :AllFiles<CR>
+
+  " For files that have LSP support the <C-p> and <Leader>p mappings are
+  " overridden to use the LSP.  But I always want to be able to do a fzf lines
+  " search so also bind to <Leader>l
+  nmap <Leader>l :Lines<CR>
+  nmap <c-p> :BLines<CR>
+  nmap <Leader>p :Lines<Enter>
+  nmap <Leader>b :Buffers<Enter>
+  nmap <Leader>h :Helptags<Enter>
+  nmap <Leader>m :History<Enter>
 endif
 
 "## vim-indent-guides
