@@ -17,5 +17,6 @@
     ],
     "coc.preferences.formatOnSaveFiletypes": [
         "rust"
-    ]
+    ],
+    "rust-analyzer.cargo-watch.command": "clippy"
 }
