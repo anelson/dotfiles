@@ -4,6 +4,7 @@ source $HOME/.zsh/zsh-notify.zsh
 source $HOME/.zsh/fzf.zsh
 
 # configure my zsh environment
+source $HOME/.zsh/history.zsh
 source $HOME/.zsh/environment.zsh
 source $HOME/.zsh/homeshick.zsh
 source $HOME/.zsh/aliases.zsh
