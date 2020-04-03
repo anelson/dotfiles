@@ -287,7 +287,9 @@ Plug 'machakann/vim-highlightedyank'
 "## rust support
 
 Plug 'rust-lang/rust.vim'
-let g:rustfmt_autosave = 1 " automatically rustfmt on save
+
+" Disable the plugin's auto format, because coc should call rls to do that
+let g:rustfmt_autosave = 0 " automatically rustfmt on save
 let g:rust_fold = 0 "seems to cause slow rustfmt per https://github.com/rust-lang/rust.vim/issues/293
 
 "## markdown support plugins
@@ -377,6 +379,7 @@ let g:coc_global_extensions = [
   \ 'coc-dictionary',
   \ 'coc-emoji',
   \ 'coc-syntax',
+  \ 'coc-pairs',
   \ 'coc-actions'
 \ ]
 
@@ -403,12 +406,19 @@ endfunction
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
-if has('patch8.1.1068')
-  " Use `complete_info` if your (Neo)Vim version supports it.
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+"if has('patch8.1.1068')
+"  " Use `complete_info` if your (Neo)Vim version supports it.
+"  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+"else
+"  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"endif
+
+" Instead of the above mapping for `<CR>`, which is the default config
+" documented in the coc readme, use this mapping described in https://github.com/neoclide/coc-pairs/issues/13
+"
+" With formatOnType enabled, this should automatically place the cursor in the
+" right place after pressing enter.
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -603,12 +613,6 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
 let g:webdevicons_conceal_nerdtree_brackets = 1
 
 let g:DevIconsEnableFoldersOpenClose = 1
-
-"## delimitMate to automatically insert closing delimiters
-
-" I simply MUST have automatic insertion of closing delimiters
-Plug 'Raimondi/delimitMate'
-let delimitMate_expand_cr = 1 "automatically indent within braces when Enter is pressed
 
 "## Some themes
 

@@ -1,13 +1,28 @@
 {
-    // Of _course_ I need a Russian dictionary also
-    "cSpell.language": "en,ru",
-
     "diagnostic.virtualText": true,
 
     "codeLens.enable": true,
 
-    "rust-analyzer.trace.server": "verbose",
-
     // The default list height of 10 feels too cramped on my big screen terminals
     "list.maxHeight": 20,
+
+    "diagnostic.errorSign": "",
+    "diagnostic.warningSign": "",
+    "diagnostic.infoSign": "",
+    "diagnostic.hintSign": "ﯦ",
+
+    "coc.preferences.formatOnType": true,
+    "coc.preferences.formatOnTypeFiletypes": [
+        "rust"
+    ],
+    "coc.preferences.formatOnSaveFiletypes": [
+        "rust"
+    ],
+
+    // Use clippy instead of strait `check` to catch more things
+    "rust-analyzer.cargo-watch.command": "clippy",
+
+    // Load Rust code from `OUT_DIR` so code generated at build time is also analyzed
+    // https://github.com/rust-analyzer/rust-analyzer/pull/3582
+    "rust-analyzer.cargoFeatures.loadOutDirsFromCheck": true
 }

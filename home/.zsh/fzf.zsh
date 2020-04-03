@@ -1,10 +1,14 @@
 # Source default FZF aliases
 if [ -f /usr/share/fzf/key-bindings.zsh ]; then
   . /usr/share/fzf/key-bindings.zsh
+elif [ -f /usr/share/fzf/shell/key-bindings.zsh ]; then
+  . /usr/share/fzf/shell/key-bindings.zsh
 fi
 
 if [ -f /usr/share/fzf/completion.zsh ]; then
   . /usr/share/fzf/completion.zsh
+elif [ -f /usr/share/fzf/shell/completion.zsh ]; then
+  . /usr/share/fzf/shell/completion.zsh
 fi
 
 # Better FZF
