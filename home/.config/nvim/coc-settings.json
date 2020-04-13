@@ -20,9 +20,9 @@
     ],
 
     // Use clippy instead of strait `check` to catch more things
-    "rust-analyzer.cargo-watch.command": "clippy",
+    "rust-analyzer.checkOnSave.command": "clippy",
 
     // Load Rust code from `OUT_DIR` so code generated at build time is also analyzed
     // https://github.com/rust-analyzer/rust-analyzer/pull/3582
-    "rust-analyzer.cargoFeatures.loadOutDirsFromCheck": true
+    "rust-analyzer.cargo.loadOutDirsFromCheck": true
 }
