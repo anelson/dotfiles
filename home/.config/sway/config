@@ -63,7 +63,17 @@ exec swayidle -w \
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
-input * xkb_layout us,ru
+#
+input type:keyboard {
+    # US layout is default, russian is available
+    xkb_layout us,ru
+
+    # See the /usr/share/X11/xkb/rules/evdev.lst file for the list of built-in xkb rules that can be applied here
+    #
+    # Map caps lock to escape
+    # Switch keyboard layouts with left-alt+left-shift
+    xkb_options caps:escape,grp:lalt_lshift_toggle
+}
 
 ### Key bindings
 #
@@ -440,4 +450,4 @@ exec --no-startup-id dropbox start
 # execute a terminal running tmux in workspace two
 exec --no-startup-id swaymsg 'workspace $ws2; exec $TERMINAL --command /bin/sh -c "tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell"'
 
-exec waybar
+exec_always $HOME/.config/waybar/waybar.sh

@@ -1,0 +1,137 @@
+// vim:ft=json
+
+{
+    "layer": "bottom",
+    "position": "top",
+    "height": 30,
+
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["sway/window"],
+    "modules-right": [
+            "custom/left-arrow-dark",
+            "disk",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "pulseaudio",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "memory",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "cpu",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "battery",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "idle_inhibitor",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "tray",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "clock"
+    ],
+    "sway/mode": {
+        "format": " {}"
+    },
+    "sway/workspaces": {
+        "format": "{index}:{name}",
+        "disable-scroll": true
+    },
+    "sway/window": {
+        "max-length": 80,
+        "tooltip": false
+    },
+    "clock": {
+        "format": "{:%a %d %b %H:%M}",
+        "tooltip": false
+    },
+    "battery": {
+        "format": "{capacity}% {icon}",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["", "", "", "", ""],
+        "format-charging": "{capacity}% ",
+        "interval": 30,
+        "states": {
+            "warning": 25,
+            "critical": 10
+        },
+        "tooltip": false
+    },
+    "network": {
+        "format": "{icon}",
+        "format-alt": "{ipaddr}/{cidr} {icon}",
+        "format-alt-click": "click-right",
+        "format-icons": {
+            "wifi": ["", "" ,""],
+            "ethernet": [""],
+            "disconnected": [""]
+        },
+        "on-click": "alacritty -e nmtui",
+        "tooltip": false
+    },
+    "pulseaudio": {
+            "format": "{icon} {volume:2}%",
+            "format-bluetooth": "{icon}  {volume}%",
+            "format-muted": "MUTE",
+            "format-icons": {
+                    "headphones": "",
+                    "default": [
+                            "",
+                            ""
+                    ]
+            },
+            "scroll-step": 5,
+            "on-click": "pamixer -t",
+            "on-click-right": "pavucontrol"
+    },
+    "custom/left-arrow-dark": {
+            "format": "",
+            "tooltip": false
+    },
+    "custom/left-arrow-light": {
+            "format": "",
+            "tooltip": false
+    },
+    "custom/right-arrow-dark": {
+            "format": "",
+            "tooltip": false
+    },
+    "custom/right-arrow-light": {
+            "format": "",
+            "tooltip": false
+    },
+    "backlight": {
+        "format": "{icon}",
+        "format-alt": "{percent}% {icon}",
+        "format-alt-click": "click-right",
+        "format-icons": ["", ""],
+        "on-scroll-down": "light -A 1",
+        "on-scroll-up": "light -U 1"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        },
+        "tooltip": false
+    },
+    "memory": {
+            "interval": 5,
+            "format": "Mem {}%"
+    },
+    "cpu": {
+            "interval": 5,
+            "format": "CPU {usage:2}%"
+    },
+    "disk": {
+            "interval": 5,
+            "format": "/ {percentage_used:2}%",
+            "path": "/"
+    },
+    "tray": {
+            "icon-size": 20
+    }
+}
