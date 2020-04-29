@@ -1,100 +1,29 @@
-# Default config for sway
+# See https://github.com/swaywm/sway/wiki for config options
 #
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
+# Migrated from `.config/i3/config` and adapted for sway
 
-### Variables
-#
-# Logo key. Use Mod1 for Alt.
+# Use the "windows" key for the modifier
 set $mod Mod4
+
+# Your preferred terminal emulator
+set $term alacritty
+
 # Home row direction keys, like vim
 set $left h
 set $down j
 set $up k
 set $right l
-# Your preferred terminal emulator
-set $term alacritty
 
 # Your preferred application launcher
-# Note: it's recommended that you pass the final command to sway
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu rofi -combi-modi window,drun,run -show combi -modi combi -display-combi '' -drun-match-fields name,generic,categories | xargs swaymsg exec --
-
-set $bg-color 	         #2f343f
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
-set $inactive-text-color #676E7D
-set $urgent-bg-color     #E53935
-
-# set $height 34
-# pick fontawesome icons from https://fontawesome.bootstrapcheatsheets.com/
-# firefox
-set $ws1  "1: "
-
-# terminals
-set $ws2  "2:  "
-
-# code
-set $ws3  "3:  "
-
-# ???
-set $ws4  "4: "
-
-# windows VM
-set $ws5  "5:  "
-
-# file explorer
-set $ws6  "6:  "
-
-# spotify or other music
-set $ws7  "7: "
-
-# skype (and other chats)
-set $ws8  "8: "
-
-# mail client
-set $ws9  "9:  "
-
-# chrome
-set $ws10 "10:  "
+set $menu wofi --show drun,run --allow-images --allow-markup --term=$term
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg $HOME/.wallpaper/tree_planet_stars_galaxy_art_117068_5760x3240.jpg fill
-
-
-# Scale the built-in display output appropriately
-output eDP-1 {
-    scale 2
-}
-
-#
-# Various blobal options
-#
-    # this is annoying; just use Mod-Tab
-    workspace_auto_back_and_forth no
-
-    force_display_urgency_hint 500 ms
-    focus_on_window_activation urgent
-
-    # this is very annoying
-    focus_follows_mouse no
-    font pango:System San Francisco Display 8
-
-    floating_minimum_size -1 x -1
-    floating_maximum_size -1 x -1
-
-#
-# Window colors
-#
-client.focused          $bg-color           $bg-color          $text-color          #00ff00 $bg-color
-client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00 $inactive-bg-color
-client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00 $inactive-bg-color
-client.urgent           $urgent-bg-color $urgent-bg-color $text-color #00ff00 $urgent-bg-color
-
-# Font is not typically used since I hide the labels
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg ~/.wallpaper/tree_planet_stars_galaxy_art_117068_5760x3240.jpg fill
 #
 # Example configuration:
 #
@@ -115,6 +44,11 @@ client.urgent           $urgent-bg-color $urgent-bg-color $text-color #00ff00 $u
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
+exec swayidle -w \
+      timeout 300 'swaylock -f -c 000000' \
+      timeout 600 'swaymsg "output * dpms off"' \
+           resume 'swaymsg "output * dpms on"' \
+      before-sleep 'swaylock -f -c 000000'
 
 ### Input configuration
 #
@@ -129,15 +63,7 @@ client.urgent           $urgent-bg-color $urgent-bg-color $text-color #00ff00 $u
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
-
-input * {
-    # Enable US english and Russian keyboard layouts
-    xkb_layout us,ru
-
-    # Toggle keyboard layouts with left shift + alt
-    # Map the caps lock key to Escape
-    xkb_options grp:lalt_lshift_toggle,caps:escape
-}
+input * xkb_layout us,ru
 
 ### Key bindings
 #
@@ -164,26 +90,6 @@ input * {
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-
-#
-# Audio controls
-#
-    # Pulse Audio controls
-    bindsym XF86AudioRaiseVolume exec --no-startup-id "pamixer -i 5; notify-send --expire-time=250 '  Raise Volume ['$(pamixer --get-volume)'%]'"
-    bindsym XF86AudioLowerVolume    exec --no-startup-id "pamixer -d 5; notify-send --expire-time=250 '  Lower Volume ['$(pamixer --get-volume)'%]'"
-    bindsym XF86AudioMute       exec --no-startup-id "pamixer -t; notify-send --expire-time=250 ' /  Toggle'"
-
-    # Sreen brightness controls
-    bindsym XF86MonBrightnessUp exec xbacklight -inc 10  -time 500 # increase screen brightness
-    bindsym XF86MonBrightnessDown exec xbacklight -dec 10 -time 500 # decrease screen brightness
-
-    # Media player controls
-    bindsym XF86AudioPlay exec playerctl play
-    bindsym XF86AudioPause exec playerctl pause
-    bindsym XF86AudioNext exec playerctl next
-    bindsym XF86AudioPrev exec playerctl previous
-
-#
 #
 # Moving around:
 #
@@ -211,7 +117,38 @@ input * {
 #
 # Workspaces:
 #
-    # switch to workspace
+    # pick fontawesome icons from https://fontawesome.bootstrapcheatsheets.com/
+    # firefox
+    set $ws1  "1: "
+
+    # terminals
+    set $ws2  "2:  "
+
+    # code
+    set $ws3  "3:  "
+
+    # ???
+    set $ws4  "4: "
+
+    # windows VM
+    set $ws5  "5:  "
+
+    # file explorer
+    set $ws6  "6:  "
+
+    # spotify or other music
+    set $ws7  "7: "
+
+    # skype (and other chats)
+    set $ws8  "8: "
+
+    # mail client
+    set $ws9  "9:  "
+
+    # chrome
+    set $ws10 "10:  "
+
+    # Switch to workspace
     bindsym $mod+1 workspace $ws1
     bindsym $mod+2 workspace $ws2
     bindsym $mod+3 workspace $ws3
@@ -254,60 +191,6 @@ input * {
 
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
-
-#
-# Gaps related config
-#
-    set $mode_gaps gaps
-    set $mode_gaps_outer outer gaps
-    set $mode_gaps_inner inner gaps
-    set $default_gaps_inner 10
-    set $default_gaps_outer 0
-
-    gaps inner $default_gaps_inner
-    gaps outer $default_gaps_outer
-
-    bindsym $mod+Shift+g mode "$mode_gaps"
-    mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
-
-        bindsym 0      mode "default", exec --no-startup-id i3-msg "gaps inner current set 0" && i3-msg "gaps outer current set 0"
-        bindsym d      mode "default", exec --no-startup-id i3-msg "gaps inner current set $default_gaps_inner" && i3-msg "gaps outer current set $default_gaps_outer"
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-    }
-
-    mode "$mode_gaps_inner" {
-        bindsym plus  gaps inner current plus 5
-        bindsym minus gaps inner current minus 5
-        bindsym 0     mode "default", gaps inner current set 0
-        bindsym d     mode "default", gaps inner current set $default_gaps_inner
-
-        bindsym Shift+plus  gaps inner all plus 5
-        bindsym Shift+minus gaps inner all minus 5
-        bindsym Shift+0     mode "default", gaps inner all set 0
-        bindsym Shift+d     mode "default", gaps inner all set $default_gaps_inner
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-    }
-
-    mode "$mode_gaps_outer" {
-        bindsym plus  gaps outer current plus 5
-        bindsym minus gaps outer current minus 5
-        bindsym 0     mode "default", gaps outer current set 0
-        bindsym d     mode "default", gaps outer current set $default_gaps_outer
-
-        bindsym Shift+plus  gaps outer all plus 5
-        bindsym Shift+minus gaps outer all minus 5
-        bindsym Shift+0     mode "default", gaps outer all set 0
-        bindsym Shift+d     mode "default", gaps outer all set $default_gaps_outer
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-    }
 #
 # Layout stuff:
 #
@@ -333,52 +216,7 @@ input * {
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
-
-    # fix graphics glitch
-    default_border none
-
-    #for_window [class=(?i)termite] border pixel 3
-    for_window [class="^.*"] border pixel 0
-    for_window [window_role="pop-up"] floating enable
-    for_window [window_role="bubble"] floating enable
-    for_window [window_role="task_dialog"] floating enable
-    for_window [window_role="Preferences"] floating enable
-
-    for_window [window_type="dialog"] floating enable
-    for_window [window_type="menu"] floating enable
-
-    for_window [class="(?i)gsimplecal"] floating enable, move position mouse, move down $height px
-    for_window [class="(?i)qemu-system"] floating enable
-    for_window [class="(?i)blueman"] floating enable
-    for_window [class="(?i)pinentry"] floating enable
-    for_window [class="(?i)nm-connection-editor"] floating enable
-
-    #for_window [instance="sun-awt-X11-XFramePeer"] floating enable
-    for_window [instance="__scratchpad"] floating enable
-    for_window [instance="__nmtui"] floating enable
-    for_window [class="(?i)recordmydesktop"] floating enable
-
-    for_window [class="(?i)pavucontrol"] floating enable, move position mouse
-    for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down $height px
-
-    for_window [class="Skype"] floating disable
-
-    # Move various windows automatically to the appropriate workspace
-    for_window [class="Firefox"] move to workspace $ws1
-    for_window [class="Google-chrome"] move to workspace $ws10
-    for_window [class="Chromium"] move to workspace $ws10
-    for_window [class="Vmware"] move to workspace $ws5
-    for_window [class="Crossover"] move to workspace $ws5
-    for_window [class="Skype"] move to workspace $ws8
-    for_window [class="Slack"] move to workspace $ws8
-    for_window [class="Mailspring"] move to workspace $ws9
-
-    # assign doesn't work for spotify due to a bug
-    # https://community.spotify.com/t5/Desktop-Linux/WM-CLASS-window-property-on-Linux/td-p/1247042
-    # so use a workaround
-    #assign [class="Spotify"] workspace $ws7
-    for_window [class="Spotify"] move to workspace $ws7
-
+#
 # Scratchpad:
 #
     # Sway has a "scratchpad", which is a bag of holding for windows.
@@ -415,43 +253,191 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-#
-# Status Bar:
-#
-# Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
+include /etc/sway/config.d/*
 
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
+### Appearance
 
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:System San Francisco Display 8
+
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+#font pango:DejaVu Sans Mono 8
+
+# Before i3 v4.8, we used to recommend this one as the default:
+# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, its unicode glyph coverage is limited, the old
+# X core fonts rendering does not support right-to-left and this being a bitmap
+# font, it doesn’t scale on retina/hidpi displays.
+
+set $bg-color 	         #2f343f
+set $inactive-bg-color   #2f343f
+set $text-color          #f3f4f5
+set $inactive-text-color #676E7D
+set $urgent-bg-color     #E53935
+
+set $default_gaps_inner 10
+set $default_gaps_outer 0
+gaps inner $default_gaps_inner
+gaps outer $default_gaps_outer
+
+# this is annoying; just use Mod-Tab
+workspace_auto_back_and_forth no
+
+force_display_urgency_hint 500 ms
+focus_on_window_activation urgent
+
+# this is very annoying
+focus_follows_mouse no
+
+floating_minimum_size -1 x -1
+floating_maximum_size -1 x -1
+
+# window colors
+#                       border              background         text                 indicator
+client.focused          $bg-color           $bg-color          $text-color          #00ff00
+client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
+client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
+client.urgent           $urgent-bg-color $urgent-bg-color $text-color #00ff00
+
+## gaps config
+set $mode_gaps gaps
+set $mode_gaps_outer outer gaps
+set $mode_gaps_inner inner gaps
+bindsym $mod+Shift+g mode "$mode_gaps"
+mode "$mode_gaps" {
+    bindsym o      mode "$mode_gaps_outer"
+    bindsym i      mode "$mode_gaps_inner"
+
+    bindsym 0      mode "default", exec --no-startup-id i3-msg "gaps inner current set 0" && i3-msg "gaps outer current set 0"
+    bindsym d      mode "default", exec --no-startup-id i3-msg "gaps inner current set $default_gaps_inner" && i3-msg "gaps outer current set $default_gaps_outer"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
 }
 
-#
-# Initial programs executed on startup
-#
-    # nm-applet at startup for configuring wifi connections
-    exec --no-startup-id nm-applet &
+mode "$mode_gaps_inner" {
+    bindsym plus  gaps inner current plus 5
+    bindsym minus gaps inner current minus 5
+    bindsym 0     mode "default", gaps inner current set 0
+    bindsym d     mode "default", gaps inner current set $default_gaps_inner
 
-    # bluetooth config
-    exec --no-startup-id blueman-applet &
+    bindsym Shift+plus  gaps inner all plus 5
+    bindsym Shift+minus gaps inner all minus 5
+    bindsym Shift+0     mode "default", gaps inner all set 0
+    bindsym Shift+d     mode "default", gaps inner all set $default_gaps_inner
 
-    # adjust color temperature for better eye comfort
-    exec --no-startup-id redshift-gtk &
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
-    # always start firefox
-    exec firefox
-    exec google-chrome-stable
-    exec skype
-    exec slack
+mode "$mode_gaps_outer" {
+    bindsym plus  gaps outer current plus 5
+    bindsym minus gaps outer current minus 5
+    bindsym 0     mode "default", gaps outer current set 0
+    bindsym d     mode "default", gaps outer current set $default_gaps_outer
 
-    # execute a terminal running tmux in workspace two
-    exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command /bin/sh -c "tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell"'
+    bindsym Shift+plus  gaps outer all plus 5
+    bindsym Shift+minus gaps outer all minus 5
+    bindsym Shift+0     mode "default", gaps outer all set 0
+    bindsym Shift+d     mode "default", gaps outer all set $default_gaps_outer
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# fix graphics glitch
+default_border none
+
+### Override specific windows that should be floated
+
+for_window [class="^.*"] border pixel 0
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+
+for_window [class="(?i)gsimplecal"] floating enable, move position mouse, move down $height px
+for_window [class="(?i)qemu-system"] floating enable
+for_window [class="(?i)blueman"] floating enable
+for_window [class="(?i)pinentry"] floating enable
+for_window [class="(?i)nm-connection-editor"] floating enable
+
+for_window [instance="__scratchpad"] floating enable
+for_window [instance="__nmtui"] floating enable
+for_window [class="(?i)recordmydesktop"] floating enable
+
+for_window [class="(?i)pavucontrol"] floating enable, move position mouse
+for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down $height px
+
+for_window [class="Skype"] floating disable
 
 
+### Force certain windows to pre-designated workspaces
+for_window [class="Firefox"] move to workspace $ws1
+for_window [class="Google-chrome"] move to workspace $ws10
+for_window [class="Chromium"] move to workspace $ws10
+for_window [class="Vmware"] move to workspace $ws5
+for_window [class="Crossover"] move to workspace $ws5
+for_window [class="Skype"] move to workspace $ws8
+for_window [class="Slack"] move to workspace $ws8
+for_window [class="Mailspring"] move to workspace $ws9
+
+# assign doesn't work for spotify due to a bug
+# https://community.spotify.com/t5/Desktop-Linux/WM-CLASS-window-property-on-Linux/td-p/1247042
+# so use a workaround
+#assign [class="Spotify"] workspace $ws7
+for_window [class="Spotify"] move to workspace $ws7
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id "pamixer -i 5; notify-send --expire-time=250 '  Raise Volume ['$(pamixer --get-volume)'%]'"
+bindsym XF86AudioLowerVolume    exec --no-startup-id "pamixer -d 5; notify-send --expire-time=250 '  Lower Volume ['$(pamixer --get-volume)'%]'"
+bindsym XF86AudioMute       exec --no-startup-id "pamixer -t; notify-send --expire-time=250 ' /  Toggle'"
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec light -A 5
+bindsym XF86MonBrightnessDown exec light -U 5
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# lock screen control
+bindsym $mod+control+l    exec --no-startup-id $HOME/.config/i3/transfer-sleep-lock-i3lock.sh
+
+# Autostart commands
+
+# nm-applet at startup for configuring wifi connections
+exec --no-startup-id nm-applet &
+
+# bluetooth config
+exec --no-startup-id blueman-applet &
+
+# Set up the remapping of Caps Lock to Escape for better vim ergonomics
+exec_always --no-startup-id $HOME/.config/i3/config-xmodmap.sh
+
+# Always run dunst to handle notifications
+# TODO: mako
+exec_always --no-startup-id "killall -q dunst; dunst &"
+
+# Launch polybar instead of using the i3 bar
+# TODO: swaybar
+#exec_always --no-startup-id $HOME/.config/polybar/run-polybar.sh
+
+# always start firefox
+exec firefox
+exec flatpak run com.skype.Client --socket=wayland
+exec flatpak run com.slack.Slack --socket=wayland
+exec --no-startup-id dropbox start
+
+# execute a terminal running tmux in workspace two
+exec --no-startup-id swaymsg 'workspace $ws2; exec $TERMINAL --command /bin/sh -c "tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell"'
+
+exec waybar
