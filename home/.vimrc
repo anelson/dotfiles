@@ -285,6 +285,9 @@ Plug 'tpope/vim-obsession'
 " templates
 Plug 'tpope/vim-liquid'
 
+" Provide handy keystrokes for changing the case of a word
+Plug 'tpop/vim-abolish'
+
 "## vim-polyglot for language support for over 100 langauges
 Plug 'sheerun/vim-polyglot'
 
