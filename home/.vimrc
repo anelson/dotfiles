@@ -416,22 +416,6 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-"if has('patch8.1.1068')
-"  " Use `complete_info` if your (Neo)Vim version supports it.
-"  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-"else
-"  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-"endif
-
-" Instead of the above mapping for `<CR>`, which is the default config
-" documented in the coc readme, use this mapping described in https://github.com/neoclide/coc-pairs/issues/13
-"
-" With formatOnType enabled, this should automatically place the cursor in the
-" right place after pressing enter.
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
