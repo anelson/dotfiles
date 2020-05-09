@@ -4,6 +4,16 @@
 gpgconf --kill gpg-agent >/dev/null 2>&1
 gpg-connect-agent /bye >/dev/null 2>&1
 
+
+
+# This sets the env var only in this current shell, it won't change the shell that invoked the script
+EXPECTED_SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+
+if [ "$SSH_AUTH_SOCK" != "$EXPECTED_SSH_AUTH_SOCK" ]; then
+  echo "SSH_AUTH_SOCK isn't set correctly.  Run this command:"
+  echo "export SSH_AUTH_SOCK=\$(gpgconf --list-dirs agent-ssh-socket)"
+fi
+
 echo GPG agent reset.  SSH keys:
 
 ssh-add -L
