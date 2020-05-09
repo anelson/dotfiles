@@ -5,6 +5,9 @@
 # Use the "windows" key for the modifier
 set $mod Mod4
 
+# Alt is used when changing the keyboard layout
+set $alt Alt_L
+
 # Your preferred terminal emulator
 set $term alacritty
 
@@ -17,13 +20,19 @@ set $right l
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-#set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu wofi --show drun,run --allow-images --allow-markup --term=$term
+set $menu wofi --show drun,run --allow-images --allow-markup --term=$term | swaymsg exec --
+
+# Preferred screen locker
+set $lock swaylock --daemonize
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/.wallpaper/tree_planet_stars_galaxy_art_117068_5760x3240.jpg fill
+# Randomly choose a wallpaper
+#
+# For some reason this use of backticks in `output` always fails with an "Invalid syntax" error for me, even though I see it used online a lot.
+#output * bg `fd . $HOME/.wallpaper | sort -R | head -1` fill
+output * bg $HOME/.wallpaper/earth_from_space_2-wallpaper-3840x2160.jpg fill
+
 #
 # Example configuration:
 #
@@ -45,10 +54,10 @@ output * bg ~/.wallpaper/tree_planet_stars_galaxy_art_117068_5760x3240.jpg fill
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 exec swayidle -w \
-      timeout 300 'swaylock -f -c 000000' \
-      timeout 600 'swaymsg "output * dpms off"' \
-           resume 'swaymsg "output * dpms on"' \
-      before-sleep 'swaylock -f -c 000000'
+         timeout 300 $lock \
+         timeout 600 'swaymsg "output * dpms off"' \
+              resume 'swaymsg "output * dpms on"' \
+         before-sleep $lock
 
 ### Input configuration
 #
@@ -100,6 +109,11 @@ input type:keyboard {
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+    # Send signal 1 to waybar when changing keyboard layout
+    #
+    # I can't make this work.  It seems sway never sees this sequence because it's already intercepeted to change the keyboard layout
+    bindsym $alt+Shift_L exec "pkill --signal SIGRTMIN+1 waybar"
 #
 # Moving around:
 #
@@ -390,6 +404,8 @@ for_window [class="Skype"] floating disable
 
 ### Force certain windows to pre-designated workspaces
 for_window [class="Firefox"] move to workspace $ws1
+for_window [class="Firefox"] layout tabbed
+
 for_window [class="Google-chrome"] move to workspace $ws10
 for_window [class="Chromium"] move to workspace $ws10
 for_window [class="Vmware"] move to workspace $ws5
@@ -437,12 +453,9 @@ exec_always --no-startup-id $HOME/.config/i3/config-xmodmap.sh
 # TODO: mako
 exec_always --no-startup-id "killall -q dunst; dunst &"
 
-# Launch polybar instead of using the i3 bar
-# TODO: swaybar
-#exec_always --no-startup-id $HOME/.config/polybar/run-polybar.sh
-
 # always start firefox
 exec firefox
+exec chromium
 exec flatpak run com.skype.Client --socket=wayland
 exec flatpak run com.slack.Slack --socket=wayland
 exec --no-startup-id dropbox start
@@ -450,4 +463,7 @@ exec --no-startup-id dropbox start
 # execute a terminal running tmux in workspace two
 exec --no-startup-id swaymsg 'workspace $ws2; exec $TERMINAL --command /bin/sh -c "tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell"'
 
-exec_always $HOME/.config/waybar/waybar.sh
+bar {
+    # Run waybar instead of swaybar
+    swaybar_command waybar
+}

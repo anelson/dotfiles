@@ -3,16 +3,15 @@
 {
     "layer": "bottom",
     "position": "top",
-    "height": 30,
 
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["sway/window"],
     "modules-right": [
             "custom/left-arrow-dark",
-            "disk",
+            "network",
             "custom/left-arrow-light",
             "custom/left-arrow-dark",
-            "pulseaudio",
+            "disk",
             "custom/left-arrow-light",
             "custom/left-arrow-dark",
             "memory",
@@ -21,7 +20,16 @@
             "cpu",
             "custom/left-arrow-light",
             "custom/left-arrow-dark",
+            "temperature",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "custom/keyboard-layout",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
             "battery",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "pulseaudio",
             "custom/left-arrow-light",
             "custom/left-arrow-dark",
             "idle_inhibitor",
@@ -30,7 +38,10 @@
             "tray",
             "custom/left-arrow-light",
             "custom/left-arrow-dark",
-            "clock"
+            "clock",
+            "custom/left-arrow-light",
+            "custom/left-arrow-dark",
+            "custom/acpi"
     ],
     "sway/mode": {
         "format": " {}"
@@ -60,6 +71,7 @@
         "tooltip": false
     },
     "network": {
+        "interval": 5,
         "format": "{icon}",
         "format-alt": "{ipaddr}/{cidr} {icon}",
         "format-alt-click": "click-right",
@@ -68,8 +80,12 @@
             "ethernet": [""],
             "disconnected": [""]
         },
+        "format-wifi": "  {essid} ({signalStrength}%)", // Icon: wifi
+        "format-ethernet": "  {ifname}: {ipaddr}/{cidr}", // Icon: ethernet
+        "format-disconnected": "⚠  Disconnected",
+        "tooltip-format": "{ifname}: {ipaddr}",
         "on-click": "alacritty -e nmtui",
-        "tooltip": false
+        "tooltip": true
     },
     "pulseaudio": {
             "format": "{icon} {volume:2}%",
@@ -124,7 +140,24 @@
     },
     "cpu": {
             "interval": 5,
-            "format": "CPU {usage:2}%"
+            "format": "CPU  {usage}% ({load})", // Icon: microchip
+            "states": {
+              "warning": 70,
+              "critical": 90
+            }
+    },
+    "temperature": {
+      "critical-threshold": 80,
+      "interval": 5,
+      "format": "{icon}  {temperatureC}°C",
+      "format-icons": [
+          "", // Icon: temperature-empty
+          "", // Icon: temperature-quarter
+          "", // Icon: temperature-half
+          "", // Icon: temperature-three-quarters
+          ""  // Icon: temperature-full
+      ],
+      "tooltip": true
     },
     "disk": {
             "interval": 5,
@@ -133,5 +166,23 @@
     },
     "tray": {
             "icon-size": 20
+    },
+    "custom/keyboard-layout": {
+      "exec": "swaymsg -t get_inputs | grep -m1 'xkb_active_layout_name' | cut -d '\"' -f4",
+      // Interval set only as a fallback, as the value is updated by signal.  But I can't get that signal working
+      // so the interval is often enough that it won't be too confusing switching layouts
+      "interval": 5,
+      "format": "  {}", // Icon: keyboard
+      // Signal sent by Sway key binding (~/.config/sway/key-bindings)
+      "signal": 1, // SIGHUP
+      "tooltip": false
+    },
+    "custom/acpi": {
+        "format": "⏻  ",
+        "tooltip": true,
+        "tooltip-format": "Reboot (Right-click to power off)",
+        "max-length": 4,
+        "on-click": "reboot",
+        "on-click-right": "poweroff"
     }
 }
