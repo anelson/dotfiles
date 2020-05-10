@@ -41,19 +41,19 @@ set $urgent-bg-color     #E53935
 set $ws1  "1: "
 
 # terminals
-set $ws2  "2:  "
+set $ws2  "2: "
 
 # code
-set $ws3  "3:  "
+set $ws3  "3: "
 
 # ???
 set $ws4  "4: "
 
 # windows VM
-set $ws5  "5:  "
+set $ws5  "5: "
 
 # file explorer
-set $ws6  "6:  "
+set $ws6  "6: "
 
 # spotify or other music
 set $ws7  "7: "
@@ -62,24 +62,10 @@ set $ws7  "7: "
 set $ws8  "8: "
 
 # mail client
-set $ws9  "9:  "
+set $ws9  "9: "
 
 # chrome
-set $ws10 "10:  "
-
-set $default_gaps_inner 10
-set $default_gaps_outer 0
-gaps inner $default_gaps_inner
-gaps outer $default_gaps_outer
-
-#it annoys me that some of these workspaces don't have gaps.  Commenting it out for now
-#and if it continues to be acceptable this way then remove
-#workspace $ws1 gaps inner 0
-#workspace $ws1 gaps outer 0
-#workspace $ws9 gaps inner 0
-#workspace $ws9 gaps outer 0
-#workspace $ws10 gaps inner 0
-#workspace $ws10 gaps outer 0
+set $ws10 "10: "
 
 workspace_auto_back_and_forth no # this is annoying; just use Mod-Tab
 force_display_urgency_hint 500 ms
@@ -241,51 +227,6 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-set $mode_gaps gaps
-set $mode_gaps_outer outer gaps
-set $mode_gaps_inner inner gaps
-bindsym $mod+Shift+g mode "$mode_gaps"
-mode "$mode_gaps" {
-    bindsym o      mode "$mode_gaps_outer"
-    bindsym i      mode "$mode_gaps_inner"
-
-    bindsym 0      mode "default", exec --no-startup-id i3-msg "gaps inner current set 0" && i3-msg "gaps outer current set 0"
-    bindsym d      mode "default", exec --no-startup-id i3-msg "gaps inner current set $default_gaps_inner" && i3-msg "gaps outer current set $default_gaps_outer"
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-mode "$mode_gaps_inner" {
-    bindsym plus  gaps inner current plus 5
-    bindsym minus gaps inner current minus 5
-    bindsym 0     mode "default", gaps inner current set 0
-    bindsym d     mode "default", gaps inner current set $default_gaps_inner
-
-    bindsym Shift+plus  gaps inner all plus 5
-    bindsym Shift+minus gaps inner all minus 5
-    bindsym Shift+0     mode "default", gaps inner all set 0
-    bindsym Shift+d     mode "default", gaps inner all set $default_gaps_inner
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-mode "$mode_gaps_outer" {
-    bindsym plus  gaps outer current plus 5
-    bindsym minus gaps outer current minus 5
-    bindsym 0     mode "default", gaps outer current set 0
-    bindsym d     mode "default", gaps outer current set $default_gaps_outer
-
-    bindsym Shift+plus  gaps outer all plus 5
-    bindsym Shift+minus gaps outer all minus 5
-    bindsym Shift+0     mode "default", gaps outer all set 0
-    bindsym Shift+d     mode "default", gaps outer all set $default_gaps_outer
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
 # fix graphics glitch
 new_window none
 #for_window [class=(?i)termite] border pixel 3
@@ -314,7 +255,6 @@ for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down $heigh
 
 for_window [class="Skype"] floating disable
 
-
 # There's a bug in i3 https://faq.i3wm.org/question/3473/how-to-disable-urgent-hints-on-startup/index.html
 # which causes an 'urgent' indicator on the workspace when these apps are launched
 # that's very annoying and there's no way to turn it off, but apparently using 'for_window' instead of 'assign'
@@ -327,7 +267,7 @@ for_window [class="Vmware"] move to workspace $ws5
 for_window [class="Crossover"] move to workspace $ws5
 for_window [class="Skype"] move to workspace $ws8
 for_window [class="Slack"] move to workspace $ws8
-for_window [class="Mailspring"] move to workspace $ws9
+for_window [class="zoom"] move to workspace $ws5
 
 # assign doesn't work for spotify due to a bug
 # https://community.spotify.com/t5/Desktop-Linux/WM-CLASS-window-property-on-Linux/td-p/1247042
@@ -396,9 +336,6 @@ exec --no-startup-id redshift-gtk &
 # Configure the X screensaver API to dim the screen after 10 minutes, and to lock the screen 30 seconds after that
 exec --no-startup-id xset s 600 30 &
 
-# Start the corsiar keyboard applet, on the off chance I have the corsair keyboard plugged in
-exec --no-startup-id ckb-next --background --profile Professional &
-
 # Invoke i3lock to lock the session when the screen saver setting above locks it, and also if the system suspends
 exec --no-startup-id xss-lock --transfer-sleep-lock --notifier $HOME/.config/i3/dim-screen.sh -- $HOME/.config/i3/transfer-sleep-lock-i3lock.sh &
 
@@ -425,10 +362,11 @@ exec --no-startup-id "unclutter &"
 
 # always start firefox
 exec firefox
-exec google-chrome-stable
-exec skype
-exec slack
-exec --no-startup-id dropbox start
+exec chromium-browser
+exec flatpak run com.skype.Client --socket=wayland
+exec flatpak run com.slack.Slack --socket=wayland
+exec flatpak run com.dropbox.Client
+exec zoom
 
 # execute a terminal running tmux in workspace two
 exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command /bin/sh -c "tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell"'
