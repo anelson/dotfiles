@@ -54,10 +54,10 @@ output * bg $HOME/.wallpaper/earth_from_space_2-wallpaper-3840x2160.jpg fill
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 exec swayidle -w \
-         timeout 300 $lock \
          timeout 600 'swaymsg "output * dpms off"' \
+         timeout 630 '$lock' \
               resume 'swaymsg "output * dpms on"' \
-         before-sleep $lock
+         before-sleep '$lock'
 
 ### Input configuration
 #
@@ -391,6 +391,8 @@ for_window [class="(?i)qemu-system"] floating enable
 for_window [class="(?i)blueman"] floating enable
 for_window [class="(?i)pinentry"] floating enable
 for_window [class="(?i)nm-connection-editor"] floating enable
+for_window [title="Firefox - Sharing Indicator"] floating enable
+for_window [app_id="firefox" title="Launch Application"] floating enable
 
 for_window [instance="__scratchpad"] floating enable
 for_window [instance="__nmtui"] floating enable
