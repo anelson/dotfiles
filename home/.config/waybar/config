@@ -129,8 +129,8 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
+            "activated": "",
+            "deactivated": ""
         },
         "tooltip": false
     },
@@ -140,7 +140,7 @@
     },
     "cpu": {
             "interval": 5,
-            "format": "CPU  {usage}% ({load})", // Icon: microchip
+            "format": "CPU  {usage}% ({load})",
             "states": {
               "warning": 70,
               "critical": 90
@@ -157,6 +157,9 @@
           "", // Icon: temperature-three-quarters
           ""  // Icon: temperature-full
       ],
+      // This is the CPU package temp sensor on the NUC.  This will be different on different hardware.
+      // Run `cat /sys/class/thermal/thermal_zone*/type` to get the types for each thermal zone
+      "thermal-zone": 4,
       "tooltip": true
     },
     "disk": {
@@ -186,3 +189,4 @@
         "on-click-right": "poweroff"
     }
 }
+
