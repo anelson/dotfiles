@@ -286,7 +286,7 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-liquid'
 
 " Provide handy keystrokes for changing the case of a word
-Plug 'tpop/vim-abolish'
+Plug 'tpope/vim-abolish'
 
 "## vim-polyglot for language support for over 100 langauges
 Plug 'sheerun/vim-polyglot'
@@ -451,6 +451,7 @@ augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  "autocmd FileType rust inoremap <buffer> <CR> <Cmd>:CocCommand rust-analyzer.onEnter<CR>
   " Update signature help on jump placeholder.
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
