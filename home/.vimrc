@@ -238,6 +238,15 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'ciaranm/securemodelines'
 
+"## When `.editorconfig` file is present use it to determine editor settings
+"like tabs etc
+
+Plug 'editorconfig/editorconfig-vim'
+
+" Don't attempt to apply editorconfig rules to anything Git related, or to
+" remote files over SCP
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+
 "## tpope gets his own section
 
 " Apply tpope's sensible defaults
