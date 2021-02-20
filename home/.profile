@@ -14,6 +14,7 @@ export LC_ALL=en_US.UTF-8
 export IS_SSH_SESSION=0
 export IS_TMUX_SESSION=0
 export IS_LOCAL_SESSION=0
+export IS_MACOS=0
 
 if [ -n "$DESKTOP_SESSION" ]; then
   # We're running under some kind of desktop environment
@@ -30,9 +31,27 @@ if [ -n "$SSH_TTY" ]; then
   export IS_SSH_SESSION=1
 fi
 
+case "$OSTYPE" in
+  "darwin"*) export IS_MACOS=1
+esac
+
 #echo "IsLocal: ${IS_LOCAL_SESSION}"
 #echo "IsTmux: ${IS_TMUX_SESSION}"
 #echo "IsSSH: ${IS_SSH_SESSION}"
+#echo "IsMacOs: ${IS_MACOS}"
+
+# If this is a mac, homebrew needs to be in the path.
+#
+# note that there are two homebrew directories, /opt/homebrew for Apple Silicon and /usr/local for Intel macs
+#
+# Apple Silicon macs support both, but obviously all things being equal we want the Apple Silicon version to take priority
+if [ "$IS_MACOS" -eq 1 ]; then
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval $(/opt/homebrew/bin/brew shellenv)
+  elif [ -x /usr/local/bin/brew ]; then
+    eval $(/usr/local/bin/brew shellenv)
+  fi
+fi
 
 # Put my own binaries on the path.  Note this specifically must be done BEFORE lookign for alacritty
 # since I like to install it in the user-specific binary path
