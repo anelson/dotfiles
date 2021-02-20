@@ -57,6 +57,17 @@ fi
 # since I like to install it in the user-specific binary path
 export PATH="$HOME/.local/bin:$PATH"
 
+# Make sure the directory where pip3 installs --user binaries is also in the path
+#
+# On my Linux systems this is `$HOME/.local/bin` but on macOS and maybe other Linux distros this
+# is something else.
+pip_user_bin="$(python3 -m site --user-base)/bin"
+
+if [ "$pip_user_bin" != "$HOME/.local/bin" ]; then
+  export PATH="$pip_user_bin:$PATH"
+fi
+
+
 # Set a TERMINAL variable so i3 will use alacritty if alacritty is installed
 command -v alacritty >/dev/null 2>&1 && export TERMINAL=`command -v alacritty`
 
@@ -96,3 +107,4 @@ if type "tmux" >/dev/null 2>&1 && [ "$IS_SSH_SESSION" -eq 1 ] && [ "$IS_TMUX_SES
   exit
 fi;
 
+source "$HOME/.cargo/env"
