@@ -1,0 +1,13 @@
+session_name: misc-elastio
+start_directory: ./
+windows:
+  - window_name: editor
+    focus: true
+    panes:
+        - vim
+  - window_name: rust shell
+    panes:
+        - pane
+  - window_name: misc shell
+    panes:
+        - pane
