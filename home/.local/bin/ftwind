@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -f
 # ftwind - switch window (based on @george-b)
 # based on pokey's ftwind at https://github.com/pokey/dotfiles/blob/dade6c88af31458c323e8f0247af510bca7af0f5/bin/ftwind
 #
@@ -10,7 +10,7 @@
 windows_str=$( \
    tmux list-windows -a -F "#{session_last_attached}|#{window_stack_index}|#S\t#{pane_current_path}\t#I:#{window_name}\t#{window_active}\t#{window_id}" | \
    sort --key 1r,2n "--field-separator=|" | \
-   cut "--delimiter=|" --fields=3 \
+   cut -d "|" -f 3
 )
 
 # Process windows_str
@@ -51,7 +51,10 @@ while read -r line; do
 done <<< "$windows_str"
 
 # Align on columns
-windows=$(column -s $'\t' --table-columns " ,Session,Window,Current Directory,ID" -t <<< "$windows")
+#
+# The --table-columns option is specific to GNU `column`, and isn't available with the BSD `column` that ships with macOS
+#windows=$(column -s $'\t' --table-columns " ,Session,Window,Current Directory,ID" -t <<< "$windows")
+windows=$(column -s $'\t'  -t <<< "$windows")
 
 # Split by newlines
 IFS=$'\n' read -rd '' -a window_arr <<<"$windows"
@@ -68,7 +71,7 @@ res=$?
 [ "$res" -eq "0" ] || exit $res
 
 # We have the window ID which is unique.  Find it's session
-target_session=$(tmux list-windows -a -F "#{window_id} #{session_name}" | grep -sw "$target_window_id" | head -n 1 | cut -d' ' -f2)
+target_session=$(tmux list-windows -a -F "#{window_id} #{session_name}" | grep -sw "$target_window_id" | head -n 1 | cut -d ' ' -f 2)
 
 #echo "Target window ID: ${target_window_id}"
 #echo "Target session: ${target_session}"
