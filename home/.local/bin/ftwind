@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -f
+#!/usr/bin/env -S bash -f
 # ftwind - switch window (based on @george-b)
 # based on pokey's ftwind at https://github.com/pokey/dotfiles/blob/dade6c88af31458c323e8f0247af510bca7af0f5/bin/ftwind
 #
