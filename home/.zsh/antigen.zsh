@@ -29,6 +29,7 @@ antigen bundles <<EOB
   changyuheng/zsh-interactive-cd
   Tarrasch/zsh-bd
   zsh-users/zsh-syntax-highlighting
+  zsh-users/zsh-autosuggestions
 EOB
 
 # Use the official agnoster repo instead of the one in oh-my-zsh
