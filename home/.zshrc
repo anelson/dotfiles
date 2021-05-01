@@ -15,3 +15,8 @@ source $HOME/.zsh/npm.zsh
 
 # Load RVM into a shell session *as a function*
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+# If starship is available, use that instead of the configured zsh theme for the prompt
+if [ -x "$HOME/.cargo/bin/starship" ]; then
+    eval $(starship init zsh)
+fi
