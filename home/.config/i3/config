@@ -61,8 +61,8 @@ set $ws7  "7: "
 # slack (and other chats)
 set $ws8  "8: "
 
-# mail client
-set $ws9  "9: "
+# password manager
+set $ws9  "9: "
 
 # chrome
 set $ws10 "10: "
@@ -265,11 +265,13 @@ assign [class="(?i)vivaldi-stable"] workspace $ws1
 for_window [class="Vivaldi-stable" window_role="pop-up"] floating enable
 for_window [class="Google-chrome"] move to workspace $ws10
 for_window [class="Chromium"] move to workspace $ws10
+for_window [class="Brave"] move to workspace $ws10
 for_window [class="Vmware"] move to workspace $ws5
 for_window [class="Crossover"] move to workspace $ws5
 for_window [class="Skype"] move to workspace $ws8
 for_window [class="Slack"] move to workspace $ws8
 for_window [class="Viber"] move to workspace $ws8
+for_window [class="1Password"] move to workspace $ws9
 for_window [class="zoom"] move to workspace $ws5
 
 # assign doesn't work for spotify due to a bug
@@ -365,11 +367,12 @@ exec --no-startup-id "unclutter &"
 
 # always start certain programs
 exec vivaldi
-exec chromium-browser
+exec brave-browser
 exec flatpak run com.skype.Client --socket=wayland
 exec flatpak run com.slack.Slack --socket=wayland
 exec flatpak run com.dropbox.Client
 exec zoom
+exec 1password
 
 # execute a terminal running tmux in workspace two
 exec --no-startup-id i3-msg 'workspace $ws2; exec $TERMINAL --command /bin/sh -c "tmux attach -t login-shell || tmuxp load login-shell -y || tmux new-session -t login-shell"'
