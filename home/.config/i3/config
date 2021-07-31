@@ -370,7 +370,11 @@ exec vivaldi
 exec brave-browser
 exec flatpak run com.skype.Client --socket=wayland
 exec flatpak run com.slack.Slack --socket=wayland
+
+# On some older systems I used the flatpak Dropbox client
+# but this is a third party package and I don't trust it
 exec flatpak run com.dropbox.Client
+exec dropbox start
 exec zoom
 exec 1password
 
