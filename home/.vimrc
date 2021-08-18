@@ -10,7 +10,7 @@
 "# Standard boilerplate
 
 set nocompatible              " be iMproved, required
-filetype off                  " required
+filetype plugin indent on
 syntax on "enable syntax highlighting
 
 "# Basic config settings
@@ -138,7 +138,8 @@ set listchars=tab:•-,trail:•,extends:»,precedes:« " Unprintable chars mapp
 
 "## Assorted other tweaks
 
-" Use a faster updatetime so vim-gutter reflects changes faster
+" Use a faster updatetime so vim-gutter reflects changes faster, as well as
+" whatever LSP plugin we're using
 set updatetime=250
 
 " Give more space for displaying messages.
@@ -391,7 +392,7 @@ let g:coc_global_extensions = [
   \ 'coc-dictionary',
   \ 'coc-emoji',
   \ 'coc-syntax',
-  \ 'coc-pairs',
+  "\ 'coc-pairs',
   \ 'coc-actions'
 \ ]
 
@@ -400,7 +401,12 @@ set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-set signcolumn=yes
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -432,8 +438,10 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
 
@@ -451,7 +459,6 @@ augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  "autocmd FileType rust inoremap <buffer> <CR> <Cmd>:CocCommand rust-analyzer.onEnter<CR>
   " Update signature help on jump placeholder.
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
@@ -482,17 +489,21 @@ command! -nargs=0 RAUpgrade :CocCommand rust-analyzer.upgrade
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" Remap keys for applying codeAction to the current line.
+" Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Introduce function text object
+" Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
 omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
 
 " Use CTRL-S for selections ranges.
 " Requires 'textDocument/selectionRange' support of language server.
@@ -814,6 +825,9 @@ let g:strip_whitespace_confirm=0
 "## capnproto syntax support
 
 Plug 'cstrahan/vim-capnp'
+
+"## Auto-generate closing braces/parens and indent
+Plug 'cohama/lexima.vim'
 
 "## end plugins
 " Add plugins to &runtimepath
