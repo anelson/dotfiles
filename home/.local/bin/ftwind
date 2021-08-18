@@ -62,7 +62,7 @@ IFS=$'\n' read -rd '' -a window_arr <<<"$windows"
 # Run fzf and check result
 # Note the use of 'sed' to strip the "*" which might be there if the selected window is active
 target_window_id=$(echo "$windows" | \
-   fzf-tmux +m --header-lines=1 --no-sort --ansi | \
+   fzf-tmux -p +m --header-lines=1 --no-sort --ansi | \
    sed -e 's/^\s*\*//g' | \
    awk '{ print $NF }' \
 )
