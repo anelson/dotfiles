@@ -22,7 +22,7 @@ source $HOME/.zsh/npm.zsh
 if [[ -x "$HOME/.cargo/bin/starship" ]]; then
     # Bullshit hoop-jumping to get the default zsh prompt turned off so that starship can be activated
     #
-    # This is discussed in https://github.com/starship/starship/issues/2525 and a potential fix in 
+    # This is discussed in https://github.com/starship/starship/issues/2525 and a potential fix in
     # https://github.com/starship/starship/issues/1994
     autoload -U promptinit && promptinit
     prompt off

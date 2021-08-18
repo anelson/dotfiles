@@ -711,7 +711,13 @@ if executable("fzf")
     \ 'header':  ['fg', 'Comment'] }
 
   " customize the layout
-  let g:fzf_layout = { 'down': '~40%' }
+
+  " If running under tmux, use a tmux popup for fzf
+  if exists('$TMUX')
+      let g:fzf_layout = { 'tmux': '-p90%,60%' }
+  else
+      let g:fzf_layout = { 'down': '~40%' }
+  endif
 
   " The `Rg` fzf command, which uses Ripgrep to search the current directory,
   " is more useful if we can combine the interactive search results with the

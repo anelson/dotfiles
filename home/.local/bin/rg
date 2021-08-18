@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Ugly hack to allow running `rg` within a tmux popup window.
+#
+# For reasons I don't understand, tmux popup windows aren't like regular tmux
+# panes, they don't have any of the environment variables of the parent, and
+# none of the shell startup scripts like .zshrc or .profile are evaluated.  As
+# a result, `rg` is not in the path because we use `cargo install rg` and that
+# puts it in `~/.cargo/bin`, but in this tmux popup hellscape the only suitable
+# user-specific path is $HOME/.local/bin.  I don't know what sets that as part
+# of the path, it's definitely not /etc/profile or /etc/bashrc.
+#
+# In any case, as an act of desperation I'm making this shim script which will be in the path
+# and will forward to the actual cargo-compiled binary binary
+
+if [[ -x "$HOME/.cargo/bin/rg" ]]; then
+	"$HOME/.cargo/bin/rg" "$@"
+else
+	cargo install ripgrep && "$HOME/.cargo/bin/rg" "$@"
+fi
+
