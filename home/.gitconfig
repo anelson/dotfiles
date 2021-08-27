@@ -24,6 +24,7 @@
 # To install it's `git-delta` on most systems
 [core]
     pager = delta
+	excludesfile = /home/cornelius/.gitignore
 
 [interactive]
     diffFilter = delta --color-only
