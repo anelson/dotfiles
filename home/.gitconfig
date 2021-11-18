@@ -10,7 +10,7 @@
 #
 # Hopefully someday a better solution will exist
 [credential]
- 	helper = store
+	helper = store
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
