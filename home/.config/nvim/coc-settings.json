@@ -22,12 +22,19 @@
     // Use clippy instead of strait `check` to catch more things
     "rust-analyzer.checkOnSave.command": "clippy",
 
+    "rust-analyzer.checkOnSave.extraArgs": [
+      "--target-dir", "/tmp/rust-analyzer-check"
+    ],
+
     // Load Rust code from `OUT_DIR` so code generated at build time is also analyzed
     // https://github.com/rust-analyzer/rust-analyzer/pull/3582
     "rust-analyzer.cargo.loadOutDirsFromCheck": true,
 
     // Enable proc macro support
     "rust-analyzer.procMacro.enable": true,
+
+    // Enable all features in rust crates.  This is an experiment to see if I like how this works
+    "rust-analyzer.cargo.allFeatures": true,
 
     "markdownlint.config": {
         "line_length": false
