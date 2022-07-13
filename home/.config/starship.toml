@@ -1,7 +1,7 @@
 # Warning: This config does not include keys that have an unset value
 format = '$all'  # default is https://starship.rs/config/#prompt
-scan_timeout = 0
-command_timeout = 0
+# scan_timeout = 0
+# command_timeout = 0
 add_newline = false
 
 [aws]
@@ -13,8 +13,6 @@ disabled = false
 [aws.region_aliases]
 
 [battery]
-threshold = 10
-style = 'red bold'
 
 [character]
 format = '$symbol '
@@ -590,7 +588,7 @@ signal_symbol = '⚡'
 style = 'bold red'
 map_symbol = false
 recognize_signal_code = true
-disabled = true
+disabled = false
 
 [swift]
 format = 'via [$symbol($version )]($style)'
