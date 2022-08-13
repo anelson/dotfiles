@@ -30,11 +30,21 @@
     // https://github.com/rust-analyzer/rust-analyzer/pull/3582
     "rust-analyzer.cargo.loadOutDirsFromCheck": true,
 
+    // Rust analyzer should run build scripts as part of its evaluation.  This is critical for things like
+    // prost and tonic which generate Rust bindings on the fly
+    "rust-analyzer.cargo.runBuildScripts": true,
+
     // Enable proc macro support
     "rust-analyzer.procMacro.enable": true,
 
+    // Do not automatically select any suggested items in autocomplete
+    // In theory it would be nice to enable this, but using <CR> or <Tab> to finish auto-completing the
+    // auto-selected suggestion doesn't work.  There's probably a glitch in my config
+    // but I can't be bothered to find it now.
+    "suggest.noselect":"true",
+
     // Enable all features in rust crates.  This is an experiment to see if I like how this works
-    "rust-analyzer.cargo.allFeatures": true,
+    // "rust-analyzer.cargo.allFeatures": true,
 
     "markdownlint.config": {
         "line_length": false
