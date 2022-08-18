@@ -595,3 +595,4 @@ key_bindings:
   #- { key: End,       mods: Shift,   action: ScrollToBottom, mode: ~Alt       }
   - { key: Tab,      mods: Control,   chars: "\x1b[1;5I"                 } # AJN: I added these to support
   - { key: Tab,      mods: Control|Shift,   chars: "\x1b[1;6I"           } # cycling between windows and sessions in tmux
+  - { key: W,      mods: Command,            action: None                } # I am *constantly* hitting Cmd-W by accident on macOS and killing alacritty
