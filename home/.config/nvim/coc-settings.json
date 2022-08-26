@@ -41,7 +41,7 @@
     // In theory it would be nice to enable this, but using <CR> or <Tab> to finish auto-completing the
     // auto-selected suggestion doesn't work.  There's probably a glitch in my config
     // but I can't be bothered to find it now.
-    "suggest.noselect":"true",
+    "suggest.noselect": true,
 
     // Enable all features in rust crates.  This is an experiment to see if I like how this works
     // "rust-analyzer.cargo.allFeatures": true,
