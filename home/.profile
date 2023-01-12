@@ -107,4 +107,4 @@ if type "tmux" >/dev/null 2>&1 && [ "$IS_SSH_SESSION" -eq 1 ] && [ "$IS_TMUX_SES
   exit
 fi;
 
-source "$HOME/.cargo/env"
+. "$HOME/.cargo/env"
