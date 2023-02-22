@@ -1,0 +1,19 @@
+[registries]
+elastio-private = { index = "https://dl.cloudsmith.io/TtnAPdIsnpfohcDy/elastio/private/cargo/index.git" }
+
+[build]
+# Use lld for linking; maybe that's faster
+#rustflags = [
+#  "-C", "link-arg=-fuse-ld=lld",
+#]
+
+# mold should be faster still
+[target.x86_64-unknown-linux-gnu]
+rustflags = [
+    "-C", "link-arg=-fuse-ld=/usr/bin/mold",
+]
+linker = "clang"
+
+[net]
+# Cloudsmith sucks so bad that timeouts talking to its registry are frequent
+retry = 100                   # network retries
