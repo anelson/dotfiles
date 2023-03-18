@@ -48,5 +48,6 @@
 
     "markdownlint.config": {
         "line_length": false
-    }
+    },
+    "snippets.ultisnips.pythonPrompt": false
 }
