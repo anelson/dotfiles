@@ -1,0 +1,3 @@
+# ignore the packer compiled plugins Lua file, it changes everytime the plugins change
+# and can be regenerated as needed
+plugin/packer_compiled.lua
