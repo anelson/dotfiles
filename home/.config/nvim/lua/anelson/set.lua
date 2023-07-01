@@ -4,8 +4,8 @@
 -- set t_Co=256 -- tell vim our terminal supports 256 colors (it does, right)
 vim.opt.termguicolors = true   -- if the term supports 24-bit color even better
 
-vim.cmd.colorscheme("gruvbox") -- activate my current preferred scheme
 vim.opt.background = "dark"    -- specifically the dark variant
+vim.cmd.colorscheme("gruvbox") -- activate my current preferred scheme
 
 -- At the terminal level at least, don't se a background.  To support terminals with translucent bg
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })

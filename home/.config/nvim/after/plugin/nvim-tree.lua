@@ -19,9 +19,11 @@ function M.on_attach(bufnr)
   api.config.mappings.default_on_attach(bufnr)
 
   -- then override the ones that I want to change
-  vim.keymap.set('n', 'h', api.tree.toggle_help,   { desc = 'Help',  buffer = bufnr, noremap = true, silent = true, nowait = true })
-  vim.keymap.set('n', '?', api.tree.toggle_help,   { desc = 'Help',  buffer = bufnr, noremap = true, silent = true, nowait = true })
-  vim.keymap.set('n', 'p', M.print_node_path,      { desc = 'Print', buffer = bufnr, noremap = true, silent = true, nowait = true })
+  vim.keymap.set('n', 'h', api.tree.toggle_help,
+  { desc = 'Help', buffer = bufnr, noremap = true, silent = true, nowait = true })
+  vim.keymap.set('n', '?', api.tree.toggle_help,
+  { desc = 'Help', buffer = bufnr, noremap = true, silent = true, nowait = true })
+  -- vim.keymap.set('n', 'p', M.print_node_path,      { desc = 'Print', buffer = bufnr, noremap = true, silent = true, nowait = true })
 end
 
 function M.print_node_path()
@@ -40,7 +42,6 @@ require("nvim-tree").setup({
   view = {
     -- I like to navigate in the tree with relative line numbers just like I do anywhere else
     relativenumber = true,
-
     -- The default width of 30 is a bit too cramped
     width = 40
   },
@@ -51,7 +52,6 @@ require("nvim-tree").setup({
       quit_on_open = true
     }
   },
-
   -- Override some keyboard shortcuts because I'm very used to NERDtree
   on_attach = M.on_attach
 })

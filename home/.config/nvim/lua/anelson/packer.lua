@@ -90,48 +90,8 @@ return packer.startup(function(use)
     end
   }
 
-  -- Rust analyzer support
-  use {
-    'simrat39/rust-tools.nvim',
-    config = function()
-      require("rust-tools").setup({
-        server = {
-          settings = {
-            -- customize the rust-analyzer TLS
-            ["rust-analyzer"] = {
-              -- Run clippy, not just check, and use a separate temp dir for
-              -- rust-analizer so as not to clobber the workspace's output directory
-              -- and thereby constantly cause rebuilds
-              checkOnSave = {
-                enable = true,
-                command = "clippy",
-                extraArgs = {
-                  { "--target-dir", "/tmp/rust-analyzer-check" },
-                },
-              },
-
-              -- TODO: copy the other coc-settings.json rust analyzer configs here
-              cargo = {
-                -- Load Rust code from `OUT_DIR` so code generated at build time is also analyzed
-                -- https://github.com/rust-analyzer/rust-analyzer/pull/3582
-                loadOutDirsFromCheck = true,
-                -- Rust analyzer should run build scripts as part of its evaluation.  This is critical for things like
-                -- prost and tonic which generate Rust bindings on the fly
-                runBuildScripts = true,
-                -- Enable all features in rust crates.  This is an experiment to see if I like how this works
-                -- allFeatures = true
-              },
-
-              procMacro = {
-                -- Enable proc macro support
-                enable = true
-              }
-            },
-          },
-        },
-      })
-    end
-  }
+  -- Rust analyzer support.  Configured in `lsp.lua along with the rest of the lsp-zero config
+  use { 'simrat39/rust-tools.nvim' }
 
   -- Enable inlay hints for certain LSPs that support it
   -- TODO: is this needed?  I can't tell if its built in now to lsp-zero.
@@ -159,9 +119,9 @@ return packer.startup(function(use)
 
   -- treesitter and associated ecosystem plugins
   use { "nvim-treesitter/nvim-treesitter",
-    requires = { "nvim-treesitter/nvim-treesitter-textobjects",
+    requires = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
       "nvim-treesitter/playground",
-      "nvim-treesitter/nvim-treesitter-context"
     },
     run = ":TSUpdate"
   }
@@ -200,6 +160,7 @@ return packer.startup(function(use)
   -- something else.  A different plugin may be needed to provide this functionality.
   use {
     'j-hui/fidget.nvim',
+    tag = "legacy",
     after = { "lsp-zero.nvim", "nvim-lspconfig" },
     config = function()
       require "fidget".setup {}
@@ -239,10 +200,13 @@ return packer.startup(function(use)
     config = function()
       require("nvim-autopairs").setup {
         -- Don't add pairs if it already has a close pair in the same line
-        enable_check_bracket_line = false
+        --enable_check_bracket_line = false
       }
     end
   }
+
+  -- Briefly highlight yanked regions for clarity
+  use 'machakann/vim-highlightedyank'
 
   -- tpope gets his own section.  If it was possible to write `tpope/*` and just blindly install all of his plugins
   -- I would probably do that.
@@ -296,43 +260,19 @@ return packer.startup(function(use)
 
   -- Look and feel improvements
 
-  -- Seems duplicative of 'nvim-tree/nvim-web-devicons', but this plugin specifically
-  -- enables file type icons in the vim-airline tab bar so I need it as well.
-  -- nvim-web-devicons will never support this, as per https://github.com/nvim-tree/nvim-web-devicons/issues/38
-  use 'ryanoasis/vim-devicons'
-
   -- rice that status line
+  -- Used to use vim-airline but all the cool kids are doing Lua these days
   use {
-    'vim-airline/vim-airline',
-    -- vim-airline is a bit different from other plugins, in that it reads
-    -- these settings when it loads.  Therefore these globals need to be
-    -- set *before* the plugin itself loads. There is still some config in
-    -- `after/plugin`; only the global vars are set here since they need to
-    -- be in place before the plugin loads
-    setup = function()
-      vim.g['airline#extensions#tabline#enabled'] = 1
-      vim.g['airline#extensions#tabline#tab_nr_type'] = 1 -- tab number
-      vim.g['airline#extensions#tabline#show_tab_type'] = 1
-      vim.g['airline#extensions#tmuxline#enabled'] = 0    -- don't try to sync with tmuxline
-      -- TODO: enable this only if we end up using CoC
-      -- vim.g['airline#extensions#coc#enabled'] = 1 -- enable coc integration
-      vim.g.airline_theme = 'gruvbox'
-      vim.g.airline_solarized_bg = 'dark'
-      vim.g.airline_powerline_fonts = 1
-
-      -- Add (Neo)Vim's native statusline support.
-      -- NOTE: Please see `:h coc-status` for integrations with external plugins that
-      -- provide custom statusline: lightline.vim, vim-airline.
-      vim.api.nvim_exec([[
-          " TODO: do this if we end up using CoC in this new config
-          " set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-        ]], false)
-
-      -- Do not render airline on buffers made by certain plugins
-      vim.g.airline_exclude_filetypes = { "NvimTree" }
-    end,
+    'nvim-lualine/lualine.nvim',
+    requires = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'gruvbox',
+        },
+      }
+    end
   }
-  use { 'vim-airline/vim-airline-themes', requires = 'vim-airline/vim-airline' }
 
   -- easymotion for quick movement to specific places with the keyboard
   -- NOTE: this is disabled for now, `hop` is a better alternative
@@ -368,6 +308,66 @@ return packer.startup(function(use)
     end
   }
 
+
+  --## markdown support plugins
+
+  use {
+    'plasticboy/vim-markdown',
+
+    requires = {
+      'godlygeek/tabular' -- required by vim-markdown to support Markdown table formatting
+    },
+
+    config = function()
+      vim.g.vim_markdown_math = 1        -- enable LaTeX syntax highlighting in markdown
+      vim.g.vim_markdown_frontmatter = 1 -- enable YAML front matter highlighting for Jekyll content
+    end
+  }
+
+  -- modify vim to behave better when writing prose
+  use {
+    'reedes/vim-pencil',
+    config = function()
+      -- Configure vim-pencil
+      vim.cmd [[
+        augroup pencil
+          autocmd!
+          autocmd FileType markdown,mkd,text call pencil#init({'wrap': 'hard', 'autoformat': 0 })
+            \| set textwidth=120
+            \| setlocal spell spelllang=en_us,ru
+          autocmd FileType vimwiki call pencil#init({'wrap': 'hard', 'autoformat': 0 })
+            \| set textwidth=120
+            \| setlocal spell spelllang=en_us,ru
+        augroup END
+        ]]
+    end
+  }
+
+  -- zoom and un-zoom vim windows
+  use {
+    'dhruvasagar/vim-zoom',
+
+    config = function()
+      -- override the default vim keybinding, which makes a window full screen by
+      -- making it the only window (the :only command).  That's, obviously,
+      -- completely useless
+      vim.api.nvim_set_keymap('n', '<Leader>z', ':Zoom<CR>', {})
+    end
+  }
+
+  -- TOML support
+  use 'cespare/vim-toml'
+
+  -- Hashicorp Terraform support
+  use {
+    'hashivim/vim-terraform',
+
+    config = function()
+      vim.g.terraform_align = 1
+      vim.g.terraform_fmt_on_save = 1 -- Auto-format terraform files on save
+    end
+  }
+
   -- fix vim's shitty incremental search
   use 'haya14busa/is.vim'
 
@@ -375,7 +375,9 @@ return packer.startup(function(use)
   use 'nvim-tree/nvim-web-devicons'
 
   -- Load my favorite color scheme
-  use 'morhetz/gruvbox'
+  --use 'morhetz/gruvbox'
+  --use 'gruvbox-community/gruvbox'
+  use { "ellisonleao/gruvbox.nvim" }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
