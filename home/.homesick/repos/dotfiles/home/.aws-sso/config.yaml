@@ -1,0 +1,40 @@
+SSOConfig:
+    Elastio:
+        SSORegion: us-east-1
+        StartUrl: https://elastio.awsapps.com/start
+        DefaultRegion: us-east-2
+        Accounts:
+            968455818835:
+                Name: anelson-isolated
+
+
+            537513441174:
+                Name: assuriodev
+
+DefaultRegion: us-east-2
+ConsoleDuration: 720
+CacheRefresh: 168
+AutoConfigCheck: true
+UrlAction: print
+# According to the docs, `print` and `printurl` aren't valid here due to AWS SDK limitations.
+# What they mean by that is the printed URL output will not be visible on the terminal when
+# the AWS SDK invokes the `credentials_process` process.
+#
+# Unfortunately `clip` fails with an error unable to copy to the system clipboard, I
+# assume because I run headless and there's no X or wayland clipboard to copy to.  This means
+# I have to invoke `aws-sso` manually if the credentials have expired
+ConfigProfilesUrlAction: clip
+LogLevel: info
+HistoryLimit: 20
+HistoryMinutes: 1440
+
+# On Linux, store credentials in a JSON file.
+# Yes this isn't perfectly secure but there's no such thing as perfect security on an internet-connected
+# Linux box anyway.  We're storing these credentials in a text file but they are short-lived and only accessible
+# to processes run by our local user anyway.
+SecureStore: json
+JsonStore: "~/.aws-sso/secure.json"
+
+# When generating profile names in `~/.aws/config`, give those profiles a friendly name
+# Unfortunately can't use just the account alias, because some accounts (`bastion-staging` at least) are available to me with either `ReadOnly` or admin access
+ProfileFormat: "{{ FirstItem .AccountName .AccountAlias (AccountIdStr .AccountId) }}:{{ .RoleName }}"
