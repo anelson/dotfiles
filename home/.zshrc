@@ -28,3 +28,6 @@ if [[ -x "$HOME/.cargo/bin/starship" ]]; then
     prompt off
     eval $(starship init zsh)
 fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
