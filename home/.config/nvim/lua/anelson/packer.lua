@@ -128,8 +128,7 @@ return packer.startup(function(use)
 
   use {
     'VonHeikemen/lsp-zero.nvim',
-    -- TODO: 2.x should be released April 2023, switch to that when it's ready
-    branch = 'v1.x',
+    branch = 'v3.x',
     requires = {
       -- LSP Support
       { 'neovim/nvim-lspconfig' },             -- Required

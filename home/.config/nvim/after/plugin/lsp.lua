@@ -1,28 +1,68 @@
-local lsp = require('lsp-zero').preset({
+local lsp_zero = require('lsp-zero')
+
+local lsp = lsp_zero.preset({
   name = 'minimal',
   set_lsp_keymaps = true,
   manage_nvim_cmp = true,
   suggest_lsp_servers = true,
 })
 
--- we'll use Mason to auto-install LSPs as needed, but still seed some basic ones
--- that we want all the time
-lsp.ensure_installed({
-  'ansiblels',
-  'bashls',
-  'dockerls',
-  'eslint',
-  'jsonls',
-  'lua_ls',
-  'ruby_ls',
-  'rust_analyzer',
-  'tsserver',
-  'vimls',
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  handlers = {
+    -- Setup language servers with default settings.
+    lsp_zero.default_setup,
+
+    -- use lspconfig to configure the Lua language server
+    -- this recommended by the lsp-zero v1 to v3 migration guide
+    lua_ls = function()
+      local lua_opts = lsp_zero.nvim_lua_ls()
+      require('lspconfig').lua_ls.setup(lua_opts)
+    end,
+
+    rust_analyzer = lsp_zero.noop,
+
+    -- you can customize other language servers by making additional properties
+    -- which must match exactly the name of the language server, and are set to a function
+    -- that is invoked to configure that language server
+  },
+
+  -- we'll use Mason to auto-install LSPs as needed, but still seed some basic ones
+  -- that we want all the time
+  ensure_installed = {
+    'ansiblels',
+    'bashls',
+    'dockerls',
+    'eslint',
+    'jsonls',
+    'lua_ls',
+    'ruby_ls',
+    'rust_analyzer',
+    'tsserver',
+    'vimls',
+    'bufls' -- a superior protobuf LS
+  },
 })
 
--- don't initialize this language server
--- we will use rust-tools to setup rust_analyzer
-lsp.skip_server_setup({ 'rust_analyzer' })
+-- Show icons on the left gutter to indicate LSP findings
+lsp_zero.set_sign_icons({
+  error = '✘',
+  warn = '▲',
+  hint = '⚑',
+  info = ''
+})
+
+vim.diagnostic.config({
+  virtual_text = false,
+  severity_sort = true,
+  float = {
+    style = 'minimal',
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
+})
 
 -- I like my LSP to do formatting on save
 -- This is commented out and instead buffer_autoformat is called inside of the `on_attach` function
@@ -72,52 +112,79 @@ lsp.on_attach(function(client, bufnr)
   --vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 
--- 'cmp' autocompletion key bindings, in addition to whatever the defaults are
+-- 'cmp' autocompletion key bindings and other settings, in addition to whatever the defaults are
 -- technically this isn't LSP-related, but because we use lsp-zero to orchestrate the various
 -- plugins that are necessary to make auto-completion with LSP work, completion and LSP settings
 -- are combined for now.
 local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
 local lspkind = require('lspkind')
+require('luasnip.loaders.from_vscode').lazy_load()
 
-lsp.setup_nvim_cmp({
-  mapping = lsp.defaults.cmp_mappings({
+cmp.setup({
+  -- preselect the first item
+  preselect = 'item',
+  completion = {
+    completeopt = 'menu,menuone,noinsert',
+  },
+
+  -- Format the completion menu w/ an icon to indicate the source
+  formatting = lsp_zero.cmp_format(),
+
+  -- bring in the non-LSP sources explicitly, as of lsp-zero v3 this must be done explicitly
+  sources = {
+    { name = 'path' },
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'copilot' }, -- TODO: is this the right way to integrate copilot now?
+    { name = 'buffer',  keyword_length = 3 },
+    { name = 'luasnip', keyword_length = 2 },
+  },
+  mapping = cmp.mapping.preset.insert({
     -- Do not use Enter to accept the current autocomple option.  It's not always what I want
     -- and is very annoying in those cases
     ['<CR>'] = vim.NIL,
-    -- ['<C-e>'] = cmp.mapping.abort(),
+
+    -- toggle completion menu
+    ['<C-e>'] = cmp_action.toggle_completion(),
+
+    -- ANELSON TODO: do I need to add C-y here explicitly to accept a completion?
+
+    -- tab complete
+    --['<Tab>'] = cmp_action.tab_complete(),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+
+    -- navigate between snippet placeholder
+    ['<C-d>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+
+    -- scroll documentation window
+    ['<C-f>'] = cmp.mapping.scroll_docs(-5),
+    --['<C-d>'] = cmp.mapping.scroll_docs(5),
   }),
-  -- HACK: customize completion sources by completely replacing the default completion sources
-  -- This is hopefully all of the default sources, but that can change over time.
-  -- Got this hack from   https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#configure-a-source
-  sources = {
-    -- default sources
-    { name = 'nvim_lsp' },
-    { name = 'path' },
-    { name = 'buffer',  keyword_length = 3 },
-    { name = 'luasnip', keyword_length = 2 },
-
-    -- anelson bonus sources
-    { name = "copilot" },
-
-  },
-  formatting = {
-    -- invoke lspkind to decorate the completion menu with fancy icons
-    format = lspkind.cmp_format({
-      mode = 'symbol',       -- show only symbol annotations
-      maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-      ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-      -- The function below will be called before any actual modifications from lspkind
-      -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-      --before = function (entry, vim_item)
-      --  ...
-      --  return vim_item
-      --end
-    })
+  -- Add borders to documentation window in completion menu
+  window = {
+    documentation = cmp.config.window.bordered(),
   }
 })
 
--- (Optional) Configure lua language server for neovim
-lsp.nvim_workspace()
+-- removed oct 2023 as migration from lsp-zero v1 to v3
+--lsp.setup_nvim_cmp({
+--  formatting = {
+--    -- invoke lspkind to decorate the completion menu with fancy icons
+--    format = lspkind.cmp_format({
+--      mode = 'symbol',       -- show only symbol annotations
+--      maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+--      ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+--      -- The function below will be called before any actual modifications from lspkind
+--      -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+--      --before = function (entry, vim_item)
+--      --  ...
+--      --  return vim_item
+--      --end
+--    })
+--  }
+--})
 
 lsp.setup()
 
@@ -166,4 +233,5 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
   },
 })
 
+local rt = require('rust-tools')
 require('rust-tools').setup({ server = rust_lsp })
