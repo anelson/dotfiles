@@ -372,7 +372,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'} " Install latest release branch
 " * coc-calc - evaluate arithmetic expressions right in the editor, wow
 " * coc-spell-checker - a spell checker that, unlike vim's, is aware of camelCase
 " * coc-cspec-dicts - non-english dictionaries (why would anyone need those??)
-" * coc-dicionary - Use the dictionary as a completion source
+" * coc-dictionary - Use the dictionary as a completion source
 " * coc-emoji - use the markdown placeholder names for emojits as a completion
 " source
 " * coc-syntax - Use each language's syntax keywords as a completion source
