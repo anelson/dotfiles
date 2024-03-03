@@ -26,7 +26,7 @@ if [[ -x "$HOME/.cargo/bin/starship" ]]; then
     # https://github.com/starship/starship/issues/1994
     autoload -U promptinit && promptinit
     prompt off
-    eval $(starship init zsh)
+    eval "$(starship init zsh)"
 fi
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
