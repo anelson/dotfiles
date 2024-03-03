@@ -44,7 +44,7 @@ style = "Semibold Italic"
 
 [font.normal]
 family = "SauceCodePro Nerd Font"
-style = "SemiBold"
+style = "Semibold"
 
 # AJN: I added these to support cycling between windows and sessions in tmux
 [[keyboard.bindings]]
