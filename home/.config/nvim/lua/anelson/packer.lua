@@ -159,7 +159,7 @@ return packer.startup(function(use)
   -- something else.  A different plugin may be needed to provide this functionality.
   use {
     'j-hui/fidget.nvim',
-    tag = "legacy",
+    tag = "v1.4.0", -- latest as of 2024-03-22
     after = { "lsp-zero.nvim", "nvim-lspconfig" },
     config = function()
       require "fidget".setup {}
