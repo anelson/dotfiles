@@ -87,26 +87,11 @@ return packer.startup(function(use)
   --}
 
   -- Replace the programmer at the keyboard with an AI copilot
-  use {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
+  use { "github/copilot.vim",
     config = function()
-      require("copilot").setup({
-        -- Disable separate copilot suggestions; use the cmp plugin instead
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
-    end,
-  }
-  use {
-    "zbirenbaum/copilot-cmp",
-    -- This seems like it should be enabled, however per https://github.com/zbirenbaum/copilot-cmp/issues/43#issuecomment-1418544046
-    -- this for some reason prevents use of the custom comparators with LSP.  Instead I used `requires` which seems to work for now
-    -- after = { "copilot.lua" },
-    requires = { 'zbirenbaum/copilot.lua' },
-    config = function()
-      require("copilot_cmp").setup()
+      vim.keymap.set('i', '<C-]>', '<Plug>(copilot-next)')
+      vim.keymap.set('i', '<C-[>', '<Plug>(copilot-previous)')
+      vim.keymap.set('i', '<C-Space>', '<Plug>(copilot-suggest)')
     end
   }
 
