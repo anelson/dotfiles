@@ -69,6 +69,12 @@ return packer.startup(function(use)
     }
   end
 
+  -- Load the (as of now experimental) Sourcegraph plugin to give us access to Cody from Neovim
+  -- For now this exists alongside Copilot but I may decide I like one or the other more
+  use { 'sourcegraph/sg.nvim', run = 'nvim -l build/init.lua',
+    requires = { { 'nvim-lua/plenary.nvim' } }
+  }
+
   -- Replace the programmer at the keyboard with an AI copilot
   use {
     "zbirenbaum/copilot.lua",
@@ -84,7 +90,10 @@ return packer.startup(function(use)
   }
   use {
     "zbirenbaum/copilot-cmp",
-    after = { "copilot.lua" },
+    -- This seems like it should be enabled, however per https://github.com/zbirenbaum/copilot-cmp/issues/43#issuecomment-1418544046
+    -- this for some reason prevents use of the custom comparators with LSP.  Instead I used `requires` which seems to work for now
+    -- after = { "copilot.lua" },
+    requires = { 'zbirenbaum/copilot.lua' },
     config = function()
       require("copilot_cmp").setup()
     end

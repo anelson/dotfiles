@@ -133,12 +133,36 @@ cmp.setup({
 
   -- bring in the non-LSP sources explicitly, as of lsp-zero v3 this must be done explicitly
   sources = {
+    -- Copilot Source
+    { name = "copilot", group_index = 2 },
+
     { name = 'path' },
     { name = 'nvim_lsp' },
     { name = 'nvim_lua' },
-    { name = 'copilot' }, -- TODO: is this the right way to integrate copilot now?
     { name = 'buffer',  keyword_length = 3 },
     { name = 'luasnip', keyword_length = 2 },
+  },
+
+  -- tweak the sorting of completion suggestions to try to make the best suggestions come first.
+  -- This is based on https://github.com/zbirenbaum/copilot-cmp#comparators because completions from copilot
+  -- can be good or shit and need special consideration
+  sorting = {
+    priority_weight = 2,
+    comparators = {
+      require("copilot_cmp.comparators").prioritize,
+
+      -- Below is the default comparitor list and order for nvim-cmp
+      cmp.config.compare.offset,
+      -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.locality,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    },
   },
   mapping = cmp.mapping.preset.insert({
     -- Do not use Enter to accept the current autocomple option.  It's not always what I want
