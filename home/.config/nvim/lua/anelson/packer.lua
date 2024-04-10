@@ -71,9 +71,20 @@ return packer.startup(function(use)
 
   -- Load the (as of now experimental) Sourcegraph plugin to give us access to Cody from Neovim
   -- For now this exists alongside Copilot but I may decide I like one or the other more
-  use { 'sourcegraph/sg.nvim', run = 'nvim -l build/init.lua',
-    requires = { { 'nvim-lua/plenary.nvim' } }
-  }
+  -- 2024-04-10 - This plugin is very immature.  I cannot get authentication to work at all.
+  -- The many comments at https://github.com/sourcegraph/sg.nvim/issues/188 mirror my experience.
+  -- I'm not going to hard-code credentials in a generic env var like `SRC_TOKEN` as part of my shell env,
+  -- that's just ridiculous.
+  --
+  -- That's a real shame.  It's a promising technology but it's clear Neovim support is not something that the vendor takes seriously.
+  -- I assume the main author tjdevries is not paid by Sourcegraph to be full time on this project, so I don't see any reason why
+  -- I should pay sourcegraph.
+  --use { 'sourcegraph/sg.nvim', run = 'nvim -l build/init.lua',
+  --  requires = { { 'nvim-lua/plenary.nvim' } },
+  --  config = function()
+  --    require("sg").setup()
+  --  end
+  --}
 
   -- Replace the programmer at the keyboard with an AI copilot
   use {
