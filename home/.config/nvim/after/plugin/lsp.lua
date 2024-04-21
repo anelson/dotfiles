@@ -36,7 +36,6 @@ require('mason-lspconfig').setup({
     'eslint',
     'jsonls',
     'lua_ls',
-    'ruby_ls',
     'rust_analyzer',
     'tsserver',
     'vimls',
