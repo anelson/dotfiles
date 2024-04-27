@@ -30,10 +30,12 @@ require 'nvim-treesitter.configs'.setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = '<c-space>',
-      node_incremental = '<c-space>',
-      scope_incremental = '<c-s>',
-      node_decremental = '<M-space>',
+      -- Sadly these aren't as useful as I thought, because the treesitter text objects aren't as fine grained as I'd like.
+      -- For example there's not on that will select a field in a struct, as far as I can tell.
+      init_selection = false,
+      node_incremental = false,
+      scope_incremental = false,
+      node_decremental = false,
     },
   },
   textobjects = {
