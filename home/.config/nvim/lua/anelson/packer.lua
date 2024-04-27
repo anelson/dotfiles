@@ -210,7 +210,29 @@ return packer.startup(function(use)
   }
 
   -- Briefly highlight yanked regions for clarity
-  use 'machakann/vim-highlightedyank'
+  use { 'machakann/vim-highlightedyank' }
+
+  -- Use OSC52 escape sequences to copy to the system clipboard
+  -- (NOTE: this is going to be built in to Neovim in an upcoming release; at that point this plugin should be removed
+  -- and the native support used instead)
+  use {
+    'ojroques/nvim-osc52',
+    config = function()
+      require('osc52').setup {
+        -- TODO: It's possible that I would run Neovim in a local terminal not using tmux.  THat's not my usual workflow but it's not inconceivable either.
+        -- Maybe make this conditional, enable it only when the env indicates tmux is running?
+        tmux_passthrough = true
+      }
+
+      local function copy()
+        if vim.v.event.operator == 'y' and vim.v.event.regname == '+' then
+          require('osc52').copy_register('+')
+        end
+      end
+
+      vim.api.nvim_create_autocmd('TextYankPost', { callback = copy })
+    end
+  }
 
   -- tpope gets his own section.  If it was possible to write `tpope/*` and just blindly install all of his plugins
   -- I would probably do that.
