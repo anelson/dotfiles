@@ -18,6 +18,9 @@ return {
   -- https://github.com/LazyVim/LazyVim/blob/11268d8ff1c3675dd4afe45dfd0348cd36a98731/lua/lazyvim/plugins/extras/editor/fzf.lua#L219, but
   -- tweaked
   keys = {
+    -- This map I use in hop, having it automatically mapped to fzf is maddening
+    { "<Leader>,", false },
+
     {
       "<Leader>fr",
       function()
