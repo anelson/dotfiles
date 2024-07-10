@@ -115,7 +115,7 @@ return packer.startup(function(use)
         -- your configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
-        vim.keymap.set("n", "<leader>tt", "<cmd>TroubleToggle<cr>",
+        vim.keymap.set("n", "<leader>tt", "<cmd>Trouble diagnostics toggle<cr>",
           { silent = true, noremap = true }
         )
       }
