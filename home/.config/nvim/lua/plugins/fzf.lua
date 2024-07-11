@@ -21,6 +21,7 @@ return {
     -- This map I use in hop, having it automatically mapped to fzf is maddening
     { "<Leader>,", false },
 
+    -- File navigation
     {
       "<Leader>fr",
       function()
@@ -67,6 +68,50 @@ return {
         require("fzf-lua").helptags()
       end,
       desc = "FZF search all help tags",
+    },
+
+    -- LSP-related operations
+    {
+      "<space>s",
+      function()
+        require("fzf-lua").lsp_live_workspace_symbols({})
+      end,
+      desc = "Goto Symbol (Workspace)",
+    },
+    {
+      "<space>o",
+      function()
+        require("fzf-lua").lsp_document_symbols({})
+      end,
+      desc = "Goto Symbol (Document)",
+    },
+    {
+      "gr",
+      function()
+        require("fzf-lua").lsp_document_symbols({})
+      end,
+      desc = "Goto Symbol (Document)",
+    },
+    {
+      "gd",
+      "<cmd>FzfLua lsp_definitions     jump_to_single_result=true ignore_current_line=true<cr>",
+      desc = "Goto Definition",
+    },2
+    {
+      "gr",
+      "<cmd>FzfLua lsp_references      jump_to_single_result=true ignore_current_line=true<cr>",
+      desc = "References",
+      nowait = true,
+    },
+    {
+      "gI",
+      "<cmd>FzfLua lsp_implementations jump_to_single_result=true ignore_current_line=true<cr>",
+      desc = "Goto Implementation",
+    },
+    {
+      "gy",
+      "<cmd>FzfLua lsp_typedefs        jump_to_single_result=true ignore_current_line=true<cr>",
+      desc = "Goto T[y]pe Definition",
     },
   },
 }
