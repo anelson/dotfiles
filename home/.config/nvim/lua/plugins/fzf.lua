@@ -96,7 +96,7 @@ return {
       "gd",
       "<cmd>FzfLua lsp_definitions     jump_to_single_result=true ignore_current_line=true<cr>",
       desc = "Goto Definition",
-    },2
+    },
     {
       "gr",
       "<cmd>FzfLua lsp_references      jump_to_single_result=true ignore_current_line=true<cr>",
