@@ -63,6 +63,11 @@ return {
       desc = "FZF search the list of open buffers",
     },
     {
+      "<Leader>bb",
+      "<Leader>fb",
+      desc = "FZF search the list of open buffers",
+    },
+    {
       "<Leader>fh",
       function()
         require("fzf-lua").helptags()

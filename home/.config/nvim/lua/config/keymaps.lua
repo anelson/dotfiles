@@ -33,7 +33,7 @@ vim.keymap.set("n", "<Leader>pc", ":pclose<CR>", { noremap = true })
 vim.keymap.set("n", "<Leader>qc", ":cclose<CR>", { noremap = true })
 
 -- Fast saving (but only if there are unsaved changes)
-vim.keymap.set("n", "<Leader>s", ":update<CR>", { noremap = true })
+vim.keymap.set("n", "<Leader>U", ":update<CR>", { noremap = true })
 
 -- Folding
 vim.keymap.set("n", vim.g.mapleader .. "z", "za", {})
@@ -47,3 +47,6 @@ vim.o.imsearch = -1
 -- move selected blocks up and down (hat tip: the primeagean)
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- Use the old NERCommenter key bindings with the built-in neovim comment handling
+vim.keymap.set("n", "<Leader>c<Space>", ":echo Use built-in gcc", { noremap = true })
