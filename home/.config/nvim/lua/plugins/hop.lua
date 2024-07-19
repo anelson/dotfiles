@@ -1,9 +1,5 @@
 return {
-  -- LazyVim enables Flash for this but I hate it and can't get it to work for me
-  {
-    "folke/flash.nvim",
-    enabled = false,
-  },
+  -- LazyVim uses Flash out of the box, which I'm getting used to, but Hop provides some useful functionality as well
   {
     "phaazon/hop.nvim",
     branch = "v2", -- optional but strongly recommended
@@ -14,7 +10,6 @@ return {
 
       hop.setup({ keys = "etovxqpdygfblzhckisuran" })
 
-      vim.api.nvim_set_keymap("", "s", ":HopChar2<CR>", {})
       vim.api.nvim_set_keymap("", "<Leader><Leader>", ":HopWord<CR>", {})
       vim.api.nvim_set_keymap("", "<Leader>L", ":HopLineStart<CR>", {})
     end,
