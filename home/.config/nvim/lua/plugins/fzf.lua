@@ -64,7 +64,9 @@ return {
     },
     {
       "<Leader>bb",
-      "<Leader>fb",
+      function()
+        require("fzf-lua").buffers()
+      end,
       desc = "FZF search the list of open buffers",
     },
     {
