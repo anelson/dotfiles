@@ -17,6 +17,13 @@ return {
         -- So the fallback is to just put the key on a local file that's not under version control.  Bummer.
         -- api_key_cmd = 'op read "op://Shared - Karina and Adam/OpenAI/chatgpt.nvim"',
         api_key_cmd = "cat " .. config_path .. "/chatgpt-api-key",
+
+        openai_params = {
+          model = "gpt-4o",
+        },
+        openai_edit_params = {
+          model = "gpt-4o",
+        },
       })
     end,
     dependencies = {
