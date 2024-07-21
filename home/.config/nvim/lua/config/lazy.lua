@@ -21,7 +21,10 @@ require("lazy").setup({
     -- import/override with your plugins
 
     -- anelson custom: all of these extras I added
-    { import = "lazyvim.plugins.extras.coding.copilot" },
+    -- LazyVim's copilot extra is oriented towards enabling Copilot as a completion source.  I hate that
+    -- with a burning passion, so instead I pull in Copilot myself.  See copilot.lua
+    -- { import = "lazyvim.plugins.extras.coding.copilot" },
+    { import = "lazyvim.plugins.extras.coding.luasnip" },
     { import = "lazyvim.plugins.extras.editor.fzf" },
     { import = "lazyvim.plugins.extras.editor.harpoon2" },
     { import = "lazyvim.plugins.extras.editor.telescope" },

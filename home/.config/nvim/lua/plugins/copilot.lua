@@ -1,17 +1,33 @@
 return {
+  -- NOTE: I do *NOT* use the LazyVim copilot extra, therefore all of this config must be done manually
   {
-    -- I don't like the default behavior of the lua copilot version.
-    -- Maybe this will bite me in the ass since LazyVim presumably tightly integrates this into the completion methods.
-    -- We'll see.
     "zbirenbaum/copilot.lua",
-    enabled = false,
-  },
-  {
-    "github/copilot.vim",
-    config = function()
-      --vim.keymap.set('i', '<C-]>', '<Plug>(copilot-next)')
-      --vim.keymap.set('i', '<C-[>', '<Plug>(copilot-previous)')
-      vim.keymap.set("i", "<C-Space>", "<Plug>(copilot-suggest)")
-    end,
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    opts = {
+      panel = {
+        enabled = false,
+      },
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        hide_during_completion = false,
+        keymap = {
+          accept = "<Tab>",
+          accept_word = false,
+          accept_line = false,
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-]>",
+        },
+      },
+      filetypes = {
+        yaml = true,
+        markdown = true,
+        help = true,
+        gitcommit = true,
+        gitrebase = true,
+      },
+    },
   },
 }
