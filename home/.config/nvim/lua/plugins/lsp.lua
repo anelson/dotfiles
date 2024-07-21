@@ -10,6 +10,9 @@ return {
         rust_analyzer = function()
           return true
         end,
+
+        -- Try to force pbls to be enabled.  This doesn't actually help since apparently there is no Protobuf LSP that does auto-formatting.  FML.
+        pbls = require("lspconfig").pbls.setup({}),
       },
     },
   },

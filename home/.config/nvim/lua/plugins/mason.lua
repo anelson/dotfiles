@@ -12,8 +12,12 @@ return {
       "eslint-lsp",
       "json-lsp",
       -- "rust_analyzer", -- This needs to be installed on a per-project basis using rust-toolchain.toml to ensure it matches the Rust version
-      "buf",
-      "buf-language-server",
+
+      -- There seems not to be a Protobuf language server solution right now.  FML.
+      -- "bufls" - Used to use that but it's been rebraned as `buf-language-server`
+      -- "buf-language-server", - Some prototype from the buf project, it loads okay, but it doesn't work.  Doesn't show errors and doesn't do any formatting
+      -- "pbkit" - Not supported by Mason apparently
+      "pbls", -- Seems to work okay for detecing errors, but doesn't autofmt.
     },
   },
 }

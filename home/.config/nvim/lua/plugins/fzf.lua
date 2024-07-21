@@ -19,6 +19,7 @@ return {
   -- tweaked
   keys = {
     -- This map I use in hop, having it automatically mapped to fzf is maddening
+    -- NOTE: the telescope extra also maps this, so it's suppressed there too
     { "<Leader>,", false },
 
     -- File navigation

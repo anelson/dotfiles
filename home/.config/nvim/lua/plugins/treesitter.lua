@@ -16,6 +16,7 @@ return {
         "lua",
         "rust",
         "toml",
+        "proto",
         "yaml",
         "json",
       })
