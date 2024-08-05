@@ -27,9 +27,10 @@ return {
           vim.keymap.set("n", "<leader>aw", function()
             vim.cmd.RustLsp("codeAction")
           end, { desc = "Code Action", buffer = bufnr })
-          vim.keymap.set("n", "<leader>rn", function()
-            vim.cmd.RustLsp("rename")
-          end, { desc = "Rename", buffer = bufnr })
+          -- For rename, the default LSP binding for rename should be used.  RustLsp doesn't have any special-case rename functionality
+          -- vim.keymap.set("n", "<leader>rn", function()
+          --   vim.cmd.RustLsp("rename")
+          -- end, { desc = "Rename", buffer = bufnr })
           vim.keymap.set("n", "<leader>dr", function()
             vim.cmd.RustLsp("debuggables")
           end, { desc = "Rust Debuggables", buffer = bufnr })
