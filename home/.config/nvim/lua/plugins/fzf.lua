@@ -31,11 +31,11 @@ return {
       desc = "Re-open last fzf",
     },
 
-    { "<leader>ff", LazyVim.pick("auto"), desc = "Find Files (Root Dir)" },
+    { "<leader>ff", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
 
     -- Keep the Control-T binding for compatibility with years of muscle memory
-    { "<C-t>", LazyVim.pick("auto"), desc = "Find Files (Root Dir)" },
-    { "<leader>fF", LazyVim.pick("auto", { root = false }), desc = "Find Files (cwd)" },
+    { "<C-t>", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
+    { "<leader>fF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
 
     { "<leader>fm", "<cmd>FzfLua oldfiles<cr>", desc = "Recent" },
     { "<leader>fM", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
