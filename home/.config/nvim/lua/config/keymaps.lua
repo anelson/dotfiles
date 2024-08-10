@@ -50,3 +50,15 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Use the old NERCommenter key bindings with the built-in neovim comment handling
 vim.keymap.set("n", "<Leader>c<Space>", ":echo Use built-in gcc", { noremap = true })
+
+-- Use <Tab> as "Super-Tab", accept copilot suggestions if there are any, otherwise do whatever
+-- else Tab is bound to.
+--
+-- Based on https://github.com/zbirenbaum/copilot.lua/discussions/153
+vim.keymap.set("i", "<Tab>", function()
+  if require("copilot.suggestion").is_visible() then
+    require("copilot.suggestion").accept()
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+  end
+end, { desc = "Super Tab" })
