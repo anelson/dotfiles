@@ -6,3 +6,7 @@ debug
 foo.*
 *.log
 data
+
+# LazyVim lock files are machine specific, don't keep them under source control.
+lazy-lock.json
+
