@@ -44,7 +44,7 @@ style = "Semibold Italic"
 
 [font.normal]
 family = "SauceCodePro Nerd Font"
-style = "Semibold"
+style = "SemiBold"
 
 # AJN: I added these to support cycling between windows and sessions in tmux
 [[keyboard.bindings]]
@@ -63,3 +63,10 @@ mods = "Control|Shift"
 action = "None"
 key = "W"
 mods = "Command"
+
+# Neovim completions by default use Control-Enter so make sure that works
+[[keyboard.bindings]]
+# accept ctrl enter
+key = "Enter"
+mods = "Control"
+chars = "\u001b[13;5u"
