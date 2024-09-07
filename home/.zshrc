@@ -12,6 +12,7 @@ source $HOME/.zsh/environment.zsh
 source $HOME/.zsh/homeshick.zsh
 source $HOME/.zsh/aliases.zsh
 source $HOME/.zsh/npm.zsh
+source $HOME/.zsh/wezterm.sh
 
 # Load RVM into a shell session *as a function*
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
