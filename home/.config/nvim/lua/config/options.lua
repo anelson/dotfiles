@@ -3,6 +3,10 @@
 -- Add any additional options here
 vim.g.mapleader = ","
 
+-- Disable the use of the system clipboard by default.
+-- The system clipboard can still be used with "+ and commands like d, p, etc.
+vim.opt.clipboard = ""
+
 -- disable netrw at the very start of init.lua (strongly advised by nvim-tree)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
