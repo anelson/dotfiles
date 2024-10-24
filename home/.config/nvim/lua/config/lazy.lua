@@ -40,6 +40,11 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.typescript" },
     { import = "lazyvim.plugins.extras.lang.yaml" },
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
+
+    -- Trying out neovim extension in VSCode, which is not compatible with some plugins.
+    -- Supposedly this extra tells LazyVim to enable only those that are suitable for use
+    -- with VS Code, if it detects that VS Code is being used.
+    { import = "lazyvim.plugins.extras.vscode" },
     -- anelson custom: end custom extras I added
 
     { import = "plugins" },
