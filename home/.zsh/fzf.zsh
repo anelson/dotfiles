@@ -25,6 +25,15 @@ export FZF_DEFAULT_OPTS="--history=$HOME/.fzf_history --ansi"
 # Rather than figure out why that is, just use the full path to the tools we use
 fd=$(which fd)
 export FZF_DEFAULT_COMMAND="$fd --type file --color=always --hidden --follow --exclude .git"
+
+# Ctrl-T invokes fzf to auto-complete files specifically.  Directories are not in the list
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Use the bind feature of FZF so that after pressing Ctrl-T, I can use Ctrl-D to switch to directories and Ctrl-F to switch back to files
+export FZF_CTRL_T_OPTS="
+  --bind \"ctrl-d:change-prompt(Directories (Ctrl-f for files)> )+reload($fd --type d --color=always --hidden --follow --exclude .git)\"
+  --bind \"ctrl-f:change-prompt(Files (Ctrl-d for dirs)> )+reload($FZF_DEFAULT_COMMAND)\"
+  --prompt \"Files (Ctrl-d for dirs)> \""
+
 export FZF_ALT_C_COMMAND="$fd --type directory --color=always --hidden --follow --exclude .git"
 
