@@ -19,6 +19,12 @@ config.hide_tab_bar_if_only_one_tab = true
 -- that up.
 config.enable_scroll_bar = false
 
+-- I want to be able to use Alt-c in the terminal to invoke fzf auto-completion of directories.  On mac at least
+-- with my Kinesis keyboard, pressing that sequence just sends a "ç".  According to the docs at 
+-- https://wezfurlong.org/wezterm/config/keyboard-concepts.html?t#macos-left-and-right-option-key this setting will
+-- fix that.
+config.send_composed_key_when_left_alt_is_pressed = false
+
 -- AJN: Support cycling between windows and sessions in tmux
 config.keys = {
 	{
