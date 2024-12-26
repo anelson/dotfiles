@@ -1,4 +1,21 @@
 -- Various tweaks to the out-of-the-box LazyVim LSP config
+
+-- Disable the default LSP diagnostic handler for the "method not found" error
+-- temporarily.
+--
+-- This workaround from https://github.com/neovim/neovim/issues/30985#issuecomment-2447329525 is necessary because, as of 2024-12-27, the version of Neovim
+-- that ships w/ Fedora doesn't properly handle the new server cancellation support landed in rust-analyzer (https://github.com/rust-lang/rust-analyzer/commit/8eef1c52757f1ca444792b22433e696364a2b86d)
+-- Hopefully this can be removed soon, once Neovim is updated to support this properly.
+for _, method in ipairs({ "textDocument/diagnostic", "workspace/diagnostic" }) do
+  local default_diagnostic_handler = vim.lsp.handlers[method]
+  vim.lsp.handlers[method] = function(err, result, context, config)
+    if err ~= nil and err.code == -32802 then
+      return
+    end
+    return default_diagnostic_handler(err, result, context, config)
+  end
+end
+
 return {
   {
     -- NOTE: Many LSP key bindings are in `fzf.lua` since  they invoke Fzf functions to display information from the LSP
