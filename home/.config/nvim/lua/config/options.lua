@@ -15,6 +15,11 @@ vim.g.loaded_netrwPlugin = 1
 -- If no prettier config file is found, the formatter will not be used
 vim.g.lazyvim_prettier_needs_config = false
 
+-- We're sticking with nvim-cmp
+-- See https://github.com/LazyVim/LazyVim/discussions/5157#discussioncomment-11597514 for a discussion that makes me want to
+-- rip out LazyVim and switch back to my own curated config because it's so obnoxiously imperious.
+vim.g.lazyvim_cmp = "nvim-cmp"
+
 -- according to the answer at https://vi.stackexchange.com/questions/3576/trouble-using-color-scheme-in-neovim
 -- one should not ever set t_Co in neovim
 -- set t_Co=256 -- tell vim our terminal supports 256 colors (it does, right)

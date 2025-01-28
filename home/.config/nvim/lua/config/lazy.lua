@@ -40,6 +40,14 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.typescript" },
     { import = "lazyvim.plugins.extras.lang.yaml" },
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
+    -- 2025-01-28 LazyVim shipped 14.x which unlitaterally turned off nvim-cmp and switched to blink.
+    -- Blink is probably better, but I have a nvim-cmp config already and do not want to stop what I'm doing to rewrite my nvim config
+    -- now that there's some new hotness.  Maybe someday I'll be motivated to switch.
+    --
+    -- NOTE: This also requires a change in `options.lua`.  See https://github.com/LazyVim/LazyVim/discussions/5157#discussioncomment-11597514
+    -- This makes me want to migrate away from LazyVim.  I don't like being told what to do, especially when it involves using a UI to install neovim
+    -- plugins FFS!
+    { import = "lazyvim.plugins.extras.coding.nvim-cmp" },
 
     -- Trying out neovim extension in VSCode, which is not compatible with some plugins.
     -- Supposedly this extra tells LazyVim to enable only those that are suitable for use
