@@ -1,5 +1,5 @@
--- I have used fzf.vim for a long time, but LazyVim has an "extra" for Fzf that uses fzf-lua instead.
--- So I''ve adapted my config to that.
+-- LazyVim 14 and later get rid of telescope and use fzf-lua instead.  I'm keeping my own config since I'm not sure to what extent
+-- it deviates from the LazyVim defaults.
 return {
   "ibhagwan/fzf-lua",
 
