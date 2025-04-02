@@ -38,6 +38,7 @@ return {
     -- Rust LSP config in LazyVim is obtained using rustaceanvim, so it's that plugin's config that must be customized to configure the rust-analyzer
     -- LSP behavior
     "mrcjkb/rustaceanvim",
+    ft = { "rust" },
     opts = {
       server = {
         on_attach = function(_, bufnr)
@@ -52,7 +53,7 @@ return {
             vim.cmd.RustLsp("debuggables")
           end, { desc = "Rust Debuggables", buffer = bufnr })
         end,
-        default_settings = {
+        settings = {
           -- rust-analyzer language server configuration
           ["rust-analyzer"] = {
             -- Run clippy, not just check, and use a separate temp dir for
