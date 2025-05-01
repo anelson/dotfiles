@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# tmux-ps.sh - List processes running under tmux with session and window names
+# 
+# Usage: ./tmux-ps.sh
+
+# Check if tmux is installed
+if ! command -v tmux >/dev/null 2>&1; then
+    echo "Error: tmux is not installed or not in PATH" >&2
+    exit 1
+fi
+
+# Check if tmux has any active sessions
+if ! tmux list-sessions >/dev/null 2>&1; then
+    echo "No active tmux sessions found" >&2
+    exit 0
+fi
+
+# Print header
+printf "%-20s %-20s %-10s %-10s %-10s %-10s %-10s %s\n" "SESSION" "WINDOW" "TTY" "PID" "USER" "%CPU" "MEM" "COMMAND"
+echo "-------------------- -------------------- ---------- ---------- ---------- ---------- ---------- ------------------"
+
+# Determine OS to set ps command format just once
+if [ "$(uname)" = "Darwin" ]; then
+    ps_cmd="ps -t"  # macOS (no space after -t)
+else
+    ps_cmd="ps -t " # Linux/FreeBSD (space after -t)
+fi
+
+# Directly pipe tmux output to while loop - no need for temporary variable
+tmux list-panes -a -F "#{session_name} #{window_name} #{pane_tty}" | while read -r line; do
+    if [ -z "$line" ]; then
+        continue
+    fi
+    
+    # Parse session, window, and TTY
+    session_name=$(echo "$line" | cut -d' ' -f1)
+    window_name=$(echo "$line" | cut -d' ' -f2)
+    pane_tty=$(echo "$line" | cut -d' ' -f3-)
+    
+    # Extract just the TTY device name (remove /dev/ prefix)
+    tty_short=$(echo "$pane_tty" | sed 's|/dev/||')
+    
+    # Use the appropriate ps command based on OS
+    $ps_cmd"$tty_short" -o pid=,tty=,user=,pcpu=,rss=,comm= 2>/dev/null | while read -r proc_info; do
+        if [ -n "$proc_info" ]; then
+            pid=$(echo "$proc_info" | awk '{print $1}')
+            tty=$(echo "$proc_info" | awk '{print $2}')
+            user=$(echo "$proc_info" | awk '{print $3}')
+            pcpu=$(echo "$proc_info" | awk '{print $4}')
+            mem=$(echo "$proc_info" | awk '{print $5}')
+            # Convert RSS to MB
+            mem_mb=$(awk "BEGIN {printf \"%.1f\", $mem/1024}")
+            comm=$(echo "$proc_info" | awk '{$1=""; $2=""; $3=""; $4=""; $5=""; print $0}' | sed 's/^[[:space:]]*//')
+            
+            printf "%-20s %-20s %-10s %-10s %-10s %-10s %-10s %s\n" \
+                "$session_name" "$window_name" "$tty" "$pid" "$user" "$pcpu" "${mem_mb}MB" "$comm"
+        fi
+    done
+done
