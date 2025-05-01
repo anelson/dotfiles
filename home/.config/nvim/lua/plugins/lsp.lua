@@ -38,7 +38,8 @@ return {
     -- Rust LSP config in LazyVim is obtained using rustaceanvim, so it's that plugin's config that must be customized to configure the rust-analyzer
     -- LSP behavior
     "mrcjkb/rustaceanvim",
-    ft = { "rust" },
+    version = "^6", -- Recommended
+    lazy = false, -- This plugin is already lazy
     opts = {
       server = {
         on_attach = function(_, bufnr)
