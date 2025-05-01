@@ -1,8 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-# tmux-ps.sh - List processes running under tmux with session and window names
-# 
-# Usage: ./tmux-ps.sh
+# tmuxps - List processes running under tmux with session and window names
+#
+# Usage: ./tmuxps
+
+# Enable strict mode
+set -euo pipefail
 
 # Check if tmux is installed
 if ! command -v tmux >/dev/null 2>&1; then
@@ -20,41 +23,52 @@ fi
 printf "%-20s %-20s %-10s %-10s %-10s %-10s %-10s %s\n" "SESSION" "WINDOW" "TTY" "PID" "USER" "%CPU" "MEM" "COMMAND"
 echo "-------------------- -------------------- ---------- ---------- ---------- ---------- ---------- ------------------"
 
-# Determine OS to set ps command format just once
-if [ "$(uname)" = "Darwin" ]; then
-    ps_cmd="ps -t"  # macOS (no space after -t)
+# Determine OS to set ps command format
+ps_format="pid,tty,user,pcpu,rss,comm"
+if [[ "$(uname)" == "Darwin" || "$(uname)" == "FreeBSD" ]]; then
+    # macOS and FreeBSD use different ps options
+    ps_list_cmd="ps -a -o $ps_format"
+    tty_prefix=""
 else
-    ps_cmd="ps -t " # Linux/FreeBSD (space after -t)
+    # Linux
+    ps_list_cmd="ps ax -o $ps_format"
+    tty_prefix="pts/"
 fi
 
-# Directly pipe tmux output to while loop - no need for temporary variable
-tmux list-panes -a -F "#{session_name} #{window_name} #{pane_tty}" | while read -r line; do
-    if [ -z "$line" ]; then
+# Create a temporary file to store TTY mappings (compatible with older Bash)
+tmux_info_file=$(mktemp)
+trap 'rm -f "$tmux_info_file"' EXIT
+
+# Get all pane TTYs and their session/window information in one go
+tmux list-panes -a -F "#{pane_tty} #{session_name} #{window_name}" | while read -r pane_tty session_name window_name; do
+    # Extract just the TTY device name (remove /dev/ prefix)
+    tty_short=${pane_tty#/dev/}
+    
+    # Store session and window name for each TTY
+    echo "$tty_short $session_name $window_name" >> "$tmux_info_file"
+done
+
+# Get all processes once
+$ps_list_cmd | awk 'NR>1 {print $1, $2, $3, $4, $5, $6}' | while read -r pid tty user pcpu rss comm; do
+    # Look up this TTY in our mapping file
+    session_window=$(grep "^$tty " "$tmux_info_file" 2>/dev/null || true)
+    
+    # Skip processes not in tmux
+    if [ -z "$session_window" ]; then
         continue
     fi
     
-    # Parse session, window, and TTY
-    session_name=$(echo "$line" | cut -d' ' -f1)
-    window_name=$(echo "$line" | cut -d' ' -f2)
-    pane_tty=$(echo "$line" | cut -d' ' -f3-)
+    # Parse the session and window names
+    session_name=$(echo "$session_window" | cut -d' ' -f2)
+    window_name=$(echo "$session_window" | cut -d' ' -f3)
     
-    # Extract just the TTY device name (remove /dev/ prefix)
-    tty_short=$(echo "$pane_tty" | sed 's|/dev/||')
+    # Convert RSS to MB with safeguard against division by zero
+    if [ "$rss" != "0" ] && [ -n "$rss" ]; then
+        mem_mb=$(awk "BEGIN {printf \"%.1f\", $rss/1024}")
+    else
+        mem_mb="0.0"
+    fi
     
-    # Use the appropriate ps command based on OS
-    $ps_cmd"$tty_short" -o pid=,tty=,user=,pcpu=,rss=,comm= 2>/dev/null | while read -r proc_info; do
-        if [ -n "$proc_info" ]; then
-            pid=$(echo "$proc_info" | awk '{print $1}')
-            tty=$(echo "$proc_info" | awk '{print $2}')
-            user=$(echo "$proc_info" | awk '{print $3}')
-            pcpu=$(echo "$proc_info" | awk '{print $4}')
-            mem=$(echo "$proc_info" | awk '{print $5}')
-            # Convert RSS to MB
-            mem_mb=$(awk "BEGIN {printf \"%.1f\", $mem/1024}")
-            comm=$(echo "$proc_info" | awk '{$1=""; $2=""; $3=""; $4=""; $5=""; print $0}' | sed 's/^[[:space:]]*//')
-            
-            printf "%-20s %-20s %-10s %-10s %-10s %-10s %-10s %s\n" \
-                "$session_name" "$window_name" "$tty" "$pid" "$user" "$pcpu" "${mem_mb}MB" "$comm"
-        fi
-    done
+    printf "%-20s %-20s %-10s %-10s %-10s %-10s %-10s %s\n" \
+        "$session_name" "$window_name" "$tty" "$pid" "$user" "$pcpu" "${mem_mb}MB" "$comm"
 done
