@@ -19,6 +19,15 @@ vim.g.lazyvim_prettier_needs_config = false
 -- rip out LazyVim and switch back to my own curated config because it's so obnoxiously imperious.
 vim.g.lazyvim_cmp = "nvim-cmp"
 
+-- I don't want LazyVim to try to be clever and change the working directory of neovim when I open files based on
+-- magical heuristics.  That makes the NeoTree file browser and the Telescope file search tools useless.
+-- I can't imagine what the use case it for this and why it's enabled by default
+--
+-- NOTE: There's a `:LazyRoot` command that will show you for the current buffer which heuristics were evaluated and
+-- which one was chosen to set the root for the current buffer.  With thsi change in place it will never change from
+-- the CWD when neovim was launched
+vim.g.root_spec = { "cwd" }
+
 -- according to the answer at https://vi.stackexchange.com/questions/3576/trouble-using-color-scheme-in-neovim
 -- one should not ever set t_Co in neovim
 -- set t_Co=256 -- tell vim our terminal supports 256 colors (it does, right)
