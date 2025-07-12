@@ -9,6 +9,9 @@ return {
         -- `markdownlint-cli2` always fails with a timeout error when formatting.
         -- Although prettier just doesn't do anything so that's not much better.
         markdown = { "prettier" },
+
+        -- Assumes that `black` is installed either in the venv or globally.
+        python = { "black" },
       },
 
       -- This workaround suggested in https://github.com/stevearc/conform.nvim/issues/297 to address formatter timeout issues
