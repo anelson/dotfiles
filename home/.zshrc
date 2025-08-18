@@ -30,5 +30,8 @@ if [[ -x "$HOME/.cargo/bin/starship" ]]; then
     eval "$(starship init zsh)"
 fi
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# Add RVM to PATH for scripting.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+# Finally, ensure that ~/.local/bin is at the front of the PATH
+source $HOME/.zsh/local-bin.zsh
