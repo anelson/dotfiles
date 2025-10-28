@@ -1,6 +1,6 @@
 -- Customize some Mason settings beyond the LazyVim defaults
 return {
-  "williamboman/mason.nvim",
+  "mason-org/mason.nvim",
 
   opts = {
     -- Some LSPs I use so often that I don't want to install them lazily, let's install them proactively
