@@ -33,5 +33,10 @@ fi
 # Add RVM to PATH for scripting.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-# Finally, ensure that ~/.local/bin is at the front of the PATH
+# Ensure that ~/.local/bin is at the front of the PATH
 source $HOME/.zsh/local-bin.zsh
+
+# If direnv is installed, hook it into the shell
+if command -v direnv &> /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
