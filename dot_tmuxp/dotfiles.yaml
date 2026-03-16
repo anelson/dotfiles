@@ -5,9 +5,9 @@ windows:
       focus: true
       panes:
           - vim
-    - window_name: homeshick shell
+    - window_name: chezmoi shell
       panes:
-          - shell_command: homeshick cd dotfiles
+          - shell_command: chezmoi cd
     - window_name: home shell
       panes:
           - pane
