@@ -1,3 +1,5 @@
 # Support installing "global" packages with `npm -g` to the local user
 prefix=${HOME}/.npm-packages
 
+@elastio:registry=https://npm.cloudsmith.io/elastio/private/
+//npm.cloudsmith.io/elastio/private/:_authToken=${CLOUDSMITH_AUTH_TOKEN}
