@@ -36,6 +36,12 @@
 {{ end }}
 
 # Windows: most Unix configs don't apply
+# Repo files that should not be deployed to ~
+README.md
+migrate-to-chezmoi.sh
+CLAUDE.md
+
+# Windows: most Unix configs don't apply
 {{ if eq .chezmoi.os "windows" }}
 .profile
 .bashrc
