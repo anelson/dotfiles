@@ -1,0 +1,63 @@
+# Linux desktop-only configs -- ignore on non-Linux
+{{ if ne .chezmoi.os "linux" }}
+.Xmodmap
+.config/i3
+.config/i3/**
+.config/sway
+.config/sway/**
+.config/waybar
+.config/waybar/**
+.config/polybar
+.config/polybar/**
+.config/compton.conf
+.config/dunst
+.config/dunst/**
+.config/redshift
+.config/redshift/**
+.config/rofi
+.config/rofi/**
+.config/terminator
+.config/terminator/**
+.config/environment.d
+.config/environment.d/**
+.config/fontconfig
+.config/fontconfig/**
+.config/gtk-3.0
+.config/gtk-3.0/**
+.config/gsettings
+.config/gsettings/**
+.config/mozilla-userContent.css
+.config/sublime-text-3
+.config/sublime-text-3/**
+.gtkrc-2.0
+.dir_colors
+.wallpaper
+.wallpaper/**
+{{ end }}
+
+# Windows: most Unix configs don't apply
+{{ if eq .chezmoi.os "windows" }}
+.profile
+.bashrc
+.zprofile
+.zshrc
+.zsh
+.zsh/**
+.tmux.conf
+.tmux
+.tmux/**
+.tmuxp
+.tmuxp/**
+.local/bin
+.local/bin/**
+.gnupg
+.gnupg/**
+.cargo
+.cargo/**
+.sbt
+.sbt/**
+.vimrc
+.vim
+.vim/**
+.inputrc
+{{ end }}
