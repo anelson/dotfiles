@@ -12,15 +12,24 @@ Install chezmoi and apply dotfiles in one command:
 
 This will:
 1. Clone this repo to `~/.local/share/chezmoi`
-2. Prompt for machine-specific values (git email, name)
+2. Prompt for machine-specific values (see defaults below)
 3. Apply all dotfiles to your home directory
+
+Init prompts and their defaults:
+
+| Prompt | Default |
+|--------|---------|
+| Git email address | `anelson@users.noreply.github.com` |
+| Git user name | `Adam Nelson` |
+
+To re-run the prompts later: `chezmoi init`
 
 After applying, set up secrets:
 
-    # Create ~/.secrets with API tokens (not tracked by chezmoi)
     cat > ~/.secrets << 'EOF'
     export CLOUDSMITH_AUTH_TOKEN=<your-token-here>
     EOF
+    chmod 600 ~/.secrets
 
 Restart your shell for everything to take effect.
 
@@ -37,37 +46,85 @@ If this machine still has the old homeshick setup, run the migration
 script instead of `chezmoi init`:
 
     cd ~/.homesick/repos/dotfiles
-    git pull
+    git checkout experiment/chezmoi
     bash migrate-to-chezmoi.sh
 
 ## Daily Usage
 
-    chezmoi edit ~/.zshrc       # Edit a managed file (opens source copy)
-    chezmoi diff                # Preview what chezmoi would change
-    chezmoi apply               # Apply changes from source to home dir
-    chezmoi add ~/.newfile      # Start managing a new file
-    chezmoi cd                  # cd into the source repo
-    chezmoi update              # Pull latest from git and apply
+### Checking for uncommitted changes
 
-### Editing workflow
+With homeshick the workflow was `hs cd dotfiles && git status` to find
+files you'd edited and forgotten to commit. With chezmoi, it's different:
+chezmoi copies files into `~` rather than symlinking them, so edits to
+live files (e.g. `~/.zshrc`) don't automatically appear in the source
+repo.
 
-Option A -- edit via chezmoi (recommended):
+To see what's drifted:
 
-    chezmoi edit ~/.zshrc
-    chezmoi apply
+    chezmoi status
 
-Option B -- edit the source repo directly:
+This shows files where the live copy in `~` differs from what chezmoi
+would write. A line like `MM .zshrc` means the file was modified both
+in the source state and in the target.
 
-    cd $(chezmoi source-path)
-    # edit files directly (remember chezmoi naming: dot_zshrc, etc.)
-    chezmoi apply
+To see the actual diff:
 
-Option C -- edit the live file, then pull changes back:
+    chezmoi diff
+
+To pull all those changes back into the source repo at once:
+
+    chezmoi re-add
+
+Then commit as usual:
+
+    chezmoi cd
+    git add -A && git commit -m "message"
+    git push
+
+### Editing files
+
+**Option A** -- edit via chezmoi (recommended):
+
+    chezmoi edit ~/.zshrc       # Opens the source copy in $EDITOR
+    chezmoi apply               # Writes it to ~
+
+**Option B** -- edit the live file directly, then pull changes back:
 
     vim ~/.zshrc
-    chezmoi re-add              # Copy changes from ~ back into source
+    chezmoi re-add              # Copies changes from ~ back into source
 
-### Templates
+**Option C** -- edit the source repo directly:
+
+    chezmoi cd
+    # edit files (remember chezmoi naming: dot_zshrc, etc.)
+    chezmoi apply
+
+### Adding new files
+
+    chezmoi add ~/.some-new-config
+
+This copies the file into the source repo with the appropriate chezmoi
+naming convention, then you commit it.
+
+### Pulling changes from another machine
+
+    chezmoi update
+
+This does a `git pull` on the source repo and then applies.
+
+### Quick reference
+
+    chezmoi status              # What's drifted between ~ and source?
+    chezmoi diff                # Show the diffs
+    chezmoi re-add              # Pull live changes back into source
+    chezmoi apply               # Push source state out to ~
+    chezmoi edit <file>         # Edit a managed file's source copy
+    chezmoi add <file>          # Start managing a new file
+    chezmoi cd                  # cd into the source repo
+    chezmoi update              # git pull + apply
+    chezmoi doctor              # Health check
+
+## Templates
 
 Files ending in `.tmpl` are Go templates processed at apply time.
 Available variables:
@@ -81,15 +138,13 @@ Available variables:
 | `{{ .email }}` | Init prompt | `anelson@users.noreply.github.com` |
 | `{{ .name }}` | Init prompt | `Adam Nelson` |
 
-To re-run the init prompts: `chezmoi init`
-
-### Secrets
+## Secrets
 
 Secrets are **never** stored in this repo. API tokens and credentials
 go in `~/.secrets`, which is sourced by `.zshrc` but not managed by
 chezmoi.
 
-### OS-conditional files
+## OS-conditional files
 
 `.chezmoiignore` skips Linux desktop configs (i3, sway, polybar, etc.)
 on non-Linux systems, and skips most Unix configs on Windows.
