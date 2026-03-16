@@ -1,6 +1,6 @@
 [user]
-	email = anelson@users.noreply.github.com
-	name = Adam Nelson
+	email = {{ .email }}
+	name = {{ .name }}
 
 # I would really like this to be the new libsecret-based helper.  Unfortunately it's
 # not a good fit for boxes one SSH's into with key-based authentication, because gnome-keyring
@@ -24,7 +24,7 @@
 # To install it's `git-delta` on most systems
 [core]
     pager = delta
-	excludesfile = /home/cornelius/.gitignore
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
 
 [interactive]
     diffFilter = delta --color-only
@@ -39,3 +39,11 @@
     file-decoration-style = none
 [pull]
 	ff = only
+{{ if lookPath "gh" -}}
+[credential "https://github.com"]
+	helper =
+	helper = !{{ lookPath "gh" }} auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !{{ lookPath "gh" }} auth git-credential
+{{ end -}}

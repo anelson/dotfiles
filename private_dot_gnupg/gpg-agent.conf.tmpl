@@ -1,0 +1,9 @@
+# https://github.com/drduh/config/blob/master/gpg-agent.conf
+enable-ssh-support
+{{ if eq .chezmoi.os "darwin" -}}
+pinentry-program /opt/homebrew/bin/pinentry-mac
+{{ else -}}
+pinentry-program /usr/bin/pinentry-gnome3
+{{ end -}}
+default-cache-ttl 60
+max-cache-ttl 120
