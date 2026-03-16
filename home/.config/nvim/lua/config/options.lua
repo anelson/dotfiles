@@ -1,11 +1,36 @@
--- Set color settings
+-- Options are automatically loaded before lazy.nvim startup Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
+-- Add any additional options here
+vim.g.mapleader = ","
+
+-- Disable the use of the system clipboard by default.
+-- The system clipboard can still be used with "+ and commands like d, p, etc.
+vim.opt.clipboard = ""
+
+-- disable netrw at the very start of init.lua (strongly advised by nvim-tree)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- Enable the option to require a Prettier config file
+-- If no prettier config file is found, the formatter will not be used
+vim.g.lazyvim_prettier_needs_config = false
+
+-- We're sticking with nvim-cmp
+-- See https://github.com/LazyVim/LazyVim/discussions/5157#discussioncomment-11597514 for a discussion that makes me want to
+-- rip out LazyVim and switch back to my own curated config because it's so obnoxiously imperious.
+vim.g.lazyvim_cmp = "nvim-cmp"
+
+-- I don't want LazyVim to try to be clever and change the working directory of neovim when I open files based on
+-- magical heuristics.  That makes the NeoTree file browser and the Telescope file search tools useless.
+-- I can't imagine what the use case it for this and why it's enabled by default
+--
+-- NOTE: There's a `:LazyRoot` command that will show you for the current buffer which heuristics were evaluated and
+-- which one was chosen to set the root for the current buffer.  With thsi change in place it will never change from
+-- the CWD when neovim was launched
+vim.g.root_spec = { "cwd" }
+
 -- according to the answer at https://vi.stackexchange.com/questions/3576/trouble-using-color-scheme-in-neovim
 -- one should not ever set t_Co in neovim
 -- set t_Co=256 -- tell vim our terminal supports 256 colors (it does, right)
-vim.opt.termguicolors = true   -- if the term supports 24-bit color even better
-
-vim.opt.background = "dark"    -- specifically the dark variant
-vim.cmd.colorscheme("gruvbox") -- activate my current preferred scheme
 
 -- At the terminal level at least, don't se a background.  To support terminals with translucent bg
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
@@ -24,12 +49,12 @@ vim.opt.backup = false
 vim.opt.writebackup = false
 
 -- Keep undo files in the .vim directory where they wont' bother anyone
-vim.opt.undodir = vim.fn.expand('~/.vim/undo//')
+vim.opt.undodir = vim.fn.expand("~/.vim/undo//")
 vim.opt.undofile = true
 
 -- make sure that directories exists.  for obvious reasons they're not in git.
-if vim.fn.isdirectory(vim.fn.expand('~/.vim/undo')) == 0 then
-	vim.fn.mkdir(vim.fn.expand('~/.vim/undo'), 'p', 0755)
+if vim.fn.isdirectory(vim.fn.expand("~/.vim/undo")) == 0 then
+  vim.fn.mkdir(vim.fn.expand("~/.vim/undo"), "p", 0755)
 end
 
 -- Line numbering
@@ -53,7 +78,7 @@ vim.o.hidden = true
 vim.o.confirm = true
 
 -- Auto saving when leaving insert mode
-vim.cmd [[ autocmd InsertLeave * silent! update ]]
+vim.cmd([[ autocmd InsertLeave * silent! update ]])
 
 -- Showing unprintable characters
 vim.o.list = true
@@ -68,14 +93,13 @@ vim.o.conceallevel = 3
 vim.o.splitright = true
 vim.o.splitbelow = true
 
-vim.g.netrw_bufsettings = 'noma nomod nu relativenumber nobl nowrap ro'
+vim.g.netrw_bufsettings = "noma nomod nu relativenumber nobl nowrap ro"
 
-if vim.fn.executable('rg') == 1 then
-	vim.o.grepprg = 'rg --vimgrep'
-elseif vim.fn.executable('ag') == 1 then
-	vim.o.grepprg = 'ag --nogroup --no-color'
+if vim.fn.executable("rg") == 1 then
+  vim.o.grepprg = "rg --vimgrep"
+elseif vim.fn.executable("ag") == 1 then
+  vim.o.grepprg = "ag --nogroup --no-color"
 end
-
 
 -- Overriding vim paste behavior
 vim.keymap.set("n", "p", "gp", {})
@@ -87,28 +111,3 @@ vim.keymap.set("n", "gP", "P", {})
 -- the incsearch auto_nohlsearch feature
 vim.o.hlsearch = true
 vim.g.incsearch_auto_nohlsearch = 1
-
--- Preserve not only the cursor position but also the location of the cursor
--- on the screen when switching between buffers in a window.
-local save_cursor = require('anelson.save_cursor')
-
--- requires neovim 0.5 or greater
--- save and restore window view settings on buf leave/enter
-local augroup = vim.api.nvim_create_augroup
-local autocmd = vim.api.nvim_create_autocmd
-
-local save_cursor_aug = augroup("save_cursor", {})
-autocmd({ "BufLeave" }, {
-	group = save_cursor_aug,
-	pattern = "*",
-	callback = function()
-		save_cursor.auto_save_win_view()
-	end
-})
-autocmd({ "BufEnter" }, {
-	group = save_cursor_aug,
-	pattern = "*",
-	callback = function()
-		save_cursor.auto_restore_win_view()
-	end
-})

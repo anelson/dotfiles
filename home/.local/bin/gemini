@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# This script wraps the stupid `gemini` CLI tool to fix auth.
+#
+# I use Vertex AI for Gemini hosting, which means a few env vars need to be set so that `gemini`
+# knows how to authenticate.  But Gemini CLI is written by people who seem not to actually use it
+# in real life, so it won't read env vars from `~/.gemini/.env` if there is a `.env` file in any
+# directory between the current directory and the home directory.  Only the top men work at Google.
+# Top men.
+#
+# This script forcibly loads the env vars from `~/.gemini/.env` and then invokes gemini
+
+# Load environment variables
+set -a # automatically export all variables
+source ~/.gemini/.env
+set +a # turn off auto-export
+
+# We assume `gemini` is installed via npm but if not we try to find it anyway
+
+# Try npx first (works with npm-installed packages)
+if command -v npx >/dev/null 2>&1; then
+	exec npx gemini "$@"
+# Fallback to direct path if npx isn't available
+elif [ -x "$HOME/.npm-packages/bin/gemini" ]; then
+	exec "$HOME/.npm-packages/bin/gemini" "$@"
+else
+	# Nothing found - give helpful error
+	echo "Error: gemini not found. Please install it with:" >&2
+	echo "  npm install -g @google/gemini-cli" >&2
+	exit 1
+fi

@@ -55,6 +55,10 @@ fi
 
 # Put my own binaries on the path.  Note this specifically must be done BEFORE lookign for alacritty
 # since I like to install it in the user-specific binary path
+#
+# NOTE: In interactive zshell environments, this is set again in .zsh/local-bin.zsh to ensure that 
+# ~/.local/bin is always at the front of the PATH.  See that file for more details.  If we ever decide
+# to use some other path for this, it must be changed here and in .zsh/local-bin.zsh
 export PATH="$HOME/.local/bin:$PATH"
 
 # Make sure the directory where pip3 installs --user binaries is also in the path

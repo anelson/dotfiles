@@ -12,6 +12,7 @@ source $HOME/.zsh/environment.zsh
 source $HOME/.zsh/homeshick.zsh
 source $HOME/.zsh/aliases.zsh
 source $HOME/.zsh/npm.zsh
+source $HOME/.zsh/wezterm.sh
 
 # Load RVM into a shell session *as a function*
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
@@ -29,5 +30,13 @@ if [[ -x "$HOME/.cargo/bin/starship" ]]; then
     eval "$(starship init zsh)"
 fi
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# Add RVM to PATH for scripting.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+# Ensure that ~/.local/bin is at the front of the PATH
+source $HOME/.zsh/local-bin.zsh
+
+# If direnv is installed, hook it into the shell
+if command -v direnv &> /dev/null; then
+    eval "$(direnv hook zsh)"
+fi

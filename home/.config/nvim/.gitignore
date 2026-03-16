@@ -1,3 +1,12 @@
-# ignore the packer compiled plugins Lua file, it changes everytime the plugins change
-# and can be regenerated as needed
-plugin/packer_compiled.lua
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data
+
+# LazyVim lock files are machine specific, don't keep them under source control.
+lazy-lock.json
+
