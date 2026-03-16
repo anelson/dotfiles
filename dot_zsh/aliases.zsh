@@ -11,11 +11,6 @@ alias vi=nvim
 alias vim=nvim
 alias gvim=gnvim
 alias fzf=fzf-tmux
-alias hs=homeshick
-alias "hcd=hs cd"
-alias "hp=hs pull"
-alias "hlink=hp link"
-alias "htrack=hp track"
 
 # Ugly hack:
 # If this is a TMUX session over SSH, alias ssh so it also pulls in
