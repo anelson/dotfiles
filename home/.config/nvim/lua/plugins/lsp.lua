@@ -1,21 +1,5 @@
 -- Various tweaks to the out-of-the-box LazyVim LSP config
 
--- Disable the default LSP diagnostic handler for the "method not found" error
--- temporarily.
---
--- This workaround from https://github.com/neovim/neovim/issues/30985#issuecomment-2447329525 is necessary because, as of 2024-12-27, the version of Neovim
--- that ships w/ Fedora doesn't properly handle the new server cancellation support landed in rust-analyzer (https://github.com/rust-lang/rust-analyzer/commit/8eef1c52757f1ca444792b22433e696364a2b86d)
--- Hopefully this can be removed soon, once Neovim is updated to support this properly.
-for _, method in ipairs({ "textDocument/diagnostic", "workspace/diagnostic" }) do
-  local default_diagnostic_handler = vim.lsp.handlers[method]
-  vim.lsp.handlers[method] = function(err, result, context, config)
-    if err ~= nil and err.code == -32802 then
-      return
-    end
-    return default_diagnostic_handler(err, result, context, config)
-  end
-end
-
 return {
   {
     -- NOTE: Many LSP key bindings are in `fzf.lua` since  they invoke Fzf functions to display information from the LSP
@@ -40,63 +24,128 @@ return {
     "mrcjkb/rustaceanvim",
     version = "^6", -- Recommended
     lazy = false, -- This plugin is already lazy
-    opts = {
-      server = {
-        on_attach = function(_, bufnr)
-          vim.keymap.set("n", "<leader>aw", function()
-            vim.cmd.RustLsp("codeAction")
-          end, { desc = "Code Action", buffer = bufnr })
-          -- For rename, the default LSP binding for rename should be used.  RustLsp doesn't have any special-case rename functionality
-          -- vim.keymap.set("n", "<leader>rn", function()
-          --   vim.cmd.RustLsp("rename")
-          -- end, { desc = "Rename", buffer = bufnr })
-          vim.keymap.set("n", "<leader>dr", function()
-            vim.cmd.RustLsp("debuggables")
-          end, { desc = "Rust Debuggables", buffer = bufnr })
-        end,
-        settings = {
+    opts = function(_, opts)
+      -- Extend LazyVim's rust extras config rather than replacing it
+      opts.server = opts.server or {}
+      opts.server.settings = opts.server.settings or {}
+
+      -- Merge our custom settings with LazyVim's defaults using deep extend
+      opts.server.settings["rust-analyzer"] =
+        vim.tbl_deep_extend("force", opts.server.settings["rust-analyzer"] or {}, {
           -- rust-analyzer language server configuration
-          ["rust-analyzer"] = {
-            -- Run clippy, not just check, and use a separate temp dir for
-            -- rust-analizer so as not to clobber the workspace's output directory
-            -- and thereby constantly cause rebuilds
-            checkOnSave = true,
-            check = {
-              allTargets = true,
-              command = "clippy",
-              extraArgs = {
-                "--target-dir",
-                "/tmp/rust-analyzer-check",
-              },
+
+          -- Run clippy, not just check, and use a separate target dir for
+          -- rust-analyzer so as not to clobber the workspace's output directory
+          -- and thereby constantly cause rebuilds
+          checkOnSave = true,
+          check = {
+            allTargets = true,
+            command = "clippy",
+            extraArgs = {
+              "--target-dir",
+              "target/rust-analyzer", -- Project-relative path instead of /tmp
             },
+          },
 
-            imports = {
-              granularity = {
-                group = "module",
-              },
-              prefix = "self",
+          -- Diagnostic refresh configuration to fix stale error issues
+          diagnostics = {
+            enable = true, -- Use rust-analyzer's native diagnostics
+            experimental = {
+              enable = true, -- Enable faster experimental diagnostics
             },
-
-            cargo = {
-              -- Enable all features in rust crates.  This is an experiment to see if I like how this works
-              allFeatures = true,
-
-              loadOutDirsFromCheck = true,
-
-              -- Rust analyzer should run build scripts as part of its evaluation.  This is critical for things like
-              -- prost and tonic which generate Rust bindings on the fly
-              buildScripts = {
-                enable = true,
-              },
+            refresh = {
+              workspace = true, -- Refresh all files when one changes
             },
+          },
 
-            procMacro = {
-              -- Enable proc macro support
+          imports = {
+            granularity = {
+              group = "module",
+            },
+            prefix = "self",
+          },
+
+          cargo = {
+            -- Enable all features in rust crates.  This is an experiment to see if I like how this works
+            allFeatures = true,
+
+            loadOutDirsFromCheck = true,
+
+            -- Rust analyzer should run build scripts as part of its evaluation.  This is critical for things like
+            -- prost and tonic which generate Rust bindings on the fly
+            buildScripts = {
               enable = true,
             },
           },
-        },
-      },
-    },
+
+          procMacro = {
+            -- Enable proc macro support
+            enable = true,
+          },
+        })
+
+      -- Set up our custom on_attach, but call LazyVim's first if it exists
+      local lazyvim_on_attach = opts.server.on_attach
+      opts.server.on_attach = function(client, bufnr)
+        -- Call LazyVim's on_attach if it exists
+        if lazyvim_on_attach then
+          lazyvim_on_attach(client, bufnr)
+        end
+
+        -- ============================================================================
+        -- SEMANTIC TOKENS CONFIGURATION
+        -- ============================================================================
+        --
+        -- By default, we use LSP semantic tokens for Rust syntax highlighting instead
+        -- of Tree-sitter. This provides more accurate, semantically-aware highlighting
+        -- that can distinguish between:
+        --   - Mutable vs immutable bindings
+        --   - Different types of variables (local, parameter, static, etc.)
+        --   - Associated functions vs methods
+        --   - Consumed vs borrowed values
+        --   - And many other semantic distinctions
+        --
+        -- TRADE-OFFS:
+        --   Semantic tokens (current):
+        --     - More accurate and semantically meaningful
+        --     - Understands code meaning, not just syntax
+        --     - Depends on LSP being healthy
+        --     - May have slight delay on large files
+        --
+        --   Tree-sitter (alternative):
+        --     - Faster, synchronous highlighting
+        --     - Works offline without LSP
+        --     - Never breaks due to LSP issues
+        --     - Purely syntax-based (can't understand semantics)
+        --
+        -- TO SWITCH TO TREE-SITTER:
+        --   If you experience issues with semantic tokens (highlighting breaks,
+        --   performance problems, conflicts), uncomment the line below:
+        --
+        --   client.server_capabilities.semanticTokensProvider = nil
+        --
+        --   This disables LSP semantic tokens, and Tree-sitter will handle all Rust
+        --   syntax highlighting. The highlighting will be fast and reliable, but less
+        --   semantically rich.
+        --
+        -- ============================================================================
+
+        -- Custom keymaps
+        vim.keymap.set("n", "<leader>aw", function()
+          vim.cmd.RustLsp("codeAction")
+        end, { desc = "Code Action", buffer = bufnr })
+
+        -- For rename, the default LSP binding for rename should be used.  RustLsp doesn't have any special-case rename functionality
+        -- vim.keymap.set("n", "<leader>rn", function()
+        --   vim.cmd.RustLsp("rename")
+        -- end, { desc = "Rename", buffer = bufnr })
+
+        vim.keymap.set("n", "<leader>dr", function()
+          vim.cmd.RustLsp("debuggables")
+        end, { desc = "Rust Debuggables", buffer = bufnr })
+      end
+
+      return opts
+    end,
   },
 }
