@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Render all of the relatively expensive tmux status widgets from one
+# long-running tmux #() job.  tmux 3.7 limits a complete format expansion to
+# 100 ms, so giving each widget its own #() job can exhaust that budget while
+# tmux is forking the helpers.  Child processes started here do not block
+# tmux's format expansion.
+
+plugin_dir="${TMUX_PLUGIN_MANAGER_PATH:-$HOME/.tmux/plugins}"
+
+run_widget() {
+    local script=$1
+    local output
+
+    if [[ -x "$script" ]] && output=$("$script" 2>/dev/null); then
+        printf '%s' "$output"
+    fi
+}
+
+refresh_interval=$(tmux show-option -gqv status-interval 2>/dev/null)
+if [[ ! "$refresh_interval" =~ ^[1-9][0-9]*$ ]]; then
+    refresh_interval=5
+fi
+
+while :; do
+    net_speed=$(run_widget "$plugin_dir/tmux-net-speed/scripts/net_speed.sh")
+    cpu=$(run_widget "$plugin_dir/tmux-plugin-sysstat/scripts/cpu.sh")
+    mem=$(run_widget "$plugin_dir/tmux-plugin-sysstat/scripts/mem.sh")
+    loadavg=$(run_widget "$plugin_dir/tmux-plugin-sysstat/scripts/loadavg.sh")
+
+    printf '%s | %s | %s | %s\n' "$net_speed" "$cpu" "$mem" "$loadavg"
+    sleep "$refresh_interval"
+done
