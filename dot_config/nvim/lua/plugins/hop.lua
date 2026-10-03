@@ -1,8 +1,7 @@
 return {
   -- LazyVim uses Flash out of the box, which I'm getting used to, but Hop provides some useful functionality as well
   {
-    "phaazon/hop.nvim",
-    branch = "v2", -- optional but strongly recommended
+    "smoka7/hop.nvim",
     config = function()
       -- you can configure Hop the way you like here; see :h hop-config
       local hop = require("hop")
