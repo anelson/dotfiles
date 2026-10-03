@@ -9,4 +9,4 @@
   "npm:pi-background-tasks@2.6.9"
   "npm:pi-goal-x@0.32.3"
 -}}
-{{ $settings | setValueAtPath "packages" $packages | toPrettyJson -}}
+{{ $settings | setValueAtPath "packages" $packages | setValueAtPath "fullscreenWheelScrollLines" 15 | toPrettyJson -}}
