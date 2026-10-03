@@ -22,41 +22,16 @@ return {
     -- Rust LSP config in LazyVim is obtained using rustaceanvim, so it's that plugin's config that must be customized to configure the rust-analyzer
     -- LSP behavior
     "mrcjkb/rustaceanvim",
-    version = "^6", -- Recommended
     lazy = false, -- This plugin is already lazy
     opts = function(_, opts)
       -- Extend LazyVim's rust extras config rather than replacing it
       opts.server = opts.server or {}
-      opts.server.settings = opts.server.settings or {}
+      opts.server.default_settings = opts.server.default_settings or {}
 
       -- Merge our custom settings with LazyVim's defaults using deep extend
-      opts.server.settings["rust-analyzer"] =
-        vim.tbl_deep_extend("force", opts.server.settings["rust-analyzer"] or {}, {
+      opts.server.default_settings["rust-analyzer"] =
+        vim.tbl_deep_extend("force", opts.server.default_settings["rust-analyzer"] or {}, {
           -- rust-analyzer language server configuration
-
-          -- Run clippy, not just check, and use a separate target dir for
-          -- rust-analyzer so as not to clobber the workspace's output directory
-          -- and thereby constantly cause rebuilds
-          checkOnSave = true,
-          check = {
-            allTargets = true,
-            command = "clippy",
-            extraArgs = {
-              "--target-dir",
-              "target/rust-analyzer", -- Project-relative path instead of /tmp
-            },
-          },
-
-          -- Diagnostic refresh configuration to fix stale error issues
-          diagnostics = {
-            enable = true, -- Use rust-analyzer's native diagnostics
-            experimental = {
-              enable = true, -- Enable faster experimental diagnostics
-            },
-            refresh = {
-              workspace = true, -- Refresh all files when one changes
-            },
-          },
 
           imports = {
             granularity = {
@@ -68,6 +43,9 @@ return {
           cargo = {
             -- Enable all features in rust crates.  This is an experiment to see if I like how this works
             allFeatures = true,
+
+            -- Keep rust-analyzer's build artifacts separate from normal builds.
+            targetDir = true,
 
             loadOutDirsFromCheck = true,
 
@@ -129,6 +107,10 @@ return {
         --   semantically rich.
         --
         -- ============================================================================
+
+        -- Disable semantic highlighting for now to see whether it's responsible
+        -- for the intermittent loss of syntax highlighting.
+        client.server_capabilities.semanticTokensProvider = nil
 
         -- Custom keymaps
         vim.keymap.set("n", "<leader>aw", function()

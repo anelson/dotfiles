@@ -85,11 +85,11 @@ vim.o.list = true
 vim.o.listchars = "tab:•-,trail:•,extends:»,precedes:«"
 
 -- Assorted other tweaks
-vim.o.updatetime = 50
+vim.o.updatetime = 300
 vim.o.cmdheight = 2
 vim.o.smartcase = true
 vim.o.diffopt = vim.o.diffopt .. ",vertical"
-vim.o.conceallevel = 3
+vim.o.conceallevel = 0
 vim.o.splitright = true
 vim.o.splitbelow = true
 
