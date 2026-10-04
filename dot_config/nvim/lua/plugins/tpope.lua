@@ -31,10 +31,6 @@ return {
   -- this is used with the tmux plugin tmux-resurrect
   { "tpope/vim-obsession" },
 
-  -- detect and handle Jekyll files which have YAML front matter and Liquid
-  -- templates
-  { "tpope/vim-liquid" },
-
   -- Provide handy keystrokes for changing the case of a word
   { "tpope/vim-abolish" },
 }
