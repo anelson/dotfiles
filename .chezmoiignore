@@ -38,6 +38,7 @@
 # Repo files that should not be deployed to ~
 README.md
 migrate-to-chezmoi.sh
+AGENTS.md
 
 # Windows: most Unix configs don't apply
 {{ if eq .chezmoi.os "windows" }}
