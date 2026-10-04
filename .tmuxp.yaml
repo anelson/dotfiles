@@ -1,0 +1,18 @@
+session_name: dotfiles
+start_directory: ./
+windows:
+  - window_name: editor
+    focus: true
+    panes:
+      - vim
+  - window_name: chezmoi shell
+    panes:
+      - pane
+  - window_name: home shell
+    start_directory: ~/
+    panes:
+      - pane
+  - window_name: ai
+    start_directory: ~/
+    panes:
+      - pane

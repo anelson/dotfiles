@@ -36,6 +36,7 @@
 {{ end }}
 
 # Repo files that should not be deployed to ~
+.tmuxp.yaml
 README.md
 migrate-to-chezmoi.sh
 AGENTS.md
