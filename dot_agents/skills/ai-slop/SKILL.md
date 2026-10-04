@@ -1,8 +1,6 @@
 ---
 name: ai-slop
-description: Whenever posting text or code to a shared system on behalf of the user, including but not limited to Git
-commit messages, GitHub issue and PRs and comments thereon, you must follow specific instructions to ensure that your
-LLM-generated content is not confused for human-authored.
+description: Whenever posting text or code to a shared system on behalf of the user, including but not limited to Git commit messages, GitHub issue and PRs and comments thereon, you must follow specific instructions to ensure that your LLM-generated content is not confused for human-authored.
 ---
 
 # AI Slop Policy
