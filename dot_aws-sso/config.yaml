@@ -1,15 +1,14 @@
 SSOConfig:
-    Elastio:
-        SSORegion: us-east-1
-        StartUrl: https://elastio.awsapps.com/start
-        DefaultRegion: us-east-2
-        Accounts:
-            968455818835:
-                Name: anelson-isolated
+  Elastio:
+    SSORegion: us-east-1
+    StartUrl: https://elastio.awsapps.com/start
+    DefaultRegion: us-east-2
+    Accounts:
+      968455818835:
+        Name: anelson-isolated
 
-
-            537513441174:
-                Name: assuriodev
+      537513441174:
+        Name: assuriodev
 
 DefaultRegion: us-east-2
 ConsoleDuration: 720
@@ -38,3 +37,8 @@ JsonStore: "~/.aws-sso/secure.json"
 # When generating profile names in `~/.aws/config`, give those profiles a friendly name
 # Unfortunately can't use just the account alias, because some accounts (`bastion-staging` at least) are available to me with either `ReadOnly` or admin access
 ProfileFormat: "{{ FirstItem .AccountName .AccountAlias (AccountIdStr .AccountId) }}:{{ .RoleName }}"
+
+# Override the default of `pkce` because that rqeuires that aws-sso's callback
+# listener http server on 127.0.0.1 is accessible from the browser doing the
+# auth, which isn't the case when I'm running this on a remote headless server.
+AuthWorkflow: device_code
