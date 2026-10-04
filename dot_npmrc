@@ -1,5 +1,8 @@
 # Support installing "global" packages with `npm -g` to the local user
 prefix=${HOME}/.npm-packages
 
+# Require packages to have been published for at least 7 days
+min-release-age=7
+
 @elastio:registry=https://npm.cloudsmith.io/elastio/private/
 //npm.cloudsmith.io/elastio/private/:_authToken=${CLOUDSMITH_AUTH_TOKEN}
