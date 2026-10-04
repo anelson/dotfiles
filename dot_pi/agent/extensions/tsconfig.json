@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022"],
+    "baseUrl": ".",
+    "paths": {
+      "@earendil-works/pi-ai": [
+        "../../../../../../.pi/agent/install/releases/1.0.2/node_modules/@earendil-works/pi-ai",
+        "../install/releases/1.0.2/node_modules/@earendil-works/pi-ai"
+      ],
+      "@earendil-works/pi-coding-agent": [
+        "../../../../../../.pi/agent/install/releases/1.0.2/node_modules/@earendil-works/pi-coding-agent",
+        "../install/releases/1.0.2/node_modules/@earendil-works/pi-coding-agent"
+      ],
+      "@earendil-works/pi-tui": [
+        "../../../../../../.pi/agent/install/releases/1.0.2/node_modules/@earendil-works/pi-tui",
+        "../install/releases/1.0.2/node_modules/@earendil-works/pi-tui"
+      ]
+    },
+    "typeRoots": [
+      "../../../../../../.pi/agent/install/releases/1.0.2/node_modules/@types",
+      "../install/releases/1.0.2/node_modules/@types"
+    ],
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "useUnknownInCatchVariables": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["./**/*.ts"]
+}

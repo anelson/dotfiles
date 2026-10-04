@@ -1,0 +1,77 @@
+#!/bin/sh
+# Adapted and modified from mitsuhiko/agent-stuff (Apache-2.0).
+set -eu
+
+command_name=${0##*/}
+previous=""
+
+for argument in "$@"; do
+  module=""
+  case "$argument" in
+    -mpip) module=pip ;;
+    -mvenv) module=venv ;;
+    -mpy_compile) module=py_compile ;;
+  esac
+
+  if [ "$previous" = "-m" ]; then
+    module=$argument
+  fi
+
+  case "$module" in
+    pip)
+      cat >&2 <<EOF
+Error: '$command_name -m pip' is disabled in Pi sessions. Use uv instead:
+
+  Add a project dependency:       uv add PACKAGE
+  Run with an ephemeral package:  uv run --with PACKAGE COMMAND
+EOF
+      exit 1
+      ;;
+    venv)
+      cat >&2 <<EOF
+Error: '$command_name -m venv' is disabled in Pi sessions. Use:
+
+  uv venv
+EOF
+      exit 1
+      ;;
+    py_compile)
+      cat >&2 <<EOF
+Error: '$command_name -m py_compile' writes bytecode caches. Check syntax without them:
+
+  uv run python -m ast path/to/file.py >/dev/null
+EOF
+      exit 1
+      ;;
+  esac
+
+  previous=$argument
+done
+
+if ! command -v uv >/dev/null 2>&1; then
+  echo "Error: uv is required but was not found in PATH" >&2
+  exit 127
+fi
+
+# Ask uv for the interpreter selected by the current project and machine. Hide
+# the leading shim directory while uv probes candidates, then pass the absolute
+# interpreter path back to uv so command execution cannot recurse.
+shim_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+case $PATH in
+  "$shim_dir":*) clean_path=${PATH#"$shim_dir":} ;;
+  *) clean_path=$PATH ;;
+esac
+
+uv_python=$(PATH="$clean_path" uv python find 2>/dev/null || true)
+if [ -z "$uv_python" ] || [ ! -x "$uv_python" ]; then
+  echo "Error: uv could not select a Python interpreter" >&2
+  exit 1
+fi
+
+python_dir=$(CDPATH= cd -- "$(dirname -- "$uv_python")" && pwd)
+if [ "$shim_dir" = "$python_dir" ]; then
+  echo "Error: uv selected the intercepted Python shim recursively" >&2
+  exit 1
+fi
+
+exec uv run --python "$uv_python" python "$@"

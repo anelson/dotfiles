@@ -1,0 +1,13 @@
+#!/bin/sh
+# Adapted and modified from mitsuhiko/agent-stuff (Apache-2.0).
+cat >&2 <<'EOF'
+Error: poetry is disabled in Pi sessions. Use uv instead:
+
+  Initialize a project:  uv init
+  Add a dependency:      uv add PACKAGE
+  Sync dependencies:     uv sync
+  Run a command:         uv run COMMAND
+
+Do not migrate an existing Poetry project unless the user requested that change.
+EOF
+exit 1

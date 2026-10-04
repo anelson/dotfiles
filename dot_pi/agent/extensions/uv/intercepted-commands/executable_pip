@@ -1,0 +1,11 @@
+#!/bin/sh
+# Adapted and modified from mitsuhiko/agent-stuff (Apache-2.0).
+command_name=${0##*/}
+cat >&2 <<EOF
+Error: $command_name is disabled in Pi sessions. Use uv instead:
+
+  Add a project dependency:       uv add PACKAGE
+  Add a development dependency:   uv add --dev PACKAGE
+  Run with an ephemeral package:  uv run --with PACKAGE COMMAND
+EOF
+exit 1
