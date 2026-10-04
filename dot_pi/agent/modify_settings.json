@@ -4,9 +4,9 @@
 {{-   $settings = fromJson .chezmoi.stdin -}}
 {{- end -}}
 {{- $packages := list
-  "npm:pi-web-access@0.35.0"
-  "npm:pi-subagents@0.75.0"
-  "npm:pi-background-tasks@2.6.9"
-  "npm:pi-goal-x@0.32.3"
+  "npm:pi-web-access"
+  "npm:pi-subagents"
+  "npm:pi-background-tasks"
+  "npm:pi-goal-x"
 -}}
 {{ $settings | setValueAtPath "packages" $packages | setValueAtPath "fullscreenWheelScrollLines" 15 | toPrettyJson -}}
