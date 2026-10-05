@@ -1,2 +1,6 @@
 **/*.swp
 !.tmuxp.yaml
+
+# Machine-local browser skill dependencies and Pi task logs.
+dot_pi/private_agent/skills/web-browser/scripts/node_modules/
+.pi/tasks/

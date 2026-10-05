@@ -41,6 +41,12 @@ README.md
 migrate-to-chezmoi.sh
 AGENTS.md
 
+# Browser skill dependencies and Pi task logs are machine-local.
+.pi/agent/skills/web-browser/scripts/node_modules
+.pi/agent/skills/web-browser/scripts/node_modules/**
+.pi/tasks
+.pi/tasks/**
+
 # Windows: most Unix configs don't apply
 {{ if eq .chezmoi.os "windows" }}
 .profile
