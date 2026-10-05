@@ -67,7 +67,36 @@ gh run view RUN_ID --repo owner/repo --log-failed
 
 Do not merge, close, approve, comment, dispatch, rerun, cancel, delete, or publish unless the user's request authorizes that mutation. Show the relevant repository, issue, pull request, run, or release URL after a successful mutation.
 
-For multiline issue or pull-request text, prefer `--body-file` over complicated shell quoting. Put temporary bodies outside the repository unless they are intended project files, and remove them after use.
+## Write GitHub Markdown safely
+
+Treat GitHub body text as file content, not shell syntax.
+
+For any issue, pull request, comment, review, discussion, or release text that contains a newline, use the command's file-reading flag: `--body-file`, `--notes-file`, or an equivalent. Use file input for one-line GFM too when the text contains shell-sensitive characters such as backticks, dollar signs, backslashes, or quotes. Reserve `--body` for simple one-line plain text.
+
+Do not encode intended line breaks as `\n` in `--body`; a POSIX shell passes those two characters unchanged. Do not put generated Markdown in a double-quoted shell argument. Backticks and `$()` remain command substitutions there and can remove text or execute unintended commands.
+
+When supplying a body inline, use standard input with a quoted heredoc delimiter:
+
+```sh
+gh issue comment ISSUE --repo OWNER/REPO --body-file - <<'EOF'
+First paragraph.
+
+A `code span` remains intact.
+EOF
+```
+
+Use the corresponding file flag for other commands, including `gh pr ... --body-file`, `gh pr review --body-file`, `gh discussion ... --body-file`, and `gh release ... --notes-file`.
+
+If only `gh api` supports the operation, have `--field` read the body from a file or standard input:
+
+```sh
+gh api -X PATCH repos/OWNER/REPO/issues/comments/COMMENT_ID \
+  -F body=@- <<'EOF'
+Replacement body with `literal code`.
+EOF
+```
+
+Put temporary body files outside the repository unless they are intended project files, and remove them after use. If the shell reports diagnostics while constructing a body, assume the write may be damaged even if `gh` succeeds; inspect it before reporting success.
 
 ## Creating Issues and Pull Requests
 
