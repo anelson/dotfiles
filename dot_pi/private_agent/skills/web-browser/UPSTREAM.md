@@ -5,11 +5,6 @@ Adapted from Armin Ronacher's (mitsuhiko) `agent-stuff` web-browser skill:
 - Repository: <https://github.com/mitsuhiko/agent-stuff>
 - Directory: `skills/web-browser`
 - Revision: `0865c849befd2021490679f96a8dee58c84ac857`
-- License: Apache License 2.0; included in `LICENSE`.
-
-The upstream skill's frontmatter said `license: Stolen from Mario`. This
-adaptation uses the repository's actual Apache-2.0 license and retains the
-upstream attribution here.
 
 ## Local changes
 
@@ -33,20 +28,3 @@ upstream attribution here.
 
 The remaining scripts and the npm dependency lock are copied unchanged. Chezmoi source
 filenames use `executable_` for command-line scripts; deployed names match upstream.
-
-## Verification
-
-Verified on macOS with Brave, running as the desktop user inside tmux:
-
-- 20 unit/CLI checks passed, including an isolated real tmux session with SSH
-  variables absent from the child process but present in the session environment.
-- The opt-in browser smoke test passed: headless startup, navigation, JavaScript
-  interaction, screenshots, mobile emulation, cookie-dialog rejection, logs,
-  visible-window startup, and persistent cookies across mode switches.
-- Pi discovered the deployed skill without diagnostics, and chezmoi source and
-  live state matched after applying.
-
-The user also confirmed that the separate visible Brave window appeared, and
-that the missing-keychain error stopped after the tests kept the normal HOME.
-Fedora runtime verification remains a follow-up; the tests here only simulate
-Linux discovery and display environments.

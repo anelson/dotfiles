@@ -31,6 +31,9 @@ Do not run the browser as root or disable its sandbox to work around a launch fa
 
 ## Tests
 
+In case of a problem, there are existing tests to verify the skill's runtime environment. Don't run these unless
+instructed, or to troubleshoot a problem with the skill.
+
 From the deployed skill directory:
 
 ```bash
@@ -40,10 +43,7 @@ BROWSER_SMOKE_TEST=1 BROWSER_SMOKE_HEADED=1 node --test ./scripts/browser-smoke.
 ```
 
 The smoke test uses a temporary isolated profile and a loopback test page; it
-does not copy the user's profile. Fedora runtime testing is pending. The macOS
-tests cover the Linux discovery/display branches, but cannot verify Fedora's
-Chromium packaging, libraries, or sandbox. Tests keep the normal `HOME` for macOS
-keychain access and isolate the skill's files with `BROWSER_CACHE_DIR` instead.
+does not copy the user's profile.
 
 ## SSH and desktop rules
 
@@ -78,6 +78,7 @@ Starts the browser with loopback remote debugging (default port `:9222`). Never 
 The start script only reuses a running browser when its profile and launch settings match. Stop the running skill browser before switching between headless and headed mode. Changing the debugging port does **not** isolate the profile: startup refuses to modify a profile already used on another port and preserves Chrome's profile locks.
 
 Profile behavior:
+
 - Default mode uses: `~/.cache/agent-web/browser/fresh-profile`
 - `--profile` mode uses: `~/.cache/agent-web/browser/profile-copy`
 - The skill **does not attach to your live Chrome profile directly**
@@ -196,6 +197,7 @@ Interactive element picker. Click to select, Cmd/Ctrl+Click for multi-select, En
 Automatically dismisses EU cookie consent dialogs.
 
 Run after navigating to a page:
+
 ```bash
 ./scripts/nav.js https://example.com && ./scripts/dismiss-cookies.js
 ```
@@ -220,17 +222,20 @@ Automatically started by `start.js` and writes JSONL logs to:
 ```
 
 Manually start:
+
 ```bash
 ./scripts/watch.js
 ```
 
 Tail latest log:
+
 ```bash
 ./scripts/logs-tail.js           # dump current log and exit
 ./scripts/logs-tail.js --follow  # keep following
 ```
 
 Summarize network responses:
+
 ```bash
 ./scripts/net-summary.js
 ```

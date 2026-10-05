@@ -72,7 +72,12 @@ test("real browser navigation, interaction, screenshots, logging, and mode switc
     await reject("start", [], /SSH session detected.*--headless/, { SSH_CONNECTION: "test" });
     await reject("start", ["--headless", "--reset-profile"], /Run stop\.js first/);
     await reject("start", ["--headless"], /Profile is in use/, { BROWSER_DEBUG_PORT: String(fixturePort) });
-    await reject("pick", ["Select something"], /requires a visible browser/);
+    // Exercise the headless-browser check even when the smoke test itself runs
+    // over SSH or inside a tmux session attached through SSH.
+    const localEnvironment = {
+      SSH_CONNECTION: "", SSH_CLIENT: "", SSH_TTY: "", IS_SSH_SESSION: "0", TMUX: "", DISPLAY: ":test",
+    };
+    await reject("pick", ["Select something"], /requires a visible browser/, localEnvironment);
     await reject("pick", ["Select something"], /SSH session detected/, { SSH_CONNECTION: "test" });
 
     await run("nav", [url]);
