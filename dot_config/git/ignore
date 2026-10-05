@@ -1,0 +1,9 @@
+# I put a .tmuxp.yaml file in the root of repos when I want to open them in a new tmux session
+# Surprisingly not everyone who collaborates with me uses tmuxp.
+.tmuxp.yaml
+
+# Claude slop settings
+**/.claude/settings.local.json
+
+# The .pi/ dir in the root of any repo should be ignored
+/.pi/

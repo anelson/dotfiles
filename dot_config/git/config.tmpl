@@ -20,11 +20,11 @@
 [rerere]
 	enabled = true
 
-# Enable the `delta` third party diff viewer
-# To install it's `git-delta` on most systems
+{{ if lookPath "delta" -}}
 [core]
+    # Enable the `delta` third party diff viewer
+    # To install it's `git-delta` on most systems
     pager = delta
-	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
 
 [interactive]
     diffFilter = delta --color-only
@@ -37,8 +37,11 @@
     commit-decoration-style = bold yellow box ul
     file-style = bold yellow ul
     file-decoration-style = none
+{{ end -}}
+
 [pull]
 	ff = only
+
 {{ if lookPath "gh" -}}
 [credential "https://github.com"]
 	helper =
