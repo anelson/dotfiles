@@ -8,5 +8,6 @@
   "npm:pi-subagents"
   "npm:pi-background-tasks"
   "npm:pi-goal-x"
+  "npm:pi-daybreak-param"
 -}}
 {{ $settings | setValueAtPath "packages" $packages | setValueAtPath "fullscreenWheelScrollLines" 15 | toPrettyJson -}}
