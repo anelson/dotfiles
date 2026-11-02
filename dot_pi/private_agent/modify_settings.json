@@ -10,4 +10,4 @@
   "npm:pi-goal-x"
   "npm:pi-daybreak-param"
 -}}
-{{ $settings | setValueAtPath "packages" $packages | setValueAtPath "fullscreenWheelScrollLines" 15 | toPrettyJson -}}
+{{ $settings | setValueAtPath "packages" $packages | setValueAtPath "fullscreenWheelScrollLines" "auto" | toPrettyJson -}}
