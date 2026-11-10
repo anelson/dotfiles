@@ -6,7 +6,7 @@
 {{- $packages := list
   "npm:pi-web-access"
   "npm:pi-subagents"
-  "npm:pi-background-tasks"
+  "npm:@aliou/pi-processes"
   "npm:pi-goal-x"
   "npm:pi-daybreak-param"
 -}}
